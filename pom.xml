@@ -11,7 +11,7 @@
 
   <groupId>com.examples</groupId>
   <artifactId>vmware_aria_orchestrator_examples</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.0.2</version>
   <packaging>package</packaging>
 
   <scm>
