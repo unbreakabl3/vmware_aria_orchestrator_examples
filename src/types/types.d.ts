@@ -13,3 +13,9 @@ export interface SampleInterface {
 }
 
 export type YesNo = "Yes" | "No";
+
+type AttributeMap = {
+  powerMin?: number;
+  powerMax?: number;
+  domainName?: string;
+};

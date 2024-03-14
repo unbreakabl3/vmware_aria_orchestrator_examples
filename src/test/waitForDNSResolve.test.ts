@@ -34,8 +34,8 @@ describe( "isValidIPv4", () => {
 } );
 
 describe( "waitForDNSResolve", () => {
-  let fakeHostFqdn;
-  let fakeIp;
+  let fakeHostFqdn: string;
+  let fakeIp: string;
 
   beforeEach( () => {
     fakeIp = "192.168.1.10";
