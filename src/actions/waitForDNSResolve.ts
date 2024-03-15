@@ -12,13 +12,13 @@ export class Network {
   private func = new GeneralFunctions();
   public waitForDNSResolve ( hostFqdn: string ) {
     const maxAttempts = 1;
-    const sleepTime = 600; // Sleep for a minute
+    const sleepTime = 600;
 
     for ( let i = 0; i < maxAttempts; i++ ) {
       try {
         const ip = System.resolveHostName( hostFqdn );
         if ( ip && this.func.isValidIPv4( ip ) ) {
-          return; // DNS resolved successfully
+          return; // hostFqdn resolved successfully
         }
       } catch ( error ) {
         System.error( `Error resolving ${hostFqdn}: ${error}` );
