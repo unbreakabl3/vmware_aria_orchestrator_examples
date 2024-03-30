@@ -9,31 +9,23 @@
  */
 import { Workflow, Out } from "vrotsc-annotations";
 
-@Workflow( {
+@Workflow({
   name: "Sample Workflow",
   path: "MyOrg/MyProject",
   id: "",
   description: "Sample workflow description",
   attributes: {},
   input: {
-    foo: {
-      type: "string",
-      availableValues: ["a", "b"],
-      defaultValue: "а",
-      description: "foo Value",
-      required: true,
-      title: "Foo"
-    },
-    bar: { type: "string" }
+    vmName: { type: "string" },
   },
   output: {
     result: { type: "Any" }
   },
   presentation: ""
-} )
+})
 export class SampleWorkflow {
-  public install ( foo: string, bar: string, @Out result: any ): void {
-    System.log( `foo=${foo}, bar=${bar}` );
+  public install(vmName: string, @Out result: any): void {
+    System.log(`vmName=${vmName}`);
     result = "result value";
   }
 }

@@ -19,14 +19,14 @@ module.exports = [
       "no-unused-vars": "off",
       "stylistic/max-len": ["warn", { code: 170 }],
       "stylistic/arrow-parens": ["warn", "always"],
-      "stylistic/space-before-function-paren": ["warn", "always"],
-      "stylistic/space-in-parens": ["warn", "always"],
+      //"stylistic/space-before-function-paren": ["warn", "always"],
+      //"stylistic/space-in-parens": ["warn", "always"],
       "stylistic/block-spacing": ["warn", "always"],
       "stylistic/quotes": ["error", "double"],
       "stylistic/no-trailing-spaces": ["warn", { skipBlankLines: true }],
       "stylistic/comma-spacing": ["warn", { before: false, after: true }],
       "stylistic/type-annotation-spacing": ["error", { before: false, after: true }],
-      "tseslint/array-type": ["error", { default: "generic" }],
+      "tseslint/array-type": ["error", { default: "generic" }]
     }
   },
   {
@@ -48,10 +48,9 @@ module.exports = [
       tseslint: tseslint,
       stylistic: stylisticTs,
       _oxc: oxlint,
-      _eslint: eslint,
-      _eslintPluginPrettierRecommended: eslintPluginPrettierRecommended
+      _eslint: eslint
     },
     rules: {}
   },
-  //oxlint.configs["flat/recommended"],
+  eslintPluginPrettierRecommended
 ];

@@ -8,12 +8,12 @@
  * #L%
  */
 export class GeneralFunctions {
-  public throwError ( errorMessage: string ): never {
-    throw new Error( errorMessage );
+  public throwError(errorMessage: string): never {
+    throw new Error(errorMessage);
   }
 
-  public isValidIPv4 ( ip: string ): boolean {
+  public isValidIPv4(ip: string): boolean {
     const ipv4Regex = /^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}$/;
-    return ipv4Regex.test( ip );
+    return ipv4Regex.test(ip);
   }
 }

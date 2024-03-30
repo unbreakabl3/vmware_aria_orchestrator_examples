@@ -8,34 +8,32 @@
  * #L%
  */
 export class SSH {
-  public executeSshCommand ( { sshHostname, sshCommand }: { sshHostname: string; sshCommand: string } ): Promise<string> {
+  public executeSshCommand({ sshHostname, sshCommand }: { sshHostname: string; sshCommand: string }): Promise<string> {
     const encoding = "UTF-8";
     const path = "/var/lib/vco/app-server/conf/vco_key";
     const sshKeyPassword = "";
     const sshPort = 22;
     const sshUsername = "root";
-    return new Promise<string>( ( resolve, reject ) => {
-      const session = this.setNewSshSessions( sshHostname, sshUsername, sshPort )
-      session.connectWithIdentity( path, sshKeyPassword );
-      session.setEncoding( encoding );
-      System.log( `Connected to ${sshHostname}` );
-      System.log( `Execute '${sshCommand}' using encoding '${encoding}'` );
+    return new Promise<string>((resolve, reject) => {
+      const session = this.setNewSshSessions(sshHostname, sshUsername, sshPort);
+      session.connectWithIdentity(path, sshKeyPassword);
+      session.setEncoding(encoding);
+      System.log(`Connected to ${sshHostname}`);
+      System.log(`Execute '${sshCommand}' using encoding '${encoding}'`);
       try {
-        session.executeCommand( sshCommand, true );
-        resolve( session.output )
-      } catch ( error ) {
-        reject( `Failed to execute SSH command. ${session.error}` );
+        session.executeCommand(sshCommand, true);
+        resolve(session.output);
+      } catch (error) {
+        reject(`Failed to execute SSH command. ${session.error}`);
       } finally {
-        if ( session ) {
+        if (session) {
           session.disconnect();
         }
       }
-    } )
+    });
   }
 
-  private setNewSshSessions ( host: string, sshUsername: string, port: number ): SSHSession {
-    return new SSHSession( host, sshUsername, port )
+  private setNewSshSessions(host: string, sshUsername: string, port: number): SSHSession {
+    return new SSHSession(host, sshUsername, port);
   }
 }
-
-
