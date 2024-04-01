@@ -7,6 +7,9 @@
  * TODO: Define header text
  * #L%
  */
+/**
+ * https://www.clouddepth.com/posts/vro-how-to-resolve-ip-address/
+ */
 import { GeneralFunctions } from "./generalFunctions";
 export class Network {
   private func = new GeneralFunctions();

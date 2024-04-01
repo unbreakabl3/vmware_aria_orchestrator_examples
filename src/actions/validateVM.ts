@@ -7,6 +7,9 @@
  * TODO: Define header text
  * #L%
  */
+/**
+ * https://www.clouddepth.com/posts/vro-how-to-use-external-validations/
+ */
 
 /**
  * Checks if a virtual machine with the given name already exists.

@@ -7,6 +7,9 @@
  * TODO: Define header text
  * #L%
  */
+/**
+ * https://www.clouddepth.com/posts/vro-how-to-ssh
+ */
 export class SSH {
   public executeSshCommand({ sshHostname, sshCommand }: { sshHostname: string; sshCommand: string }): Promise<string> {
     const encoding = "UTF-8";

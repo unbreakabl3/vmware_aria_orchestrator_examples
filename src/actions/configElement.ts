@@ -7,6 +7,9 @@
  * TODO: Define header text
  * #L%
  */
+/**
+ * https://www.clouddepth.com/posts/vro-configuration-element-how-to/
+ */
 import { AttributeMap } from "../types/types";
 
 export class InvalidConfigElementError extends Error {
