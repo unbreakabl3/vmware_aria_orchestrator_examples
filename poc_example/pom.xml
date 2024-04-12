@@ -6,12 +6,12 @@
   <parent>
     <groupId>com.vmware.pscoe.o11n</groupId>
     <artifactId>typescript-project-all</artifactId>
-    <version>2.38.0</version>
+    <version>2.38.1</version>
   </parent>
 
-  <groupId>com.examples</groupId>
-  <artifactId>vmware_aria_orchestrator_examples</artifactId>
-  <version>1.0.6</version>
+  <groupId>com.clouddepth</groupId>
+  <artifactId>poc_example</artifactId>
+  <version>1.0.8</version>
   <packaging>package</packaging>
 
   <scm>
@@ -21,6 +21,13 @@
   <description>
     This package is licensed under null
   </description>
+  <licenses>
+    <license>
+      <name>TODO: Enter License name</name>
+      <url>null</url>
+      <distribution>pom</distribution>
+    </license>
+  </licenses>
   <properties>
     <generated.from>package-typescript-archetype</generated.from>
     <license.organizationName>TODO: Enter Organization name</license.organizationName>
