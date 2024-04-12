@@ -9,7 +9,7 @@
  */
 export class Functions {
   private workflowParameters = new Properties();
-  public executeDecommissionWorkflow(vmObject: VcVirtualMachine, decommissionWfId: string, decommissionDate: Date, decommissionDelay: number) {
+  public decommissionWorkflow(vmObject: VcVirtualMachine, decommissionWfId: string, decommissionDate: Date, decommissionDelay: number) {
     const workflowParameters = new Properties();
     workflowParameters.put("vm_in", vmObject);
     workflowParameters.put("__taskName", `Decommission of VM ${vmObject.name}`);

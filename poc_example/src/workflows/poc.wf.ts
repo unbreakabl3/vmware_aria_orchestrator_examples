@@ -51,7 +51,7 @@ export class Main {
 
     if (isPOC_in) {
       System.log(`The POC VM named '${vm_in.name}' has been scheduled for decommissioning on ${decommissionDate_in}.`);
-      func.executeDecommissionWorkflow(vm_in, decommissionWf, decommissionDate_in, decommissionDelay_in);
+      func.decommissionWorkflow(vm_in, decommissionWf, decommissionDate_in, decommissionDelay_in);
     }
   }
 }

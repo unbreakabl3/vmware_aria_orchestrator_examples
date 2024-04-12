@@ -27,7 +27,7 @@ describe("YourClass", () => {
     spyOn(Server, "getWorkflowWithId").and.returnValue({
       schedule: jasmine.createSpy("schedule").and.returnValue({})
     });
-    func.executeDecommissionWorkflow(vmObject, decommissionWfId, decommissionDate, decommissionDelay);
+    func.decommissionWorkflow(vmObject, decommissionWfId, decommissionDate, decommissionDelay);
 
     expect(Server.getWorkflowWithId).toHaveBeenCalledWith(decommissionWfId);
     expect(Server.getWorkflowWithId(decommissionWfId).schedule).toHaveBeenCalled();
@@ -44,7 +44,7 @@ describe("YourClass", () => {
       schedule: jasmine.createSpy("schedule").and.throwError("Failed to schedule")
     });
 
-    expect(() => func.executeDecommissionWorkflow(vmObject, decommissionWfId, decommissionDate, decommissionDelay)).toThrow(
+    expect(() => func.decommissionWorkflow(vmObject, decommissionWfId, decommissionDate, decommissionDelay)).toThrow(
       "Failed to schedule the decommission flow. Error: Failed to schedule"
     );
   });
