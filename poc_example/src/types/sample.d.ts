@@ -8,8 +8,8 @@
  * #L%
  */
 export interface SampleInterface {
-    foo: string
-    bar: string
+  foo: string;
+  bar: string;
 }
 
-export type YesNo = "Yes" | "No"
+export type YesNo = "Yes" | "No";

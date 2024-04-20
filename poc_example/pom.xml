@@ -11,7 +11,7 @@
 
   <groupId>com.clouddepth</groupId>
   <artifactId>poc_example</artifactId>
-  <version>1.0.8</version>
+  <version>1.0.9</version>
   <packaging>package</packaging>
 
   <scm>
@@ -21,13 +21,6 @@
   <description>
     This package is licensed under null
   </description>
-  <licenses>
-    <license>
-      <name>TODO: Enter License name</name>
-      <url>null</url>
-      <distribution>pom</distribution>
-    </license>
-  </licenses>
   <properties>
     <generated.from>package-typescript-archetype</generated.from>
     <license.organizationName>TODO: Enter Organization name</license.organizationName>

@@ -1,0 +1,133 @@
+{
+  "itemId": "",
+  "layout": {
+    "pages": [
+      {
+        "id": "page_1",
+        "sections": [
+          {
+            "fields": [
+              {
+                "display": "valuePicker",
+                "id": "vm_in",
+                "signpostPosition": "right-middle",
+                "state": {
+                  "read-only": false,
+                  "visible": true
+                }
+              }
+            ],
+            "id": "section_0"
+          },
+          {
+            "fields": [
+              {
+                "display": "dateTime",
+                "id": "decommissionDate_in",
+                "signpostPosition": "right-middle",
+                "state": {
+                  "read-only": false,
+                  "visible": [
+                    {
+                      "equals": {
+                        "isPOC_in": true
+                      },
+                      "value": true
+                    }
+                  ]
+                }
+              }
+            ],
+            "id": "section_1"
+          },
+          {
+            "fields": [
+              {
+                "display": "decimalField",
+                "id": "decommissionDelay_in",
+                "signpostPosition": "left-bottom",
+                "state": {
+                  "read-only": true,
+                  "visible": [
+                    {
+                      "equals": {
+                        "isPOC_in": true
+                      },
+                      "value": true
+                    }
+                  ]
+                }
+              }
+            ],
+            "id": "section_2"
+          },
+          {
+            "fields": [
+              {
+                "display": "checkbox",
+                "id": "isPOC_in",
+                "signpostPosition": "right-middle",
+                "state": {
+                  "read-only": false,
+                  "visible": true
+                }
+              }
+            ],
+            "id": "section_3"
+          }
+        ],
+        "title": "General"
+      }
+    ]
+  },
+  "options": {
+    "externalValidations": []
+  },
+  "schema": {
+    "decommissionDate_in": {
+      "constraints": {
+        "required": true
+      },
+      "id": "decommissionDate_in",
+      "label": "Decommission Date",
+      "type": {
+        "dataType": "dateTime",
+        "isMultiple": false
+      }
+    },
+    "decommissionDelay_in": {
+      "constraints": {},
+      "default": 30,
+      "id": "decommissionDelay_in",
+      "label": "Decommission Delay",
+      "signpost": "30 days is a minimum period to wait before the decommission.",
+      "type": {
+        "dataType": "decimal",
+        "isMultiple": false
+      }
+    },
+    "isPOC_in": {
+      "constraints": {},
+      "default": false,
+      "id": "isPOC_in",
+      "label": "Is POC?",
+      "type": {
+        "dataType": "boolean",
+        "isMultiple": false
+      }
+    },
+    "vm_in": {
+      "constraints": {
+        "required": true
+      },
+      "id": "vm_in",
+      "label": "VM Name",
+      "type": {
+        "dataType": "reference",
+        "isMultiple": false,
+        "referenceType": "VC:VirtualMachine"
+      },
+      "valueList": []
+    }
+  }
+}
