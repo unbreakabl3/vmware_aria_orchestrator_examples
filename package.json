@@ -1,0 +1,10 @@
+{
+  "devDependencies": {
+    "@stylistic/eslint-plugin": "^1.7.2",
+    "@typescript-eslint/eslint-plugin": "^7.7.1",
+    "@typescript-eslint/parser": "^7.7.1",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-oxlint": "^0.2.9",
+    "eslint-plugin-prettier": "^5.1.3"
+  }
+}

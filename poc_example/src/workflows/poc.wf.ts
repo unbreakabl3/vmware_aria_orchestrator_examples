@@ -25,12 +25,12 @@ import { Functions } from "../actions/functions";
     decommissionDate_in: {
       type: "Date",
       description: "Automatic Decommissioning Target Date",
-      required: true
+      required: false
     },
     decommissionDelay_in: {
       type: "number",
       description: "Days until decommissioning",
-      required: true
+      required: false
     },
     isPOC_in: {
       type: "boolean",
