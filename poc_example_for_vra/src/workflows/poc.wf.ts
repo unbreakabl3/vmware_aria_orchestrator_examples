@@ -10,7 +10,7 @@
 import { Workflow, Out } from "vrotsc-annotations";
 import { Functions } from "../actions/functions";
 import { ConfigElement } from "../actions/configElement";
-import { AttributeMap, Credentials } from "../types/types";
+import { Credentials } from "../types/types";
 
 @Workflow({
   name: "POC Example for vRA",
