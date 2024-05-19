@@ -8,6 +8,7 @@
  * #L%
  */
 import { Workflow, Out } from "vrotsc-annotations";
+import { Functions } from "../actions/functions";
 
 @Workflow({
   name: "Upgrade VM Tools",
@@ -25,6 +26,10 @@ import { Workflow, Out } from "vrotsc-annotations";
     __tokenName: {
       type: "string",
       description: "Internal property"
+    },
+    allowReboot: {
+      type: "boolean",
+      description: "Allow reboot? If true, VM will be rebooted if required by the installation. If false, reboot will be suppressed."
     },
     setVmToolsUpgradePolicy: {
       type: "boolean",
@@ -57,5 +62,25 @@ export class UpgradeVMTools {
     allowUpgradeTemplates: boolean,
     allowUpgradePoweredOffVms: boolean,
     @Out result: any
-  ): void {}
+  ): void {
+    const func = new Functions();
+    const isVmTemplate = func.isVmTemplate(vm);
+    if (isVmTemplate) {
+      //const vmType = func.getVmType(vm);
+      const currentHostSystem = func.getVmParentHost(vm);
+      const currentComputeResource = func.getComputeResource(currentHostSystem);
+      //@ts-ignore
+      const currentResourcePool = func.getResourcePool(currentComputeResource);
+      const vars = {
+        vm: vm,
+        pool: currentResourcePool,
+        host: currentHostSystem
+      };
+      func.convertVmTemplateToVm(vars);
+    }
+    const currentPowerState = func.getVmPowerState(vm);
+    const vmDisk = func.getVmDiskMode(vm);
+    if (!func.isVmDiskModePersistent(vmDisk)) {
+    }
+  }
 }

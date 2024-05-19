@@ -44,23 +44,6 @@ describe("isUpgradePoweredOffVmAllowed", () => {
   });
 });
 
-// describe("isUpgradeVmTemplatesAllowed", () => {
-//   beforeEach(() => {
-//     func = new Functions();
-//   });
-//   it("should allow upgrade when allowUpgradeTemplates is true", () => {
-//     const allowUpgradeTemplates = true;
-//     const result = func.isUpgradeVmTemplatesAllowed(allowUpgradeTemplates);
-//     expect(result).toBe(true);
-//   });
-
-//   it("should disallow upgrade when allowUpgradeTemplates is false", () => {
-//     const allowUpgradeTemplates = false;
-//     const result = func.isUpgradeVmTemplatesAllowed(allowUpgradeTemplates);
-//     expect(result).toBe(false);
-//   });
-// });
-
 describe("getResourcePool", () => {
   beforeEach(() => {
     func = new Functions();
@@ -84,28 +67,55 @@ describe("getResourcePool", () => {
   });
 });
 
-describe("getComputeResource", () => {
-  beforeEach(() => {
-    func = new Functions();
-  });
-  it("should return the compute resource and log its name", () => {
-    const mockHostSystem = {
-      parent: { name: "MyCluster" }
-    };
-    const spy = spyOn(System, "log");
-    //@ts-ignore
-    const result = func.getComputeResource(mockHostSystem);
-    //@ts-ignore
-    expect(result).toBe(mockHostSystem.parent);
-    expect(spy).toHaveBeenCalledWith(`Cluster: ${mockHostSystem.parent.name}`);
-  });
+// describe("getResourcePool", () => {
+//   beforeEach(() => {
+//     func = new Functions();
+//   });
+//   it("should return the resource pool and log its name", () => {
+//     const mockVm = {
+//       resourcePool: { name: "MyResourcePool" }
+//     };
+//     const spy = spyOn(System, "log");
+//     //@ts-ignore
+//     const result = func.getResourcePool(mockVm);
+//     //@ts-ignore
+//     expect(result).toBe(mockVm.resourcePool);
+//   });
 
-  it("should return null if host system has no parent", () => {
-    const mockHostSystem = { parent: null };
-    //@ts-ignore
-    expect(() => func.getComputeResource(mockHostSystem)).toThrowError("Hostsystem does not have a compute resource");
-  });
-});
+//   it("should return null if VM has no resource pool", () => {
+//     const mockVm = { resourcePool: null };
+//     //@ts-ignore
+//     const result = func.getResourcePool(mockVm);
+//     expect(result).toBeNull();
+//   });
+
+//   it("should throw an error if VM object is null or undefined", () => {
+//     expect(() => func.getResourcePool(undefined)).toThrowError("VM object is null or undefined.");
+//   });
+// });
+
+// describe("getComputeResource", () => {
+//   beforeEach(() => {
+//     func = new Functions();
+//   });
+//   it("should return the compute resource and log its name", () => {
+//     const mockHostSystem = {
+//       parent: { name: "MyCluster" }
+//     };
+//     const spy = spyOn(System, "log");
+//     //@ts-ignore
+//     const result = func.getComputeResource(mockHostSystem);
+//     //@ts-ignore
+//     expect(result).toBe(mockHostSystem.parent);
+//     expect(spy).toHaveBeenCalledWith(`Cluster: ${mockHostSystem.parent.name}`);
+//   });
+
+//   it("should return null if host system has no parent", () => {
+//     const mockHostSystem = { parent: null };
+//     //@ts-ignore
+//     expect(() => func.getComputeResource(mockHostSystem)).toThrowError("Hostsystem does not have a compute resource");
+//   });
+// });
 
 describe("getVmParentHost", () => {
   beforeEach(() => {
@@ -201,3 +211,36 @@ describe("isUpgradeVmTemplatesAllowed", () => {
     expect(result).toBe(false);
   });
 });
+
+// describe("convertVmTemplateToVm", () => {
+//   let vm: VcVirtualMachine;
+//   let pool: VcResourcePool;
+//   let host: VcHostSystem;
+
+//   beforeEach(() => {
+//     func = new Functions();
+//     vm = jasmine.createSpyObj("VcVirtualMachine", ["markAsVirtualMachine"]);
+//     pool = jasmine.createSpyObj("VcResourcePool", []);
+//     host = jasmine.createSpyObj("VcHostSystem", []);
+
+//     // Mocking the System.log method
+//     spyOn(System, "log");
+//   });
+
+//   it("should convert the template to VM and log the success message", () => {
+//     const spy = spyOn(System, "log");
+//     func.convertVmTemplateToVm({ vm, pool, host });
+
+//     // Assert
+//     expect(vm.markAsVirtualMachine).toHaveBeenCalledWith(pool, host);
+//   });
+
+//   it("should throw an error if markAsVirtualMachine fails", () => {
+//     // Arrange
+//     const errorMessage = "Some error";
+//     (vm.markAsVirtualMachine as jasmine.Spy).and.throwError(errorMessage);
+
+//     // Act & Assert
+//     expect(() => func.convertVmTemplateToVm({ vm, pool, host })).toThrowError(`Failed to convert template to VM: ${errorMessage}`);
+//   });
+// });

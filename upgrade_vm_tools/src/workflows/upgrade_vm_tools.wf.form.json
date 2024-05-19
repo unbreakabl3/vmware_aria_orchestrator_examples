@@ -1,67 +1,210 @@
 {
-    "layout": {
-      "pages": [
-        {
-          "id": "page_ftr9080h",
-          "sections": [
-            {
-              "id": "section_m29eidg4",
-              "fields": [
-                {
-                  "id": "foo",
-                  "display": "textField",
-                  "signpostPosition": "right-middle",
-                  "state": {
-                    "visible": true,
-                    "read-only": false
+  "itemId": "",
+  "layout": {
+    "pages": [
+      {
+        "id": "page_1",
+        "sections": [
+          {
+            "fields": [
+              {
+                "display": "valuePicker",
+                "id": "vm"
+              }
+            ],
+            "id": "section_0"
+          },
+          {
+            "fields": [
+              {
+                "display": "textField",
+                "id": "__tokenName",
+                "state": {
+                  "visible": false
+                }
+              }
+            ],
+            "id": "section_1"
+          },
+          {
+            "fields": [
+              {
+                "display": "checkbox",
+                "id": "allowReboot"
+              }
+            ],
+            "id": "section_2"
+          },
+          {
+            "fields": [
+              {
+                "display": "checkbox",
+                "id": "setVmToolsUpgradePolicy"
+              }
+            ],
+            "id": "section_3"
+          },
+          {
+            "fields": [
+              {
+                "display": "dropDown",
+                "id": "desiredVmToolsUpgradePolicy",
+                "state": {
+                  "visible": {
+                    "id": "com.vmware.o11n.forms/evalOGNL",
+                    "parameters": [
+                      {
+                        "ognl": "`#setVmToolsUpgradePolicy`"
+                      },
+                      {
+                        "setVmToolsUpgradePolicy": "setVmToolsUpgradePolicy"
+                      },
+                      {
+                        "setVmToolsUpgradePolicy__type_": "`boolean`"
+                      },
+                      {
+                        "return": "`boolean`"
+                      }
+                    ],
+                    "type": "scriptAction"
                   }
                 }
-              ]
-            },
-            {
-              "id": "section_3wv6e91j",
-              "fields": [
-                {
-                  "id": "bar",
-                  "display": "textField",
-                  "signpostPosition": "right-middle",
-                  "state": {
-                    "visible": true,
-                    "read-only": false
-                  }
-                }
-              ]
-            }
-          ],
-          "title": "General",
-          "state": {}
-        }
-      ]
-    },
-    "schema": {
-      "foo": {
-        "id": "foo",
-        "type": {
-          "dataType": "string"
-        },
-        "label": "foo",
-        "constraints": {
-          "required": false
-        }
+              }
+            ],
+            "id": "section_4"
+          },
+          {
+            "fields": [
+              {
+                "display": "checkbox",
+                "id": "allowUpgradeTemplates"
+              }
+            ],
+            "id": "section_5"
+          },
+          {
+            "fields": [
+              {
+                "display": "checkbox",
+                "id": "allowUpgradePoweredOffVms"
+              }
+            ],
+            "id": "section_6"
+          }
+        ],
+        "title": "General"
+      }
+    ]
+  },
+  "schema": {
+    "__tokenName": {
+      "constraints": {},
+      "default": {
+        "id": "com.vmware.o11n.forms/evalOGNL",
+        "parameters": [
+          {
+            "ognl": "`#vm.name`"
+          },
+          {
+            "vm": "vm"
+          },
+          {
+            "vm__type_": "`VC:VirtualMachine`"
+          },
+          {
+            "return": "`string`"
+          }
+        ],
+        "type": "scriptAction"
       },
-      "bar": {
-        "id": "bar",
-        "type": {
-          "dataType": "string"
-        },
-        "label": "bar",
-        "constraints": {
-          "required": false
-        }
+      "id": "__tokenName",
+      "label": "Internal property",
+      "type": {
+        "dataType": "string",
+        "isMultiple": false
       }
     },
-    "options": {
-      "externalValidations": []
+    "allowReboot": {
+      "constraints": {},
+      "default": true,
+      "id": "allowReboot",
+      "label": "Allow reboot? If true, VM will be rebooted if required by the installation. If false, reboot will be suppressed.",
+      "type": {
+        "dataType": "boolean",
+        "isMultiple": false
+      }
     },
-    "itemId": ""
+    "allowUpgradePoweredOffVms": {
+      "constraints": {},
+      "default": false,
+      "id": "allowUpgradePoweredOffVms",
+      "label": "allowUpgradePoweredOffVms",
+      "type": {
+        "dataType": "boolean",
+        "isMultiple": false
+      }
+    },
+    "allowUpgradeTemplates": {
+      "constraints": {},
+      "default": false,
+      "id": "allowUpgradeTemplates",
+      "label": "allowUpgradeTemplates",
+      "type": {
+        "dataType": "boolean",
+        "isMultiple": false
+      }
+    },
+    "desiredVmToolsUpgradePolicy": {
+      "constraints": {
+        "required": {
+          "id": "com.vmware.o11n.forms/evalOGNL",
+          "parameters": [
+            {
+              "ognl": "`#setVmToolsUpgradePolicy`"
+            },
+            {
+              "setVmToolsUpgradePolicy": "setVmToolsUpgradePolicy"
+            },
+            {
+              "setVmToolsUpgradePolicy__type_": "`boolean`"
+            },
+            {
+              "return": "`boolean`"
+            }
+          ],
+          "type": "scriptAction"
+        }
+      },
+      "default": "manual",
+      "id": "desiredVmToolsUpgradePolicy",
+      "label": "Desired VMTools upgrade policy (manual or upgradeAtPowerCycle)",
+      "type": {
+        "dataType": "string",
+        "isMultiple": false
+      },
+      "valueList": ["manual", "upgradeAtPowerCycle"]
+    },
+    "setVmToolsUpgradePolicy": {
+      "constraints": {},
+      "default": false,
+      "id": "setVmToolsUpgradePolicy",
+      "label": "Set VMTools upgrade policy?",
+      "type": {
+        "dataType": "boolean",
+        "isMultiple": false
+      }
+    },
+    "vm": {
+      "constraints": {
+        "required": true
+      },
+      "id": "vm",
+      "label": "Virtual machine",
+      "type": {
+        "dataType": "reference",
+        "isMultiple": false,
+        "referenceType": "VC:VirtualMachine"
+      }
+    }
   }
+}
