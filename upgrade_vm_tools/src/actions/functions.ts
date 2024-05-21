@@ -19,16 +19,10 @@ export class Functions {
     return false;
   }
 
-  /**
-   * isUpgradeVMTemplatesAllowed
-   */
   public isUpgradeVmTemplatesAllowed(allowUpgradeTemplates: boolean): boolean {
     return allowUpgradeTemplates;
   }
 
-  /**
-   * getVMPowerState
-   */
   public getVmPowerState(vm: VcVirtualMachine): string {
     if (vm.runtime && vm.runtime.powerState) {
       const powerState = vm.runtime.powerState.value;
@@ -39,9 +33,6 @@ export class Functions {
     }
   }
 
-  /**
-   * getVMType
-   */
   public getVmType(vm: VcVirtualMachine): boolean {
     if (vm.config) {
       System.log(`isTemplate: ${vm.config.template}`);
@@ -51,9 +42,6 @@ export class Functions {
     }
   }
 
-  /**
-   * getVMParentHost
-   */
   public getVmParentHost(vm: VcVirtualMachine): VcHostSystem {
     if (vm.runtime && vm.runtime.host) {
       System.log(`Host: ${vm.runtime.host.name}`);
@@ -74,9 +62,6 @@ export class Functions {
   //   }
   // }
 
-  /**
-   * isVmTemplate
-   */
   public isVmTemplate(vm: VcVirtualMachine): boolean {
     System.log(`VM template: ${vm.isTemplate}`);
     if (vm.isTemplate !== undefined) {
@@ -86,9 +71,6 @@ export class Functions {
     }
   }
 
-  /**
-   * convertVmTemplateToVm
-   */
   public convertVmTemplateToVm({ vm, pool, host }: { vm: VcVirtualMachine; pool: VcResourcePool; host: VcHostSystem }): void {
     System.log(`pool: ${pool.name}`);
     try {
@@ -99,9 +81,6 @@ export class Functions {
     }
   }
 
-  /**
-   * getComputeResource
-   */
   public getComputeResource(hostSystem: VcHostSystem) {
     if (hostSystem.parent) {
       System.log(`Cluster: ${hostSystem.parent.name}`);
@@ -111,9 +90,6 @@ export class Functions {
     }
   }
 
-  /**
-   * getResourcePool
-   */
   public getResourcePool(computeResource: VcComputeResource) {
     if (computeResource.resourcePool) {
       System.log(`Resource pool: ${computeResource.resourcePool.name}`);
@@ -123,125 +99,129 @@ export class Functions {
     }
   }
 
-  /**
-   * getVmDiskMode
-   */
-  public getVmDiskMode(vm: VcVirtualMachine): VcVirtualDevice & VcVirtualDiskFlatVer2BackingInfo {
-    if (vm.config.hardware.device !== null) {
-      for (let i in vm.config.hardware.device) {
-        const device: VcVirtualDevice = vm.config.hardware.device[i];
-        if (device instanceof VcVirtualDiskFlatVer2BackingInfo) {
-          return device;
+  public getVmDisks(vm: VcVirtualMachine): VcVirtualDisk[] | null {
+    const devices: VcVirtualDisk[] = [];
+    if (vm.config && vm.config.hardware && vm.config.hardware.device) {
+      for (const device of vm.config.hardware.device) {
+        if (device instanceof VcVirtualDisk) {
+          devices.push(device);
         }
       }
-    } else {
-      System.log(`No disks found for virtual machine '${vm.name}'`);
+      return devices;
     }
   }
 
-  /**
-   * isVmDiskModePersistent
-   */
-  public isVmDiskModePersistent(disk: VcVirtualDevice & VcVirtualDiskFlatVer2BackingInfo) {
-    if (disk.diskMode === "persistent") {
-      System.log("Virtual machine disks are persistent");
-      return true;
-    } else {
-      System.log("Virtual machine disks are not persistent");
-      return false;
+  public getVmNonPersistentDisks(disks: VcVirtualDisk[]): VcVirtualDisk[] {
+    const nonPersistentDisks: VcVirtualDisk[] = [];
+    disks.forEach((disk) => {
+      if (disk.backing instanceof VcVirtualDiskFlatVer2BackingInfo && disk.backing.diskMode !== "persistent") {
+        nonPersistentDisks.push(disk);
+      }
+    });
+    return nonPersistentDisks;
+  }
+
+  public shutdownVmBasedOnCurrentState(vm: VcVirtualMachine, shutdownTimeout: number) {
+    const currentState = vm.runtime.powerState.value;
+    switch (currentState) {
+      case "poweredOff":
+        System.log("VM is already powered off");
+        return;
+      case "suspended":
+        return this.powerOnVm(vm);
+      case "poweredOn":
+        return this.handlePoweredOnVm(vm, shutdownTimeout);
+      default:
+        System.log(`Unknown VM power state: ${currentState}`);
     }
   }
 
-  /**
-   * handleVmPowerState
-   */
-  public changeVmPowerState(vm: VcVirtualMachine, shutdownTimeout: number) {
-    if (!vm) {
-      throw "Mandatory parameter vm is not defined.";
+  public powerOnVm(vm: VcVirtualMachine): void {
+    try {
+      const task = vm.powerOnVM_Task(null);
+      System.getModule("com.vmware.library.vc.basic").vim3WaitTaskEnd(task, true, 2);
+      System.log("Successfully powered on VM");
+    } catch (e) {
+      throw new Error(`Failed to power on VM: ${e}`);
     }
+  }
 
-    if (vm.runtime.powerState.value === "poweredOff") {
-      System.debug("VM is already powered off");
-    } else {
-      if (!shutdownTimeout || shutdownTimeout === null || shutdownTimeout === undefined) {
-        shutdownTimeout = 5;
-      }
+  public handlePoweredOnVm(vm: VcVirtualMachine, shutdownTimeout: number): void {
+    try {
+      System.getModule("com.vmware.library.vc.vm.tools").vim3WaitToolsStarted(vm, 2, 5);
+      const vmToolsRunning = vm.vmToolsStatus === "guestToolsRunning";
 
-      System.debug("Timeout before forcing the shutdown (minutes): " + shutdownTimeout);
-
-      if (vm.runtime.powerState.value === "suspended") {
-        System.debug("VM is suspended. Starting VM");
-
-        try {
-          let task = System.getModule("com.vmware.library.vc.vm.power").startVM(vm, null);
-          System.getModule("com.vmware.library.vc.basic").vim3WaitTaskEnd(task, true, 2);
-        } catch (e) {
-          throw "Failed to power on VM. " + e;
-        }
-
-        System.debug("Successfully powered on VM");
-
-        if (vm.runtime.powerState.value === "poweredOn") {
-          System.debug("VM is powered on");
-
-          try {
-            System.getModule("com.vmware.library.vc.vm.tools").vim3WaitToolsStarted(vm, 2, 5);
-
-            if (vm.vmToolsStatus === "guestToolsRunning") {
-              System.debug("VM is powered on and VMware Tools are running. The virtual machine will be shutdown gracefully");
-
-              try {
-                System.getModule("com.vmware.library.vc.vm.power").shutdownVMAndForce(vm, shutdownTimeout, 2);
-              } catch (e) {
-                throw "Failed to power off VM. " + e;
-              }
-
-              System.debug("Successfully powered off VM");
-            } else {
-              System.debug("VM is powered on but VMware Tools are not running. The virtual machine will be powered off ungracefully");
-
-              try {
-                task = System.getModule("com.vmware.library.vc.vm.power").forcePowerOff(vm);
-                System.getModule("com.vmware.library.vc.basic").vim3WaitTaskEnd(task, true, 2);
-              } catch (e) {
-                throw "Failed to power off VM. " + e;
-              }
-            }
-          } catch (e) {
-            System.debug("Failed to wait for VMTools. " + e + ". Will try to force shutdown");
-            try {
-              var task = System.getModule("com.vmware.library.vc.vm.power").forcePowerOff(vm);
-              System.getModule("com.vmware.library.vc.basic").vim3WaitTaskEnd(task, true, 2);
-            } catch (e) {
-              throw "Failed to power off VM. " + e;
-            }
-            System.debug("Successfully powered off VM");
-          }
-        }
+      if (vmToolsRunning) {
+        this.shutdownVmGracefully(vm, shutdownTimeout);
       } else {
-        if (vm.runtime.powerState.value == "poweredOn") {
-          if (vm.vmToolsStatus == "guestToolsRunning") {
-            System.debug("VM is powered on and VMware Tools are running. The virtual machine will be shutdown gracefully");
-
-            try {
-              System.getModule("com.vmware.library.vc.vm.power").shutdownVMAndForce(vm, shutdownTimeout, 2);
-            } catch (e) {
-              throw "Failed to power off VM. " + e;
-            }
-
-            System.debug("Successfully powered off VM");
-          } else {
-            System.debug("VM is powered on but VMware Tools are not running. The virtual machine will be powered off ungracefully");
-
-            try {
-              var task = System.getModule("com.vmware.library.vc.vm.power").forcePowerOff(vm);
-              System.getModule("com.vmware.library.vc.basic").vim3WaitTaskEnd(task, true, 2);
-            } catch (e) {
-              throw "Failed to power off VM. " + e;
-            }
-          }
-        }
+        this.powerOffVmUngracefully(vm);
       }
+    } catch (e) {
+      System.log(`Failed to wait for vmtools: ${e}. Will try to force shutdown`);
+      try {
+        this.powerOffVmUngracefully(vm);
+      } catch (e) {
+        throw new Error(`Failed to power off VM '${vm.name}': ${e}`);
+      }
+      System.log(`VM '${vm.name}' powered off successfully`);
+    }
+  }
+
+  public shutdownVmGracefully(vm: VcVirtualMachine, shutdownTimeout: number): void {
+    try {
+      System.getModule("com.vmware.library.vc.vm.power").shutdownVMAndForce(vm, shutdownTimeout, 2);
+      System.log("Successfully powered off VM");
+    } catch (e) {
+      throw new Error(`Failed to power off VM: ${e}`);
+    }
+  }
+
+  public powerOffVmUngracefully(vm: VcVirtualMachine): void {
+    try {
+      const task = System.getModule("com.vmware.library.vc.vm.power").forcePowerOff(vm);
+      System.getModule("com.vmware.library.vc.basic").vim3WaitTaskEnd(task, true, 2);
+    } catch (e) {
+      throw new Error(`Failed to power off VM: ${e}`);
+    }
+  }
+
+  public prepareVmDiskPersistency(devices: VcVirtualDisk[]): VcVirtualMachineConfigSpec {
+    // if (vm.snapshot != null) {
+    //   throw new Error(`Disks cannot be converted because the virtual machine has at least one snapshot`);
+    // }
+    const configSpec: VcVirtualMachineConfigSpec = new VcVirtualMachineConfigSpec();
+    const deviceConfigSpecs = [];
+    devices.forEach((device) => {
+      if (device.backing instanceof VcVirtualDiskFlatVer2BackingInfo && device.backing.diskMode !== "persistent") {
+        device.backing.diskMode = `persistent`;
+        const deviceConfigSpec = new VcVirtualDeviceConfigSpec();
+        deviceConfigSpec.device = device;
+        deviceConfigSpec.operation = VcVirtualDeviceConfigSpecOperation.edit;
+        deviceConfigSpecs.push(deviceConfigSpec);
+      }
+    });
+    configSpec.deviceChange = deviceConfigSpecs;
+    return configSpec;
+  }
+
+  public changeVmDiskPersistency(configSpec: VcVirtualMachineConfigSpec, vm: VcVirtualMachine): void {
+    try {
+      const task: VcTask = vm.reconfigVM_Task(configSpec);
+      if (task) {
+        System.getModule("com.vmware.library.vc.basic").vim3WaitTaskEnd(task, true, 2);
+        System.log("Disks have been converted to persistent");
+      }
+    } catch (e) {
+      throw new Error(`Failed to convert virtual machine disks. ${e}`);
+    }
+  }
+
+  public checkVmToolsStatus(vm: VcVirtualMachine, vmtoolsTimeout: number) {
+    try {
+      System.getModule("com.vmware.library.vc.vm.tools").vim3WaitToolsStarted(vm, 2, vmtoolsTimeout);
+    } catch (e) {
+      const toolsStatus = vm.guest.toolsStatus.value;
+      throw new Error(`VMTools status: ${toolsStatus}. ${e}`);
     }
   }
 }

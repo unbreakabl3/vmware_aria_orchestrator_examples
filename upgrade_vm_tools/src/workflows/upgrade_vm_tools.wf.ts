@@ -64,6 +64,8 @@ export class UpgradeVMTools {
     @Out result: any
   ): void {
     const func = new Functions();
+    const shutdownTimeout = 10; // seconds
+    const vmtoolsTimeout = 10; // minutes
     const isVmTemplate = func.isVmTemplate(vm);
     if (isVmTemplate) {
       //const vmType = func.getVmType(vm);
@@ -79,8 +81,19 @@ export class UpgradeVMTools {
       func.convertVmTemplateToVm(vars);
     }
     const currentPowerState = func.getVmPowerState(vm);
-    const vmDisk = func.getVmDiskMode(vm);
-    if (!func.isVmDiskModePersistent(vmDisk)) {
+    const vmDisks: VcVirtualDisk[] = func.getVmDisks(vm);
+    if (!vmDisks) throw new Error(`No disks found for virtual machine '${vm.name}'`);
+    System.log(`AA: ${func.getVmNonPersistentDisks(vmDisks).length}`);
+    if (func.getVmNonPersistentDisks(vmDisks).length !== 0) {
+      func.shutdownVmBasedOnCurrentState(vm, shutdownTimeout);
+      if (vm.snapshot != null) throw new Error(`Disks cannot be converted because the virtual machine has at least one snapshot`);
+      const diskPersistency = func.prepareVmDiskPersistency(vmDisks);
+      func.changeVmDiskPersistency(diskPersistency, vm);
     }
+    if (currentPowerState === "poweredOff") {
+      System.log(`Powering on VM`);
+      func.powerOnVm(vm);
+    }
+    func.checkVmToolsStatus(vm, vmtoolsTimeout);
   }
 }

@@ -212,35 +212,63 @@ describe("isUpgradeVmTemplatesAllowed", () => {
   });
 });
 
-// describe("convertVmTemplateToVm", () => {
-//   let vm: VcVirtualMachine;
-//   let pool: VcResourcePool;
-//   let host: VcHostSystem;
-
+//TODO: fix it
+// describe("getVmDiskMode", () => {
 //   beforeEach(() => {
 //     func = new Functions();
-//     vm = jasmine.createSpyObj("VcVirtualMachine", ["markAsVirtualMachine"]);
-//     pool = jasmine.createSpyObj("VcResourcePool", []);
-//     host = jasmine.createSpyObj("VcHostSystem", []);
-
-//     // Mocking the System.log method
-//     spyOn(System, "log");
+//     (<any>VcVirtualDiskFlatVer2BackingInfo) = {
+//       device: function () {}
+//     };
+//   });
+//   it("should return the disk device if found", () => {
+//     const mockVm = {
+//       config: {
+//         hardware: {
+//           device: [
+//             {
+//               /* Other device */
+//             },
+//             {
+//               /* Another device */
+//             },
+//             { instanceof: VcVirtualDiskFlatVer2BackingInfo } // Mock disk device
+//           ]
+//         }
+//       },
+//       name: "MyVM"
+//     };
+//     //@ts-ignore
+//     const result = func.getVmDiskMode(mockVm);
+//     //@ts-ignore
+//     expect(result).toBe(mockVm.config.hardware.device[2]); // Verify returned device
 //   });
 
-//   it("should convert the template to VM and log the success message", () => {
+//   it("should return null if no disks are found", () => {
+//     const mockVm = {
+//       config: {
+//         hardware: {
+//           device: [
+//             {
+//               /* Other device */
+//             }
+//           ]
+//         }
+//       },
+//       name: "MyVM"
+//     };
 //     const spy = spyOn(System, "log");
-//     func.convertVmTemplateToVm({ vm, pool, host });
-
-//     // Assert
-//     expect(vm.markAsVirtualMachine).toHaveBeenCalledWith(pool, host);
+//     //@ts-ignore
+//     const result = func.getVmDiskMode(mockVm);
+//     expect(result).toBeNull();
+//     //expect(console.log).toHaveBeenCalledWith(`No disks found for virtual machine '${mockVm.name}'`); // Verify log message
 //   });
 
-//   it("should throw an error if markAsVirtualMachine fails", () => {
-//     // Arrange
-//     const errorMessage = "Some error";
-//     (vm.markAsVirtualMachine as jasmine.Spy).and.throwError(errorMessage);
-
-//     // Act & Assert
-//     expect(() => func.convertVmTemplateToVm({ vm, pool, host })).toThrowError(`Failed to convert template to VM: ${errorMessage}`);
+//   it("should return null if VM configuration or hardware information is missing", () => {
+//     const mockVm = { config: null, name: "MyVM" };
+//     //@ts-ignore
+//     const result = func.getVmDiskMode(mockVm);
+//     const spy = spyOn(System, "log");
+//     expect(result).toBeNull();
+//     // expect(console.log).toHaveBeenCalledWith(`VM configuration or hardware information missing for '${mockVm.name}'`); // Verify log message
 //   });
 // });
