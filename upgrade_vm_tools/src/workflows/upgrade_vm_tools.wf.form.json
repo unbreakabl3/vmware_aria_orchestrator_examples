@@ -9,7 +9,8 @@
             "fields": [
               {
                 "display": "valuePicker",
-                "id": "vm"
+                "id": "vm",
+                "signpostPosition": "right-middle"
               }
             ],
             "id": "section_0"
@@ -19,6 +20,7 @@
               {
                 "display": "textField",
                 "id": "__tokenName",
+                "signpostPosition": "right-middle",
                 "state": {
                   "visible": false
                 }
@@ -30,7 +32,8 @@
             "fields": [
               {
                 "display": "checkbox",
-                "id": "allowReboot"
+                "id": "allowReboot",
+                "signpostPosition": "right-middle"
               }
             ],
             "id": "section_2"
@@ -39,7 +42,8 @@
             "fields": [
               {
                 "display": "checkbox",
-                "id": "setVmToolsUpgradePolicy"
+                "id": "setVmToolsUpgradePolicy",
+                "signpostPosition": "right-middle"
               }
             ],
             "id": "section_3"
@@ -49,6 +53,7 @@
               {
                 "display": "dropDown",
                 "id": "desiredVmToolsUpgradePolicy",
+                "signpostPosition": "right-middle",
                 "state": {
                   "visible": {
                     "id": "com.vmware.o11n.forms/evalOGNL",
@@ -77,7 +82,12 @@
             "fields": [
               {
                 "display": "checkbox",
-                "id": "allowUpgradeTemplates"
+                "id": "allowUpgradeTemplates",
+                "signpostPosition": "right-middle",
+                "state": {
+                  "read-only": false,
+                  "visible": true
+                }
               }
             ],
             "id": "section_5"
@@ -86,15 +96,44 @@
             "fields": [
               {
                 "display": "checkbox",
-                "id": "allowUpgradePoweredOffVms"
+                "id": "allowUpgradePoweredOffVms",
+                "signpostPosition": "right-middle",
+                "state": {
+                  "read-only": [
+                    {
+                      "equals": {
+                        "allowUpgradeTemplates": true
+                      },
+                      "value": true
+                    }
+                  ],
+                  "visible": true
+                }
               }
             ],
             "id": "section_6"
+          },
+          {
+            "fields": [
+              {
+                "display": "checkbox",
+                "id": "createSnapshot",
+                "signpostPosition": "right-middle",
+                "state": {
+                  "read-only": false,
+                  "visible": true
+                }
+              }
+            ],
+            "id": "section_586819e2"
           }
         ],
         "title": "General"
       }
     ]
+  },
+  "options": {
+    "externalValidations": []
   },
   "schema": {
     "__tokenName": {
@@ -136,7 +175,14 @@
     },
     "allowUpgradePoweredOffVms": {
       "constraints": {},
-      "default": false,
+      "default": [
+        {
+          "equals": {
+            "allowUpgradeTemplates": true
+          },
+          "value": true
+        }
+      ],
       "id": "allowUpgradePoweredOffVms",
       "label": "allowUpgradePoweredOffVms",
       "type": {
@@ -152,6 +198,13 @@
       "type": {
         "dataType": "boolean",
         "isMultiple": false
+      }
+    },
+    "createSnapshot": {
+      "description": "Create a snapshot before any changes",
+      "label": "createSnapshot",
+      "type": {
+        "dataType": "boolean"
       }
     },
     "desiredVmToolsUpgradePolicy": {
