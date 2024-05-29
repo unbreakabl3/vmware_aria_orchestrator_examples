@@ -12,7 +12,6 @@ export class Functions {
    * upgradePoweredOfVMs
    */
 
-  //TODO: rename it to upgradePoweredOfVM
   public isUpgradePoweredOffVmAllowed(allowUpgradePoweredOffVm: boolean, vm: VcVirtualMachine): boolean {
     if (allowUpgradePoweredOffVm || vm.runtime.powerState.value === "poweredOn") return true;
     System.warn(`The current state '${vm.runtime.powerState.value}' is prohibited for the upgrade.`);
@@ -224,19 +223,24 @@ export class Functions {
       System.getModule("com.vmware.library.vc.vm.tools").vim3WaitToolsStarted(vm, 2, vmtoolsTimeout);
     } catch (e) {
       const toolsStatus = vm.guest.toolsStatus.value;
-      throw new Error(`VMTools status: ${toolsStatus}. ${e}`);
+      throw new Error(`VMTools status: ${toolsStatus}: ${e}`);
     }
   }
 
   public upgradeVmTools({ vm, allowReboot = false, waitForTools }: { vm: VcVirtualMachine; allowReboot: boolean; waitForTools: boolean }): boolean {
-    const toolsStatus = vm.guest.toolsStatus.value;
-
+    const toolsStatus = vm.guest.toolsVersionStatus2;
+    System.log("tools status: " + toolsStatus);
     switch (toolsStatus) {
-      case "toolsOk":
+      case "guestToolsSupportedNew":
+        System.log("VMtools are newer than available. Skipping the upgrade");
+      case "guestToolsUnmanaged":
+        System.log("3rd party managed VMtools (open-vm-tools). Skipping the upgrade");
+      case "guestToolsCurrent":
         System.log("VMware Tools are already running and up to date. Nothing to do.");
         return true;
-      case "toolsOld":
-      case "toolsNotRunning":
+      case "guestToolsBlacklisted":
+      case "guestToolsNeedUpgrade":
+      case "guestToolsSupportedOld":
         System.log("Starting VMware Tools upgrade...");
         const upgradeArgs = allowReboot ? "/s /vqn" : '/s /v"/qn REBOOT=ReallySuppress"';
         try {
@@ -249,14 +253,14 @@ export class Functions {
           }
           return true;
         } catch (e) {
-          throw new Error(`Failed to upgrade VMware Tools. ${e}`);
+          throw new Error(`Failed to upgrade VMware Tools: ${e}`);
         }
 
-      case "toolsNotInstalled":
-        throw new Error("Unable to upgrade VMware Tools because they are not currently installed.");
+      case "guestToolsNotInstalled":
+        throw new Error(`Unable to upgrade VMware Tools because they are not currently installed.`);
 
       default:
-        throw new Error("Unexpected VMware Tools status: " + toolsStatus);
+        throw new Error(`Unexpected VMware Tools status: ${toolsStatus}`);
     }
   }
 
@@ -268,7 +272,6 @@ export class Functions {
     }
 
     System.log(`Current VMTools upgrade policy is '${currentVmToolsUpgradePolicy}'. Updating to '${desiredVmToolsUpgradePolicy}'.`);
-
     const configSpec = new VcVirtualMachineConfigSpec();
     const toolsSpec = new VcToolsConfigInfo();
     toolsSpec.toolsUpgradePolicy = desiredVmToolsUpgradePolicy;
@@ -279,7 +282,7 @@ export class Functions {
       System.getModule("com.vmware.library.vc.basic").vim3WaitTaskEnd(task, true, 2);
       System.log(`Successfully set VMTools upgrade policy to '${desiredVmToolsUpgradePolicy}'.`);
     } catch (e) {
-      throw new Error(`Failed to set VMTools upgrade policy to '${desiredVmToolsUpgradePolicy}'. ${e}`);
+      throw new Error(`Failed to set VMTools upgrade policy to '${desiredVmToolsUpgradePolicy}': ${e}`);
     }
   }
 
@@ -288,11 +291,11 @@ export class Functions {
       throw new Error("Required parameters are missing");
     }
     try {
-      const task = vm.createSnapshot_Task(name, description, memory, quiesce);
+      const task: VcTask = vm.createSnapshot_Task(name, description, memory, quiesce);
       System.getModule("com.vmware.library.vc.basic").vim3WaitTaskEnd(task, true, 2);
       System.log(`Creating snapshot '${name}' on VM '${vm.name} was completed successfully'`);
     } catch (error) {
-      throw new Error(`Failed to create snapshot '${name}' on VM '${vm.name}'. ${error}`);
+      throw new Error(`Failed to create snapshot '${name}' on VM '${vm.name}': ${error}`);
     }
   }
 
@@ -312,16 +315,16 @@ export class Functions {
   }
 
   public removeSnapshot({ vm, removeChildren, consolidate, snapshotName }: { vm: VcVirtualMachine; removeChildren: boolean; consolidate: boolean; snapshotName: string }): void {
-    const vmSnapshots = this.getVmSnapshot(vm);
+    const vmSnapshots: VcVirtualMachineSnapshot[] = this.getVmSnapshot(vm);
     if (!vmSnapshots) return;
     vmSnapshots.forEach((snapshot) => {
       if (snapshot.name === snapshotName) {
         try {
           const task = snapshot.removeSnapshot_Task(removeChildren, consolidate);
           System.getModule("com.vmware.library.vc.basic").vim3WaitTaskEnd(task, true, 2);
-          System.log(`Snapshot '${snapshot.name}' was removed successfully`);
+          System.log(`Snapshot '${snapshotName}' was removed successfully`);
         } catch (error) {
-          const errorMessage = `Failed to remove snapshot '${snapshot.name}' on VM '${vm.name}': ${error instanceof Error ? error.message : String(error)}`;
+          const errorMessage = `Failed to remove snapshot '${snapshotName}' on VM '${vm.name}': ${error instanceof Error ? error.message : String(error)}`;
           throw new Error(errorMessage);
         }
       }

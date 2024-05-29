@@ -23,10 +23,6 @@ import { Functions } from "../actions/functions";
       required: true,
       title: "Foo"
     },
-    __tokenName: {
-      type: "string",
-      description: "Internal property"
-    },
     allowReboot: {
       type: "boolean",
       description: "Allow reboot? If true, VM will be rebooted if required by the installation. If false, reboot will be suppressed."
@@ -58,6 +54,10 @@ import { Functions } from "../actions/functions";
     consolidate: {
       type: "boolean",
       description: "Consolidate snapshot"
+    },
+    snapshotName: {
+      type: "string",
+      description: "Snapshot name"
     }
   },
   output: {
@@ -68,7 +68,6 @@ import { Functions } from "../actions/functions";
 export class UpgradeVMTools {
   public install(
     vm: VcVirtualMachine,
-    __tokenName: string,
     allowReboot: boolean,
     setVmToolsUpgradePolicy: boolean,
     desiredVmToolsUpgradePolicy: string,
@@ -77,13 +76,13 @@ export class UpgradeVMTools {
     createSnapshot: boolean,
     removeChildren: boolean,
     consolidate: boolean,
+    snapshotName: string,
     @Out result: any
   ): void {
     const func = new Functions();
     const shutdownTimeout = 10; // seconds
     const vmtoolsTimeout = 10; // minutes
     const waitForTools = true;
-    const snapshotName = "upgrade_vm_tools";
     const snapshotDescription = `Upgrade VM Tools. Created by ${Server.getCurrentLdapUser()}`;
     const snapshotWithMemory = false;
     const snapshotWithQuiesce = false;
@@ -102,50 +101,52 @@ export class UpgradeVMTools {
     const initialPowerState = func.getVmPowerState(vm);
     if (!allowUpgradePoweredOffVms && initialPowerState === "poweredOff") throw new Error("VM is powered off and not allowed for upgrade");
     if (!allowUpgradeTemplates && isVmTemplate) throw new Error("VM is template and templates are not allowed for upgrade");
+
+    if (isVmTemplate) {
+      const currentHostSystem = func.getVmParentHost(vm);
+      const currentComputeResource = func.getComputeResource(currentHostSystem);
+      //@ts-ignore
+      const currentResourcePool = func.getResourcePool(currentComputeResource);
+      const vars = {
+        vm: vm,
+        pool: currentResourcePool,
+        host: currentHostSystem
+      };
+      func.convertTemplateToVm(vars);
+    }
     if (createSnapshot) func.createVmSnapshot(vars);
-    // if (isVmTemplate) {
-    //   const currentHostSystem = func.getVmParentHost(vm);
-    //   const currentComputeResource = func.getComputeResource(currentHostSystem);
-    //   //@ts-ignore
-    //   const currentResourcePool = func.getResourcePool(currentComputeResource);
-    //   const vars = {
-    //     vm: vm,
-    //     pool: currentResourcePool,
-    //     host: currentHostSystem
-    //   };
-    //   func.convertTemplateToVm(vars);
-    // }
+    const vmDisks = func.getVmDisks(vm);
+    if (!vmDisks) throw new Error(`No disks found for virtual machine '${vm.name}'`);
+    const isDiskNonPersistent = func.getVmNonPersistentDisks(vmDisks, diskPersistencyType.persistent).length !== 0;
+    if (isDiskNonPersistent) {
+      System.log(`Preparing disks for conversion to ${diskPersistencyType.persistent}`);
+      func.shutdownVmBasedOnCurrentState(vm, shutdownTimeout);
+      if (vm.snapshot != null) throw new Error("Disks cannot be converted because the virtual machine has at least one snapshot");
+      const diskPersistency: VcVirtualMachineConfigSpec = func.prepareVmDiskPersistency(vmDisks, diskPersistencyType.persistent);
+      func.changeVmDiskPersistency(diskPersistency, vm);
+    }
 
-    // const vmDisks = func.getVmDisks(vm);
-    // if (!vmDisks) throw new Error(`No disks found for virtual machine '${vm.name}'`);
-    // const isDiskNonPersistent = func.getVmNonPersistentDisks(vmDisks, diskPersistencyType.persistent).length !== 0;
-    // if (isDiskNonPersistent) {
-    //   System.log(`Preparing disks for conversion to ${diskPersistencyType.persistent}`);
-    //   func.shutdownVmBasedOnCurrentState(vm, shutdownTimeout);
-    //   if (vm.snapshot != null) throw new Error("Disks cannot be converted because the virtual machine has at least one snapshot");
-    //   const diskPersistency = func.prepareVmDiskPersistency(vmDisks, diskPersistencyType.persistent);
-    //   func.changeVmDiskPersistency(diskPersistency, vm);
-    // }
+    if (initialPowerState !== "poweredOn") func.powerOnVm(vm);
+    func.checkVmToolsStatus(vm, vmtoolsTimeout);
+    func.upgradeVmTools({ vm, allowReboot, waitForTools });
+    func.checkVmToolsStatus(vm, vmtoolsTimeout);
 
-    // if (initialPowerState !== "poweredOn") func.powerOnVm(vm);
-    // func.checkVmToolsStatus(vm, vmtoolsTimeout);
-    // func.upgradeVmTools({ vm, allowReboot, waitForTools });
-    // func.checkVmToolsStatus(vm, vmtoolsTimeout);
-
-    // if (setVmToolsUpgradePolicy) func.setVmToolsUpgradePolicy(vm, desiredVmToolsUpgradePolicy);
-    // if (initialPowerState === "poweredOff") func.handlePoweredOnVm(vm, shutdownTimeout);
-    // if (initialPowerState === "suspended") func.handleSuspendedVm(vm);
-    // if (isDiskNonPersistent) {
-    //   const diskPersistency: VcVirtualMachineConfigSpec = func.prepareVmDiskPersistency(vmDisks, diskPersistencyType.nonpersistent);
-    //   func.changeVmDiskPersistency(diskPersistency, vm);
-    // }
-    // if (isVmTemplate) func.convertVmToTemplate(vm);
-    const snapshotVars = {
-      vm: vm,
-      removeChildren: removeChildren,
-      consolidate: consolidate,
-      snapshotName: snapshotName
-    };
-    func.removeSnapshot(snapshotVars);
+    if (setVmToolsUpgradePolicy) func.setVmToolsUpgradePolicy(vm, desiredVmToolsUpgradePolicy);
+    if (initialPowerState === "poweredOff") func.handlePoweredOnVm(vm, shutdownTimeout);
+    if (initialPowerState === "suspended") func.handleSuspendedVm(vm);
+    if (isDiskNonPersistent) {
+      const diskPersistency: VcVirtualMachineConfigSpec = func.prepareVmDiskPersistency(vmDisks, diskPersistencyType.nonpersistent);
+      func.changeVmDiskPersistency(diskPersistency, vm);
+    }
+    if (createSnapshot) {
+      const snapshotVars = {
+        vm: vm,
+        removeChildren: removeChildren,
+        consolidate: consolidate,
+        snapshotName: snapshotName
+      };
+      func.removeSnapshot(snapshotVars);
+    }
+    if (isVmTemplate) func.convertVmToTemplate(vm);
   }
 }

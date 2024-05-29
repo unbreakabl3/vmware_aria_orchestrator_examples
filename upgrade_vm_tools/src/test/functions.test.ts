@@ -18,7 +18,6 @@ describe("isUpgradePoweredOffVmAllowed", () => {
     const vm = { runtime: { powerState: { value: "poweredOn" } } };
     const allowUpgradePoweredOffVm = true;
     //@ts-ignore
-    //TODO: convert 'vm' to be of type VCVirtualMachine
     const result = func.isUpgradePoweredOffVmAllowed(allowUpgradePoweredOffVm, vm);
     expect(result).toBe(true);
   });
@@ -27,7 +26,6 @@ describe("isUpgradePoweredOffVmAllowed", () => {
     const vm = { runtime: { powerState: { value: "poweredOff" } } };
     const allowUpgradePoweredOffVm = true;
     //@ts-ignore
-    //TODO: convert 'vm' to be of type VCVirtualMachine
     const result = func.isUpgradePoweredOffVmAllowed(allowUpgradePoweredOffVm, vm);
     expect(result).toBe(true);
   });
@@ -37,7 +35,6 @@ describe("isUpgradePoweredOffVmAllowed", () => {
     const vm = { runtime: { powerState: { value: "poweredOff" } } };
     const allowUpgradePoweredOffVm = false;
     //@ts-ignore
-    //TODO: convert 'vm' to be of type VCVirtualMachine
     const result = func.isUpgradePoweredOffVmAllowed(allowUpgradePoweredOffVm, vm);
     expect(result).toBe(false);
     expect(spy).toHaveBeenCalledWith(`The current state '${vm.runtime.powerState.value}' is prohibited for the upgrade.`);
@@ -211,67 +208,6 @@ describe("isUpgradeVmTemplatesAllowed", () => {
     expect(result).toBe(false);
   });
 });
-
-//TODO: fix it
-// describe("getVmDiskMode", () => {
-//   beforeEach(() => {
-//     func = new Functions();
-//     (<any>VcVirtualDiskFlatVer2BackingInfo) = {
-//       device: function () {}
-//     };
-//   });
-//   it("should return the disk device if found", () => {
-//     const mockVm = {
-//       config: {
-//         hardware: {
-//           device: [
-//             {
-//               /* Other device */
-//             },
-//             {
-//               /* Another device */
-//             },
-//             { instanceof: VcVirtualDiskFlatVer2BackingInfo } // Mock disk device
-//           ]
-//         }
-//       },
-//       name: "MyVM"
-//     };
-//     //@ts-ignore
-//     const result = func.getVmDiskMode(mockVm);
-//     //@ts-ignore
-//     expect(result).toBe(mockVm.config.hardware.device[2]); // Verify returned device
-//   });
-
-//   it("should return null if no disks are found", () => {
-//     const mockVm = {
-//       config: {
-//         hardware: {
-//           device: [
-//             {
-//               /* Other device */
-//             }
-//           ]
-//         }
-//       },
-//       name: "MyVM"
-//     };
-//     const spy = spyOn(System, "log");
-//     //@ts-ignore
-//     const result = func.getVmDiskMode(mockVm);
-//     expect(result).toBeNull();
-//     //expect(console.log).toHaveBeenCalledWith(`No disks found for virtual machine '${mockVm.name}'`); // Verify log message
-//   });
-
-//   it("should return null if VM configuration or hardware information is missing", () => {
-//     const mockVm = { config: null, name: "MyVM" };
-//     //@ts-ignore
-//     const result = func.getVmDiskMode(mockVm);
-//     const spy = spyOn(System, "log");
-//     expect(result).toBeNull();
-//     // expect(console.log).toHaveBeenCalledWith(`VM configuration or hardware information missing for '${mockVm.name}'`); // Verify log message
-//   });
-// });
 
 describe("setVmToolsUpgradePolicy", () => {
   let vm: any;
