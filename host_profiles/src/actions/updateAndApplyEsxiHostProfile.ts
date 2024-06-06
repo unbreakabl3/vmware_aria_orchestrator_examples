@@ -1,6 +1,6 @@
 /*-
  * #%L
- * vmware_aria_orchestrator_examples
+ * host_profiles
  * %%
  * Copyright (C) 2024 TODO: Enter Organization name
  * %%
@@ -27,7 +27,7 @@ export class EsxiHostProfile {
     const hostNameInput = new VcProfileDeferredPolicyOptionParameter();
     hostNameInput.inputPath = new VcProfilePropertyPath();
     hostNameInput.inputPath.policyId = "HostNamePolicy";
-    hostNameInput.inputPath.profilePath = 'network.GenericNetStackInstanceProfile["key-vim-profile-host-GenericNetStackInstanceProfile-defaultTcpipStack"].GenericDnsConfigProfile';
+    hostNameInput.inputPath.profilePath = "network.GenericNetStackInstanceProfile[\"key-vim-profile-host-GenericNetStackInstanceProfile-defaultTcpipStack\"].GenericDnsConfigProfile";
 
     //@ts-ignore
     const hostNameParameter = new VcKeyAnyValue();
@@ -48,7 +48,7 @@ export class EsxiHostProfile {
     ipParameter.value_AnyValue = hostIP;
     ipInput.inputPath = new VcProfilePropertyPath();
     ipInput.inputPath.policyId = "IpAddressPolicy";
-    ipInput.inputPath.profilePath = 'network.hostPortGroup["key-vim-profile-host-HostPortgroupProfile-ManagementNetwork"].ipConfig';
+    ipInput.inputPath.profilePath = "network.hostPortGroup[\"key-vim-profile-host-HostPortgroupProfile-ManagementNetwork\"].ipConfig";
     ipInput.parameter = [subnetParameter, ipParameter];
     userInput.push(ipInput);
     configSpec.userInput = userInput;

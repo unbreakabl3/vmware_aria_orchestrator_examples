@@ -1,0 +1,161 @@
+{
+    "itemId": "",
+    "layout": {
+        "pages": [
+            {
+                "id": "page_ftr9080h",
+                "sections": [
+                    {
+                        "fields": [],
+                        "id": "section_m29eidg4"
+                    },
+                    {
+                        "fields": [],
+                        "id": "section_3wv6e91j"
+                    },
+                    {
+                        "fields": [
+                            {
+                                "display": "valuePicker",
+                                "id": "vmHost",
+                                "signpostPosition": "right-middle",
+                                "state": {
+                                    "read-only": false,
+                                    "visible": true
+                                }
+                            }
+                        ],
+                        "id": "section_cf233d9d"
+                    },
+                    {
+                        "fields": [
+                            {
+                                "display": "textField",
+                                "id": "textField_b92a6ced",
+                                "signpostPosition": "right-middle",
+                                "state": {
+                                    "read-only": true,
+                                    "visible": [
+                                        {
+                                            "notEmpty": {
+                                                "vmHost": ""
+                                            },
+                                            "value": true
+                                        }
+                                    ]
+                                }
+                            }
+                        ],
+                        "id": "section_36799d43"
+                    },
+                    {
+                        "fields": [
+                            {
+                                "display": "textField",
+                                "id": "hostFQDN",
+                                "signpostPosition": "right-middle",
+                                "state": {
+                                    "read-only": false,
+                                    "visible": true
+                                }
+                            }
+                        ],
+                        "id": "section_27ae42e5"
+                    },
+                    {
+                        "fields": [
+                            {
+                                "display": "textField",
+                                "id": "hostSubnet",
+                                "signpostPosition": "right-middle",
+                                "state": {
+                                    "read-only": false,
+                                    "visible": true
+                                }
+                            }
+                        ],
+                        "id": "section_a8bc2b79"
+                    },
+                    {
+                        "fields": [
+                            {
+                                "display": "textField",
+                                "id": "hostIP",
+                                "signpostPosition": "right-middle",
+                                "state": {
+                                    "read-only": false,
+                                    "visible": true
+                                }
+                            }
+                        ],
+                        "id": "section_49741bbc"
+                    }
+                ],
+                "state": {},
+                "title": "General"
+            }
+        ]
+    },
+    "options": {
+        "externalValidations": []
+    },
+    "schema": {
+        "hostFQDN": {
+            "label": "hostFQDN",
+            "type": {
+                "dataType": "string"
+            }
+        },
+        "hostIP": {
+            "label": "hostIP",
+            "type": {
+                "dataType": "string"
+            }
+        },
+        "hostSubnet": {
+            "label": "hostSubnet",
+            "type": {
+                "dataType": "string"
+            }
+        },
+        "textField_b92a6ced": {
+            "constraints": {
+                "required": [
+                    {
+                        "notEmpty": {
+                            "vmHost": ""
+                        },
+                        "value": true
+                    }
+                ]
+            },
+            "default": {
+                "id": "com.clouddepth.host_profiles.actions\/getHostProfile",
+                "parameters": [
+                    {
+                        "$type": {
+                            "dataType": "reference",
+                            "referenceType": "VC:HostSystem"
+                        },
+                        "vmHost": "vmHost"
+                    }
+                ],
+                "type": "scriptAction"
+            },
+            "label": "Host Profile Name",
+            "placeholder": "",
+            "type": {
+                "dataType": "string"
+            }
+        },
+        "vmHost": {
+            "id": "vmHost",
+            "label": "vmHost",
+            "type": {
+                "dataType": "reference",
+                "referenceType": "VC:HostSystem"
+            },
+            "valueList": []
+        }
+    }
+}
