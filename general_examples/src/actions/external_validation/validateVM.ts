@@ -21,9 +21,9 @@
   /**
    * @type {Array<VirtualMachine>}
    */
-  const vms: VcVirtualMachine[] = VcPlugin.getAllVirtualMachines(null, `xpath:name[matches(.,'${vmName}')]`);
+  const vms: Array<VcVirtualMachine> = VcPlugin.getAllVirtualMachines(null, `xpath:name[matches(.,'${vmName}')]`);
 
   if (vms.length > 0) {
-    return `Virtual Machine with that name is already exists`;
+    return "Virtual Machine with that name is already exists";
   }
 });

@@ -16,7 +16,7 @@ import { Workflow, Out } from "vrotsc-annotations";
   description: "Sample workflow description",
   attributes: {},
   input: {
-    vmName: { type: "string" },
+    vmName: { type: "string" }
   },
   output: {
     result: { type: "Any" }

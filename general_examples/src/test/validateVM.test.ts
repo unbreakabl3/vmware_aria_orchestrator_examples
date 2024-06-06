@@ -1,3 +1,12 @@
+/*-
+ * #%L
+ * vmware_aria_orchestrator_examples
+ * %%
+ * Copyright (C) 2024 TODO: Enter Organization name
+ * %%
+ * TODO: Define header text
+ * #L%
+ */
 const validateVM = System.getModule("com.examples.vmware_aria_orchestrator_examples.external_validation").validateVM;
 
 describe("validateVM", () => {
