@@ -55,4 +55,8 @@ export class functionsHostProfile {
       throw new Error(`associateHostProfile: ${error}`);
     }
   }
+
+  public isArrayNotEmpty<T>(array: T[]): array is [T, ...T[]] {
+    return array.length > 0;
+  }
 }

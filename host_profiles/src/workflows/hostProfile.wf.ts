@@ -31,7 +31,7 @@ import { functionsHostProfile } from "../actions/functionsHostProfile";
 export class SampleWorkflow {
   public install(vmHost: VcHostSystem, hostFQDN: string, hostSubnet: string, hostIP: string, availableHostProfiles: string, @Out result: any): void {
     const func = new functionsHostProfile();
-    if (!vmHost || !hostFQDN || !hostIP) throw new Error("input arguments are missing");
+    if (!vmHost || !hostFQDN || !hostIP || !availableHostProfiles) throw new Error("input arguments are missing");
     const sdkConnection: VcSdkConnection = vmHost.sdkConnection;
     const hostProfileManager: VcProfileManager = sdkConnection.hostProfileManager;
     const hostToConfigSpecMap = [];
@@ -74,13 +74,14 @@ export class SampleWorkflow {
     hostToConfigSpecMap.push(vcHostProfileManagerHostToConfigSpecMap);
 
     func.updateHostCustomization(hostToConfigSpecMap, hostProfileManager);
-    const profiles = System.getModule("com.clouddepth.host_profiles.actions").getHostProfileDetails;
-    const selectedProfile = profiles(vmHost, availableHostProfiles);
-    const attachedProfile = func.findAssociatedProfile(vmHost, hostProfileManager);
-    if (attachedProfile && selectedProfile[0].profileName != attachedProfile.name) {
-      func.associateHostProfile(vmHost, selectedProfile[0].profileObject);
+    const selectedProfile: Properties[] = System.getModule("com.clouddepth.host_profiles.actions").getHostProfileDetails(vmHost, availableHostProfiles);
+    if (!func.isArrayNotEmpty(selectedProfile)) throw new Error(`${selectedProfile} is not an array`);
+    const selectedProfileDetails: Properties = selectedProfile[0];
+    const attachedProfile: VcProfile | null = func.findAssociatedProfile(vmHost, hostProfileManager);
+    if (attachedProfile && selectedProfileDetails.profileName != attachedProfile.name) {
+      func.associateHostProfile(vmHost, selectedProfileDetails.profileObject);
     }
-    const profileExecuteResult: VcProfileExecuteResult = func.executeHostProfile(vmHost, userInput, selectedProfile[0].profileObject);
+    const profileExecuteResult: VcProfileExecuteResult = func.executeHostProfile(vmHost, userInput, selectedProfileDetails.profileObject);
     func.applyHostConfig(vmHost, profileExecuteResult);
   }
 }
