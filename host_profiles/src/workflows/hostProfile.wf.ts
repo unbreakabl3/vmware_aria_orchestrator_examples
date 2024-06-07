@@ -47,7 +47,6 @@ export class SampleWorkflow {
     hostNameInput.inputPath = new VcProfilePropertyPath();
     hostNameInput.inputPath.policyId = "HostNamePolicy";
     hostNameInput.inputPath.profilePath = 'network.GenericNetStackInstanceProfile["key-vim-profile-host-GenericNetStackInstanceProfile-defaultTcpipStack"].GenericDnsConfigProfile';
-
     //@ts-ignore
     const hostNameParameter = new VcKeyAnyValue();
     hostNameParameter.key = "hostName";
@@ -73,6 +72,7 @@ export class SampleWorkflow {
     configSpec.userInput = userInput;
     hostToConfigSpecMap.push(vcHostProfileManagerHostToConfigSpecMap);
 
+    // Main
     func.updateHostCustomization(hostToConfigSpecMap, hostProfileManager);
     const selectedProfile: Properties[] = System.getModule("com.clouddepth.host_profiles.actions").getHostProfileDetails(vmHost, availableHostProfiles);
     if (!func.isArrayNotEmpty(selectedProfile)) throw new Error(`${selectedProfile} is not an array`);

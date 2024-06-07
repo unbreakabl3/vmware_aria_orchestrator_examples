@@ -6,14 +6,6 @@
         "id": "page_ftr9080h",
         "sections": [
           {
-            "fields": [],
-            "id": "section_m29eidg4"
-          },
-          {
-            "fields": [],
-            "id": "section_3wv6e91j"
-          },
-          {
             "fields": [
               {
                 "display": "valuePicker",
@@ -35,14 +27,7 @@
                 "signpostPosition": "right-middle",
                 "state": {
                   "read-only": true,
-                  "visible": [
-                    {
-                      "notEmpty": {
-                        "vmHost": ""
-                      },
-                      "value": true
-                    }
-                  ]
+                  "visible": true
                 }
               }
             ],
@@ -151,6 +136,9 @@
   },
   "schema": {
     "availableHostProfiles": {
+      "constraints": {
+        "required": true
+      },
       "label": "Available Host Profiles",
       "type": {
         "dataType": "string"
@@ -190,7 +178,7 @@
         ],
         "type": "scriptAction"
       },
-      "label": "Data Grid",
+      "label": "Host Profile Details",
       "placeholder": "",
       "type": {
         "dataType": "complex",
@@ -221,6 +209,20 @@
       }
     },
     "hostFQDN": {
+      "constraints": {
+        "pattern": {
+          "message": "FQDN format is required.",
+          "value": "^(?!-)[A-Za-z0-9-]{1,63}(?<!-)(\\.(?!-)[A-Za-z0-9-]{1,63}(?<!-))*\\.[A-Za-z]{2,}$"
+        },
+        "required": [
+          {
+            "equals": {
+              "availableHostProfiles": "Host Profile 1"
+            },
+            "value": true
+          }
+        ]
+      },
       "label": "Host FQDN",
       "placeholder": "ex. esxi01.domain.local",
       "type": {
@@ -232,7 +234,15 @@
         "pattern": {
           "message": "",
           "value": "^((25[0-5]|(2[0-4]|1\\d|[1-9]|)\\d)\\.?\\b){4}$"
-        }
+        },
+        "required": [
+          {
+            "equals": {
+              "availableHostProfiles": "Host Profile 1"
+            },
+            "value": true
+          }
+        ]
       },
       "label": "IP Address",
       "placeholder": "ex. 192.168.0.1",
@@ -241,6 +251,16 @@
       }
     },
     "hostSubnet": {
+      "constraints": {
+        "required": [
+          {
+            "equals": {
+              "availableHostProfiles": "Host Profile 1"
+            },
+            "value": true
+          }
+        ]
+      },
       "label": "IP Subnetmask",
       "placeholder": "ex. 255.255.255.0",
       "type": {
@@ -248,16 +268,7 @@
       }
     },
     "textField_b92a6ced": {
-      "constraints": {
-        "required": [
-          {
-            "notEmpty": {
-              "vmHost": ""
-            },
-            "value": true
-          }
-        ]
-      },
+      "constraints": {},
       "default": {
         "id": "com.clouddepth.host_profiles.actions/getAttachedProfile",
         "parameters": [
