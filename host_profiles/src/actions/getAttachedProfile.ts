@@ -13,12 +13,12 @@
  * @param {VC:HostSystem} vmHost - The name of the ESXi host to check.
  * @returns {string} - Host profile name.
  */
-(function getHostProfile(vmHost: VcHostSystem): VcProfile | null {
+(function getAttachedProfile(vmHost: VcHostSystem): string | null {
   const hostProfileManager: VcProfileManager = vmHost.sdkConnection.hostProfileManager;
   try {
     const profiles: Array<VcProfile> = hostProfileManager.findAssociatedProfile(vmHost);
-    return profiles.length > 0 ? profiles[0] : null;
+    return profiles.length > 0 ? profiles[0].name : null;
   } catch (error) {
-    throw new Error(`Unable to find attached host profile`);
+    throw new Error("Unable to find attached host profile");
   }
 });
