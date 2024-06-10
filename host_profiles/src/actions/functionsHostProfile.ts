@@ -12,7 +12,7 @@ export class functionsHostProfile {
     try {
       const { configSpec, requireInput } = profileExecuteResult;
       //@ts-ignore
-      const task: VcTask = hostProfileManager.applyHostConfig_Task(vmHost, configSpec, requireInput);
+      const task: VcTask = vmHost.sdkConnection.hostProfileManager.applyHostConfig_Task(vmHost, configSpec, requireInput);
       System.getModule("com.vmware.library.vc.basic").vim3WaitTaskEnd(task, true, 2);
     } catch (error) {
       throw new Error(`hostProfileManager: ${error}`);
@@ -37,7 +37,7 @@ export class functionsHostProfile {
     }
   }
 
-  public updateHostCustomization(hostToConfigSpecMap: Array<any>, hostProfileManager: VcProfileManager) {
+  public updateHostCustomization(hostToConfigSpecMap: Array<any>, hostProfileManager: VcProfileManager): void {
     try {
       //@ts-ignore
       const task = hostProfileManager.updateHostCustomizations_Task(hostToConfigSpecMap);
@@ -48,7 +48,7 @@ export class functionsHostProfile {
     }
   }
 
-  public associateHostProfile(vmHost: VcHostSystem, profile: VcProfile) {
+  public associateHostProfile(vmHost: VcHostSystem, profile: VcProfile): void {
     try {
       return profile.associateProfile([vmHost]);
     } catch (error) {
