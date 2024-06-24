@@ -56,7 +56,7 @@ export class functionsHostProfile {
     }
   }
 
-  public isArrayNotEmpty<T>(array: T[]): array is [T, ...T[]] {
+  public isArrayNotEmpty<T>(array: Array<T>): array is [T, ...Array<T>] {
     return array.length > 0;
   }
 }

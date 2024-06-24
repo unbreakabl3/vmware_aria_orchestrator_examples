@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.vmware.pscoe.o11n</groupId>
@@ -9,18 +8,25 @@
     <version>2.39.0</version>
   </parent>
 
-  <groupId>com.examples</groupId>
-  <artifactId>vmware_aria_orchestrator_examples</artifactId>
-  <version>1.0.12</version>
+  <groupId>com.clouddepth</groupId>
+  <artifactId>set_vm_hw_version</artifactId>
+  <version>1.0.4</version>
   <packaging>package</packaging>
 
   <scm>
     <developerConnection>${scmDeveloperConnection}</developerConnection>
   </scm>
-
+      
   <description>
     This package is licensed under null
   </description>
+  <licenses>
+    <license>
+      <name>TODO: Enter License name</name>
+      <url>null</url>
+      <distribution>pom</distribution>
+    </license>
+  </licenses>
   <properties>
     <generated.from>package-typescript-archetype</generated.from>
     <license.organizationName>TODO: Enter Organization name</license.organizationName>

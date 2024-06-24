@@ -7,7 +7,7 @@
  * TODO: Define header text
  * #L%
  */
-const validateVM = System.getModule("com.examples.vmware_aria_orchestrator_examples.external_validation").validateVM;
+const validateVM = System.getModule("com.examples.vmware_aria_orchestrator_examples.actions.external_validation").validateVM;
 
 describe("validateVM", () => {
   let vm: VcVirtualMachine;
