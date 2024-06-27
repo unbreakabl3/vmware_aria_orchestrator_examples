@@ -1,5 +1,18 @@
 {
+  "vmx-21": "ESXi 8.0 Update 2 and later",
+  "vmx-20": "ESXi 8.0 and later",
   "vmx-19": "ESXi 7.0 Update 2 or later",
   "vmx-18": "ESXi 7.0 Update 1 or later",
-  "null": "Default"
+  "vmx-17": "ESXi 7.0 and later",
+  "vmx-16": "Workstation 15 or later",
+  "vmx-15": "ESXi 6.7 Update 2 or later",
+  "vmx-14": "ESXi 6.7 or later",
+  "vmx-13": "ESXi 6.5 or later",
+  "vmx-12": "Workstation 12 or later",
+  "vmx-10": "ESXi 5.5 or later",
+  "vmx-9": "ESXi 5.1 or later",
+  "vmx-8": "ESXi 5.0 or later",
+  "vmx-7": "ESXi 4.0 or later",
+  "vmx-4": "ESXi 3.5 or later",
+  "": "Reset to default cluster/datacenter configuration"
 }

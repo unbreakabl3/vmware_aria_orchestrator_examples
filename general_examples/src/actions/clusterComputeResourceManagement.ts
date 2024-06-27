@@ -28,9 +28,6 @@ export class ClusterComputeResourceManagement {
     if (!cluster) {
       throw new Error("Invalid cluster resource provided.");
     }
-    if (!defaultHardwareVersion || !maxHardwareVersion) {
-      throw new Error("Invalid hardware version provided.");
-    }
     const spec = new VcComputeResourceConfigSpec();
     //@ts-ignore
     spec.maximumHardwareVersionKey = maxHardwareVersion;

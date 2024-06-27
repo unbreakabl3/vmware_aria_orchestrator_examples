@@ -60,7 +60,10 @@
       },
       "label": "Cluster",
       "description": "VM to update the vmtools on",
-      "valueList": []
+      "valueList": [],
+      "constraints": {
+        "required": true
+      }
     },
     "defaultHardwareVersion": {
       "type": {
@@ -84,6 +87,9 @@
             }
           }
         ]
+      },
+      "constraints": {
+        "required": true
       }
     },
     "maxHardwareVersion": {
@@ -108,6 +114,9 @@
             }
           }
         ]
+      },
+      "constraints": {
+        "required": true
       }
     }
   },

@@ -11,7 +11,7 @@
 
   <groupId>com.clouddepth</groupId>
   <artifactId>set_vm_hw_version</artifactId>
-  <version>1.0.26</version>
+  <version>1.0.32</version>
   <packaging>package</packaging>
 
   <scm>
