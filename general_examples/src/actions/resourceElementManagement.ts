@@ -34,21 +34,19 @@ export class ResourceElementManagement {
   }
 
   /**
-   * @name {string} - Name of the ResourceElement
-   * @rsPath {string} - Path of the ResourceElementCategory
-   * @rsContent {string} - New Content of the ResourceElement
-   *
-   * @returns {boolean} - true, if the resource element was update
+   * @param {ResourceElement} resourceElement - Resource element object
+   * @param {MimeAttachment} mime - updated mime file
+   * @returns {boolean} - True of false if the update was completed successfully
    */
-  public updateResourceElement(rs: ResourceElement, mime: MimeAttachment): boolean {
-    System.log(`Attempting to update resource element: ${rs.name}`);
+  public updateResourceElement(resourceElement: ResourceElement, mime: MimeAttachment): boolean {
+    System.log(`Attempting to update resource element: ${resourceElement.name}`);
     let result = false;
     try {
-      rs.setContentFromMimeAttachment(mime);
+      resourceElement.setContentFromMimeAttachment(mime);
       result = true;
-      System.log(`Successfully updated resource element: ${rs.name}`);
+      System.log(`Successfully updated resource element: ${resourceElement.name}`);
     } catch (error) {
-      throw new Error(`Failed to update resource element: ${rs.name}: ${error}`);
+      throw new Error(`Failed to update resource element: ${resourceElement.name}: ${error}`);
     }
 
     return result;

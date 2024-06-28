@@ -11,7 +11,7 @@
 
   <groupId>com.clouddepth</groupId>
   <artifactId>set_vm_hw_version</artifactId>
-  <version>1.0.32</version>
+  <version>1.0.39</version>
   <packaging>package</packaging>
 
   <scm>
@@ -30,7 +30,7 @@
   </licenses>
   <properties>
     <generated.from>package-typescript-archetype</generated.from>
-    <license.organizationName>TODO: Enter Organization name</license.organizationName>
+    <license.organizationName>https://www.clouddepth.com</license.organizationName>
     <license.includes>**/*.js,**/*.ts</license.includes>
     <license.excludes>**/*.test.ts,**/*Test.js</license.excludes>
   </properties>

@@ -2,7 +2,7 @@
  * #%L
  * set_vm_hw_version
  * %%
- * Copyright (C) 2024 TODO: Enter Organization name
+ * Copyright (C) 2024 https://www.clouddepth.com
  * %%
  * TODO: Define header text
  * #L%
@@ -38,9 +38,10 @@ import { Workflow, Out } from "vrotsc-annotations";
 export class SetVMHardwareVersion {
   public install(rsPath: string, rsName: string, cluster: VcClusterComputeResource, defaultHardwareVersion: string, maxHardwareVersion: string, @Out result: any): void {
     const clusterFunctions = System.getModule("com.examples.vmware_aria_orchestrator_examples.actions").clusterComputeResourceManagement();
-    const jsonData = System.getModule("com.clouddepth.set_vm_hw_version.actions").getVmHwVersionsConfigElement(rsName, rsPath);
+    const jsonData = System.getModule("com.clouddepth.set_vm_hw_version.actions").getVmHwVersionsResourceElement(rsName, rsPath);
     const maxHardwareVersionKey = System.getModule("com.clouddepth.set_vm_hw_version.actions").getKeyByValue(jsonData, maxHardwareVersion);
     const defaultHardwareVersionKey = System.getModule("com.clouddepth.set_vm_hw_version.actions").getKeyByValue(jsonData, defaultHardwareVersion);
+    if (!cluster || !defaultHardwareVersion || !maxHardwareVersion) throw new Error(`Cannot reconfigure the cluster. Required arguments are missing`);
     clusterFunctions.ClusterComputeResourceManagement.prototype.setVmHardwareVersion(cluster, defaultHardwareVersionKey, maxHardwareVersionKey);
   }
 }

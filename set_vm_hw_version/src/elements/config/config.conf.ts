@@ -2,7 +2,7 @@
  * #%L
  * set_vm_hw_version
  * %%
- * Copyright (C) 2024 TODO: Enter Organization name
+ * Copyright (C) 2024 https://www.clouddepth.com
  * %%
  * TODO: Define header text
  * #L%
