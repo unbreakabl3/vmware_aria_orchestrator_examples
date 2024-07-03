@@ -1,5 +1,5 @@
 {
 	"java.configuration.updateBuildConfiguration": "automatic",
 	"cSpell.words": ["Changelease", "creds"],
-	"vrdev.maven.profile": "ops-vro01t"
+	"vrdev.maven.profile": "ops-vra01t"
 }
