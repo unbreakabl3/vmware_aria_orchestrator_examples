@@ -22,7 +22,7 @@ export class VirtualNetworkManagement {
     const distributedPortConnection: VcDistributedVirtualSwitchPortConnection = this.createDistributedVirtualSwitchPortConnection(portGroup);
 
     // Create virtual ethernet adapter based on adapter type
-    const vNetwork = this.createVirtualEthernetAdapter(adapterType);
+    const vNetwork: VcVirtualEthernetCard | null = this.createVirtualEthernetAdapter(adapterType);
 
     if (vNetwork) {
       //@ts-ignore
@@ -46,7 +46,6 @@ export class VirtualNetworkManagement {
     }
   }
 
-  // Helper functions to improve readability and reusability
   private createVirtualDeviceConfigSpec(operation: VcVirtualDeviceConfigSpecOperation): VcVirtualDeviceConfigSpec {
     const vmConfigSpec = new VcVirtualDeviceConfigSpec();
     vmConfigSpec.operation = operation;
@@ -84,7 +83,6 @@ export class VirtualNetworkManagement {
       default:
         throw new Error(`Unknown adapter type: ${adapterType}`);
     }
-    // return null;
   }
 
   private createVirtualEthernetCardDistributedVirtualPortBackingInfo(port: VcDistributedVirtualSwitchPortConnection): VcVirtualEthernetCardDistributedVirtualPortBackingInfo {
@@ -92,72 +90,4 @@ export class VirtualNetworkManagement {
     backingInfoDvs.port = port;
     return backingInfoDvs;
   }
-
-  // public addVnicToDistributedSwitch(vm: VcVirtualMachine, portGroup: VcDistributedVirtualPortgroup, adapterType: string) {
-  //   const configSpec = new VcVirtualMachineConfigSpec();
-  //   const vmConfigSpecs: Array<VcVirtualDeviceConfigSpec> = [];
-
-  //   // Create operation for device config spec
-  //   const vmConfigSpec = new VcVirtualDeviceConfigSpec();
-  //   vmConfigSpec.operation = VcVirtualDeviceConfigSpecOperation.add;
-
-  //   // Create connect info for portGroup
-  //   const connectInfo = new VcVirtualDeviceConnectInfo();
-  //   connectInfo.allowGuestControl = true;
-  //   connectInfo.connected = true;
-  //   connectInfo.startConnected = true;
-
-  //   // Creating distributed virtual switch port connection
-  //   const distributedPortConnection = new VcDistributedVirtualSwitchPortConnection();
-  //   const distributedVirtualSwitch = VcPlugin.convertToVimManagedObject(portGroup, portGroup.config.distributedVirtualSwitch);
-  //   distributedPortConnection.switchUuid = distributedVirtualSwitch.uuid;
-  //   distributedPortConnection.portgroupKey = portGroup.key;
-
-  //   // Creating backing info for distributed switch
-  //   const backingInfoDvs = new VcVirtualEthernetCardDistributedVirtualPortBackingInfo();
-  //   backingInfoDvs.port = distributedPortConnection;
-
-  //   // Create virtual ethernet adapter
-  //   let vNetwork: VcVirtualEthernetCard | null = null;
-  //   switch (adapterType) {
-  //     case "E1000":
-  //       vNetwork = new VcVirtualE1000();
-  //       break;
-  //     case "E1000e":
-  //       vNetwork = new VcVirtualE1000e();
-  //       break;
-  //     case "Vmxnet":
-  //       vNetwork = new VcVirtualVmxnet();
-  //       break;
-  //     case "Vmxnet2":
-  //       vNetwork = new VcVirtualVmxnet2();
-  //       break;
-  //     case "Vmxnet3":
-  //       vNetwork = new VcVirtualVmxnet3();
-  //       break;
-  //     default:
-  //       throw new Error(`Unknown adapter type: ${adapterType}`);
-  //   }
-
-  //   if (vNetwork) {
-  //     //@ts-ignore
-  //     vNetwork.backing = backingInfoDvs;
-  //     vNetwork.unitNumber = 0;
-  //     vNetwork.addressType = "Generated";
-  //     vNetwork.wakeOnLanEnabled = true;
-  //     vNetwork.connectable = connectInfo;
-
-  //     // Creating device specs configured in vNetwork object
-  //     vmConfigSpec.device = vNetwork;
-  //     vmConfigSpecs.push(vmConfigSpec);
-
-  //     // Adding the device to the configSpec
-  //     configSpec.deviceChange = vmConfigSpecs;
-
-  //     System.log("Reconfiguring the virtual machine to add new vNIC");
-  //     const task = vm.reconfigVM_Task(configSpec);
-  //   } else {
-  //     throw new Error("Failed to create virtual ethernet adapter");
-  //   }
-  // }
 }

@@ -7,6 +7,7 @@ logs
 
 # Maven
 target/
+!/target/com.examples.vmware_aria_orchestrator_examples-*.package
 
 # Node
 node_modules/

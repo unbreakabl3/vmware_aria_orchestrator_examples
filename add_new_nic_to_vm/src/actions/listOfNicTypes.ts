@@ -7,8 +7,9 @@
  * TODO: Define header text
  * #L%
  */
-export class SampleClass {
-    public sum(x: number, y: number) {
-        return x + y;
-    }
-}
+/**
+ * @returns {Array/string} Array of NICs
+ */
+(function () {
+  return ["E1000", "E1000e", "Vmxnet", "Vmxnet2", "Vmxnet3"];
+});
