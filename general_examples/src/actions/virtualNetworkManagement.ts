@@ -8,7 +8,11 @@
  * #L%
  */
 export class VirtualNetworkManagement {
-  public addVnicToDistributedSwitch(vm: VcVirtualMachine, portGroup: VcDistributedVirtualPortgroup, adapterType: string) {
+  private switchType: VcVirtualEthernetCardDistributedVirtualPortBackingInfo | VcNetwork;
+  constructor(switchType: VcVirtualEthernetCardDistributedVirtualPortBackingInfo | VcNetwork) {
+    this.switchType = switchType;
+  }
+  public addVnicToDistributedSwitch(vm: VcVirtualMachine, switchType: VcVirtualEthernetCardDistributedVirtualPortBackingInfo | VcNetwork, adapterType: string) {
     const configSpec = new VcVirtualMachineConfigSpec();
     const vmConfigSpecs: Array<VcVirtualDeviceConfigSpec> = [];
 
@@ -19,14 +23,14 @@ export class VirtualNetworkManagement {
     const connectInfo: VcVirtualDeviceConnectInfo = this.createVirtualDeviceConnectInfo(true, true, true);
 
     // Create distributed virtual switch port connection
-    const distributedPortConnection: VcDistributedVirtualSwitchPortConnection = this.createDistributedVirtualSwitchPortConnection(portGroup);
+    //const distributedPortConnection: VcDistributedVirtualSwitchPortConnection = this.createDistributedVirtualSwitchPortConnection(portGroup);
 
     // Create virtual ethernet adapter based on adapter type
     const vNetwork: VcVirtualEthernetCard | null = this.createVirtualEthernetAdapter(adapterType);
 
     if (vNetwork) {
       //@ts-ignore
-      vNetwork.backing = this.createVirtualEthernetCardDistributedVirtualPortBackingInfo(distributedPortConnection);
+      vNetwork.backing = switchType; //this.createVirtualEthernetCardDistributedVirtualPortBackingInfo(distributedPortConnection);
       vNetwork.unitNumber = 0;
       vNetwork.addressType = "Generated";
       vNetwork.wakeOnLanEnabled = true;
@@ -60,14 +64,6 @@ export class VirtualNetworkManagement {
     return connectInfo;
   }
 
-  private createDistributedVirtualSwitchPortConnection(portGroup: VcDistributedVirtualPortgroup): VcDistributedVirtualSwitchPortConnection {
-    const distributedPortConnection = new VcDistributedVirtualSwitchPortConnection();
-    const distributedVirtualSwitch = VcPlugin.convertToVimManagedObject(portGroup, portGroup.config.distributedVirtualSwitch);
-    distributedPortConnection.switchUuid = distributedVirtualSwitch.uuid;
-    distributedPortConnection.portgroupKey = portGroup.key;
-    return distributedPortConnection;
-  }
-
   private createVirtualEthernetAdapter(adapterType: string): VcVirtualEthernetCard | null {
     switch (adapterType) {
       case "E1000":
@@ -84,10 +80,22 @@ export class VirtualNetworkManagement {
         throw new Error(`Unknown adapter type: ${adapterType}`);
     }
   }
+}
 
-  private createVirtualEthernetCardDistributedVirtualPortBackingInfo(port: VcDistributedVirtualSwitchPortConnection): VcVirtualEthernetCardDistributedVirtualPortBackingInfo {
+export class DistributedVirtualPortBackingInfo {
+  createVirtualEthernetCardDistributedVirtualPortBackingInfo(port: VcDistributedVirtualSwitchPortConnection): VcVirtualEthernetCardDistributedVirtualPortBackingInfo {
     const backingInfoDvs = new VcVirtualEthernetCardDistributedVirtualPortBackingInfo();
     backingInfoDvs.port = port;
     return backingInfoDvs;
+  }
+}
+
+export class DistributedVirtualSwitchPortConnection {
+  createDistributedVirtualSwitchPortConnection(portGroup: VcDistributedVirtualPortgroup): VcDistributedVirtualSwitchPortConnection {
+    const distributedPortConnection = new VcDistributedVirtualSwitchPortConnection();
+    const distributedVirtualSwitch = VcPlugin.convertToVimManagedObject(portGroup, portGroup.config.distributedVirtualSwitch);
+    distributedPortConnection.switchUuid = distributedVirtualSwitch.uuid;
+    distributedPortConnection.portgroupKey = portGroup.key;
+    return distributedPortConnection;
   }
 }
