@@ -18,8 +18,10 @@ import { Workflow, Out } from "vrotsc-annotations";
     vm: {
       type: "VC:VirtualMachine"
     },
-    portGroup: { type: "VC:DistributedVirtualPortgroup" },
-    adapterType: { type: "string" }
+    distributedPortGroup: { type: "VC:DistributedVirtualPortgroup" },
+    standardPortGroup: { type: "VC:Network" },
+    adapterType: { type: "string" },
+    switchType: { type: "string" }
   },
   output: {
     result: { type: "Any" }
@@ -27,10 +29,17 @@ import { Workflow, Out } from "vrotsc-annotations";
   presentation: ""
 })
 export class SampleWorkflow {
-  public install(vm: VcVirtualMachine, portGroup: VcDistributedVirtualPortgroup, adapterType: string, @Out result: any): void {
+  public install(
+    vm: VcVirtualMachine,
+    distributedPortGroup: VcDistributedVirtualPortgroup,
+    adapterType: string,
+    switchType: string,
+    standardPortGroup: VcNetwork,
+    @Out result: any
+  ): void {
     var networkManagement = System.getModule("com.examples.vmware_aria_orchestrator_examples.actions").virtualNetworkManagement();
     try {
-      networkManagement.VirtualNetworkManagement.prototype.addVnicToDistributedSwitch(vm, portGroup, adapterType);
+      networkManagement.VirtualNetworkManagement.prototype.addVnicToDistributedSwitch(vm, distributedPortGroup, adapterType);
     } catch (error) {
       throw new Error("Failed to add NIC to VM: " + error);
     }
