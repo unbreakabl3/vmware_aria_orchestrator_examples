@@ -22,15 +22,12 @@ export class VirtualNetworkManagement {
     // Create connection info for port group
     const connectInfo: VcVirtualDeviceConnectInfo = this.createVirtualDeviceConnectInfo(true, true, true);
 
-    // Create distributed virtual switch port connection
-    //const distributedPortConnection: VcDistributedVirtualSwitchPortConnection = this.createDistributedVirtualSwitchPortConnection(portGroup);
-
     // Create virtual ethernet adapter based on adapter type
     const vNetwork: VcVirtualEthernetCard | null = this.createVirtualEthernetAdapter(adapterType);
 
     if (vNetwork) {
       //@ts-ignore
-      vNetwork.backing = switchType; //this.createVirtualEthernetCardDistributedVirtualPortBackingInfo(distributedPortConnection);
+      vNetwork.backing = switchType;
       vNetwork.unitNumber = 0;
       vNetwork.addressType = "Generated";
       vNetwork.wakeOnLanEnabled = true;
@@ -46,7 +43,7 @@ export class VirtualNetworkManagement {
       const task: VcTask = vm.reconfigVM_Task(configSpec);
       System.getModule("com.vmware.library.vc.basic").vim3WaitTaskEnd(task, true, 2);
     } else {
-      throw new Error("Failed to create virtual ethernet adapter");
+      throw new Error("Failed to create vNIC");
     }
   }
 
@@ -84,6 +81,7 @@ export class VirtualNetworkManagement {
 
 export class DistributedVirtualPortBackingInfo {
   createVirtualEthernetCardDistributedVirtualPortBackingInfo(port: VcDistributedVirtualSwitchPortConnection): VcVirtualEthernetCardDistributedVirtualPortBackingInfo {
+    if (!port) throw new Error("'Port' argument is required");
     const backingInfoDvs = new VcVirtualEthernetCardDistributedVirtualPortBackingInfo();
     backingInfoDvs.port = port;
     return backingInfoDvs;
@@ -92,10 +90,21 @@ export class DistributedVirtualPortBackingInfo {
 
 export class DistributedVirtualSwitchPortConnection {
   createDistributedVirtualSwitchPortConnection(portGroup: VcDistributedVirtualPortgroup): VcDistributedVirtualSwitchPortConnection {
+    if (!portGroup) throw new Error("'portGroup' argument is required");
     const distributedPortConnection = new VcDistributedVirtualSwitchPortConnection();
     const distributedVirtualSwitch = VcPlugin.convertToVimManagedObject(portGroup, portGroup.config.distributedVirtualSwitch);
     distributedPortConnection.switchUuid = distributedVirtualSwitch.uuid;
     distributedPortConnection.portgroupKey = portGroup.key;
     return distributedPortConnection;
+  }
+}
+
+export class StandardVirtualSwitchPortConnection {
+  createStandardVirtualSwitchPortConnection(standardNetworkGroup: VcNetwork): VcVirtualEthernetCardLegacyNetworkBackingInfo {
+    if (!standardNetworkGroup) throw new Error("'standardNetworkGroup' argument is required");
+    const backingInfo = new VcVirtualEthernetCardLegacyNetworkBackingInfo();
+    backingInfo.useAutoDetect = true;
+    backingInfo.deviceName = standardNetworkGroup.name;
+    return backingInfo;
   }
 }
