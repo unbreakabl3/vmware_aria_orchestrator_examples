@@ -19,20 +19,6 @@
             ]
           },
           {
-            "id": "section_179234d6",
-            "fields": [
-              {
-                "id": "portGroup",
-                "display": "valuePickerTree",
-                "state": {
-                  "visible": true,
-                  "read-only": false
-                },
-                "signpostPosition": "right-middle"
-              }
-            ]
-          },
-          {
             "id": "section_6f69eb2c",
             "fields": [
               {
@@ -116,14 +102,6 @@
         "referenceType": "VC:VirtualMachine"
       },
       "label": "vm"
-    },
-    "portGroup": {
-      "id": "portGroup",
-      "type": {
-        "dataType": "reference",
-        "referenceType": "VC:DistributedVirtualPortgroup"
-      },
-      "label": "portGroup"
     },
     "switchType": {
       "type": {

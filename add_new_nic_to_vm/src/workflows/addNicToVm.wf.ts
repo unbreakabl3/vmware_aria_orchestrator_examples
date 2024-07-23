@@ -13,7 +13,7 @@ import { Workflow, Out } from "vrotsc-annotations";
   name: "Add NIC to VM",
   path: "MyOrg/MyProject",
   id: "",
-  description: "A",
+  description: "This workflow create and add new vNIC to the VM",
   input: {
     vm: {
       type: "VC:VirtualMachine"
@@ -37,11 +37,18 @@ export class SampleWorkflow {
     standardPortGroup: VcNetwork,
     @Out result: any
   ): void {
-    var networkManagement = System.getModule("com.examples.vmware_aria_orchestrator_examples.actions").virtualNetworkManagement();
+    const networkManagement = System.getModule("com.examples.vmware_aria_orchestrator_examples.actions").virtualNetworkManagement();
+    let virtualSwitch = "";
+    if (switchType === "dvswitch") {
+      const aa = networkManagement.DistributedVirtualSwitchPortConnection.prototype.createDistributedVirtualSwitchPortConnection(distributedPortGroup);
+      virtualSwitch = networkManagement.DistributedVirtualPortBackingInfo.prototype.createVirtualEthernetCardDistributedVirtualPortBackingInfo(aa);
+    } else if (switchType === "standard") {
+      virtualSwitch = networkManagement.StandardVirtualSwitchPortConnection.prototype.createStandardVirtualSwitchPortConnection(standardPortGroup);
+    } else throw new Error("Unsupported switch type");
     try {
-      networkManagement.VirtualNetworkManagement.prototype.addVnicToDistributedSwitch(vm, distributedPortGroup, adapterType);
+      networkManagement.VirtualNetworkManagement.prototype.addVnicToDistributedSwitch(vm, virtualSwitch, adapterType);
     } catch (error) {
-      throw new Error("Failed to add NIC to VM: " + error);
+      throw new Error(`Failed to add NIC to VM: ${error}`);
     }
   }
 }
