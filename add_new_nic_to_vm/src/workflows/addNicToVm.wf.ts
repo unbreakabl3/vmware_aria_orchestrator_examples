@@ -13,7 +13,7 @@ import { Workflow, Out } from "vrotsc-annotations";
   name: "Add NIC to VM",
   path: "MyOrg/MyProject",
   id: "",
-  description: "This workflow create and add new vNIC to the VM",
+  description: "This workflow create and add new vNIC to the VM.",
   input: {
     vm: {
       type: "VC:VirtualMachine"
