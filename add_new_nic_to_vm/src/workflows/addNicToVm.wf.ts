@@ -40,13 +40,13 @@ export class SampleWorkflow {
     const networkManagement = System.getModule("com.examples.vmware_aria_orchestrator_examples.actions").virtualNetworkManagement();
     let virtualSwitch = "";
     if (switchType === "dvswitch") {
-      const aa = networkManagement.DistributedVirtualSwitchPortConnection.prototype.createDistributedVirtualSwitchPortConnection(distributedPortGroup);
-      virtualSwitch = networkManagement.DistributedVirtualPortBackingInfo.prototype.createVirtualEthernetCardDistributedVirtualPortBackingInfo(aa);
+      const distributedPortConnection = networkManagement.DistributedVirtualSwitchPortConnection.prototype.createDistributedVirtualSwitchPortConnection(distributedPortGroup);
+      virtualSwitch = networkManagement.DistributedVirtualPortBackingInfo.prototype.createVirtualEthernetCardDistributedVirtualPortBackingInfo(distributedPortConnection);
     } else if (switchType === "standard") {
       virtualSwitch = networkManagement.StandardVirtualSwitchPortConnection.prototype.createStandardVirtualSwitchPortConnection(standardPortGroup);
     } else throw new Error("Unsupported switch type");
     try {
-      networkManagement.VirtualNetworkManagement.prototype.addVnicToDistributedSwitch(vm, virtualSwitch, adapterType);
+      networkManagement.VirtualNetworkManagement.prototype.addVnicToSwitch(vm, virtualSwitch, adapterType);
     } catch (error) {
       throw new Error(`Failed to add NIC to VM: ${error}`);
     }

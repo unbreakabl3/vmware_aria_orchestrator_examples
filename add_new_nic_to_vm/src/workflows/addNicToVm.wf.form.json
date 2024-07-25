@@ -101,13 +101,16 @@
         "dataType": "reference",
         "referenceType": "VC:VirtualMachine"
       },
-      "label": "vm"
+      "label": "Virtual Machine",
+      "constraints": {
+        "required": true
+      }
     },
     "switchType": {
       "type": {
         "dataType": "string"
       },
-      "label": "switchType",
+      "label": "Switch Type",
       "valueList": [
         {
           "value": "standard",
@@ -118,7 +121,10 @@
           "label": "Distributed Switch"
         }
       ],
-      "default": ""
+      "default": "",
+      "constraints": {
+        "required": true
+      }
     },
     "standardPortGroup": {
       "id": "standardPortGroup",
@@ -126,26 +132,49 @@
         "dataType": "reference",
         "referenceType": "VC:Network"
       },
-      "label": "standardPortGroup"
+      "label": "Standard PortGroup",
+      "constraints": {
+        "required": [
+          {
+            "equals": {
+              "switchType": "standard"
+            },
+            "value": true
+          }
+        ]
+      }
     },
     "distributedPortGroup": {
       "type": {
         "dataType": "reference",
         "referenceType": "VC:DistributedVirtualPortgroup"
       },
-      "label": "distributedPortGroup"
+      "label": "Distributed PortGroup",
+      "constraints": {
+        "required": [
+          {
+            "equals": {
+              "switchType": "dvswitch"
+            },
+            "value": true
+          }
+        ]
+      }
     },
     "adapterType": {
       "type": {
         "dataType": "string"
       },
-      "label": "adapterType",
+      "label": "Adapter Type",
       "valueList": {
         "type": "scriptAction",
         "id": "com.clouddepth.add_new_nic_to_vm.actions/listOfNicTypes",
         "parameters": []
       },
-      "default": "Vmxnet3"
+      "default": "Vmxnet3",
+      "constraints": {
+        "required": true
+      }
     }
   },
   "options": {
