@@ -12,7 +12,7 @@ export class VirtualNetworkManagement {
   constructor(switchType: VcVirtualEthernetCardDistributedVirtualPortBackingInfo | VcNetwork) {
     this.switchType = switchType;
   }
-  public addVnicToDistributedSwitch(vm: VcVirtualMachine, switchType: VcVirtualEthernetCardDistributedVirtualPortBackingInfo | VcNetwork, adapterType: string) {
+  public addVnicToSwitch(vm: VcVirtualMachine, switchType: VcVirtualEthernetCardDistributedVirtualPortBackingInfo | VcNetwork, adapterType: string) {
     const configSpec = new VcVirtualMachineConfigSpec();
     const vmConfigSpecs: Array<VcVirtualDeviceConfigSpec> = [];
 
@@ -23,26 +23,26 @@ export class VirtualNetworkManagement {
     const connectInfo: VcVirtualDeviceConnectInfo = this.createVirtualDeviceConnectInfo(true, true, true);
 
     // Create virtual ethernet adapter based on adapter type
-    const vNetwork: VcVirtualEthernetCard | null = this.createVirtualEthernetAdapter(adapterType);
+    const vNetwork: VcVirtualEthernetCard | null = this.getVirtualEthernetAdapterType(adapterType);
 
-    if (vNetwork) {
-      //@ts-ignore
-      vNetwork.backing = switchType;
-      vNetwork.unitNumber = 0;
-      vNetwork.addressType = "Generated";
-      vNetwork.wakeOnLanEnabled = true;
-      vNetwork.connectable = connectInfo;
+    if (!vNetwork) throw new Error("Failed to create VirtualEthernetAdapter");
+    //@ts-ignore
+    vNetwork.backing = switchType;
+    vNetwork.unitNumber = 0;
+    vNetwork.addressType = "Generated";
+    vNetwork.wakeOnLanEnabled = true;
+    vNetwork.connectable = connectInfo;
 
-      // Add the configured virtual ethernet adapter to device specs
-      vmDeviceConfigSpec.device = vNetwork;
-      vmConfigSpecs.push(vmDeviceConfigSpec);
+    // Add the configured virtual ethernet adapter to device specs
+    vmDeviceConfigSpec.device = vNetwork;
+    vmConfigSpecs.push(vmDeviceConfigSpec);
+    configSpec.deviceChange = vmConfigSpecs;
 
-      configSpec.deviceChange = vmConfigSpecs;
-
-      System.log("Reconfiguring the virtual machine to add new vNIC");
+    System.log("Reconfiguring the virtual machine to add new vNIC");
+    try {
       const task: VcTask = vm.reconfigVM_Task(configSpec);
       System.getModule("com.vmware.library.vc.basic").vim3WaitTaskEnd(task, true, 2);
-    } else {
+    } catch (error) {
       throw new Error("Failed to create vNIC");
     }
   }
@@ -61,7 +61,7 @@ export class VirtualNetworkManagement {
     return connectInfo;
   }
 
-  private createVirtualEthernetAdapter(adapterType: string): VcVirtualEthernetCard | null {
+  private getVirtualEthernetAdapterType(adapterType: string): VcVirtualEthernetCard | null {
     switch (adapterType) {
       case "E1000":
         return new VcVirtualE1000();
