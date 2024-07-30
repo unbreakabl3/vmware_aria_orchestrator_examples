@@ -7,7 +7,6 @@ logs
 
 # Maven
 target/
-!target/com.clouddepth.add_new_nic_to_vm-*.package
 
 # Node
 node_modules/
