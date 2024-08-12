@@ -108,3 +108,26 @@ export class StandardVirtualSwitchPortConnection {
     return backingInfo;
   }
 }
+
+export class VirtualNetworkAdapterManagement {
+  public disableVirtualNetworkAdapter(vm: VcVirtualMachine) {
+    const devices: Array<VcVirtualDevice> = vm.config.hardware.device;
+    for (var i in devices) {
+      if (!System.getModule("com.vmware.library.vc.vm.network").isSupportedNic(devices[i])) {
+        continue;
+      }
+      const confSpec = new VcVirtualDeviceConfigSpec();
+      confSpec.operation = VcVirtualDeviceConfigSpecOperation.edit;
+      confSpec.device = devices[i];
+      confSpec.device.connectable.startConnected = false;
+      confSpec.device.connectable.connected = false;
+      const spec = new VcVirtualMachineConfigSpec();
+      spec.deviceChange = [confSpec];
+      try {
+        vm.reconfigVM_Task(spec);
+      } catch (error) {
+        System.error("Error reconfiguring VM: " + error);
+      }
+    }
+  }
+}

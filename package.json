@@ -1,8 +1,8 @@
 {
   "devDependencies": {
     "@stylistic/eslint-plugin": "^1.8.1",
-    "@typescript-eslint/eslint-plugin": "^7.16.1",
-    "@typescript-eslint/parser": "^7.16.1",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-node": "^11.1.0",
@@ -10,6 +10,6 @@
     "eslint-plugin-prettier": "^5.2.1",
     "javascript": "^1.0.0",
     "prettier": "^3.3.3",
-    "typescript": "^5.5.3"
+    "typescript": "^5.5.4"
   }
 }
