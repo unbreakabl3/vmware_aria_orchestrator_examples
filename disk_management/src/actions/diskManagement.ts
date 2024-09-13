@@ -8,7 +8,7 @@
  * #L%
  */
 export class DiskManagement {
-  public createDisk(vm: VcVirtualMachine, deviceUnitNumber: number, diskSize: number): VcVirtualMachineConfigSpec {
+  public createDisk(vm: VcVirtualMachine, deviceUnitNumber: number, diskSize: number, deviceControllerKey: number): VcVirtualMachineConfigSpec {
     // Create Disk BackingInfo
     const diskBackingInfo = new VcVirtualDiskFlatVer2BackingInfo();
     diskBackingInfo.diskMode = "persistent";
@@ -19,7 +19,7 @@ export class DiskManagement {
     const disk = new VcVirtualDisk();
     //@ts-ignore
     disk.backing = diskBackingInfo;
-    disk.controllerKey = 1000;
+    disk.controllerKey = deviceControllerKey;
     disk.unitNumber = deviceUnitNumber;
     disk.capacityInKB = diskSize * 1024 * 1024;
 
@@ -78,7 +78,7 @@ export class DiskManagement {
       const task = vm.reconfigVM_Task(configSpec);
       System.getModule("com.vmware.library.vc.basic").vim3WaitTaskEnd(task, true, 3);
     } catch (e) {
-      throw "Failed to create and attach disk to VM : " + vm.name + "ERROR: " + e;
+      throw `Failed to create and attach disk to VM  ${vm.name}. ${e}`;
     }
   }
 }

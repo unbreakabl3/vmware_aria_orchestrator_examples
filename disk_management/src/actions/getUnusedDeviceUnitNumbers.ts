@@ -13,8 +13,8 @@
  * @param {VC:VirtualMachine} vm - Virtual Machine to get the unit number
  * @returns {Array/number} - Array of unused device unit numbers
  */
-(function (vm: VcVirtualMachine): Array<number> {
-  if (!vm) return [];
+(function (vm: VcVirtualMachine): number | undefined {
+  if (!vm) return;
   let predefinedArray: Array<number> = [];
   for (var i = 1; i <= 64; i++) {
     predefinedArray.push(i);
@@ -23,5 +23,5 @@
   const unusedDeviceUnits = predefinedArray.filter(function (num) {
     return deviceUnitToRemove.indexOf(num) === -1;
   });
-  return unusedDeviceUnits;
+  return unusedDeviceUnits.length > 0 ? unusedDeviceUnits[0] : undefined;
 });

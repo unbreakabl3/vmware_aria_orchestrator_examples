@@ -13,7 +13,7 @@
  * @param {VC:VirtualMachine} vm - The name of the virtual machine to check.
  * @returns {Array/number} - Array of used device unit numbers
  */
-(function getDeviceUnitNumber(vm: VcVirtualMachine): Array<number> {
+(function (vm: VcVirtualMachine): Array<number> {
   const devices: Array<VcVirtualDevice> = vm.config.hardware.device;
   const usedUnitNumbers: Array<number> = [];
   devices.forEach((device) => {

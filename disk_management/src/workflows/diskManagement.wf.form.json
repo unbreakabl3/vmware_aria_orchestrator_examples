@@ -19,11 +19,11 @@
             ]
           },
           {
-            "id": "section_75c05082",
+            "id": "section_a32433dc",
             "fields": [
               {
-                "id": "deviceUnitNumber",
-                "display": "dropDown",
+                "id": "diskSize",
+                "display": "decimalField",
                 "state": {
                   "visible": true,
                   "read-only": false
@@ -33,11 +33,11 @@
             ]
           },
           {
-            "id": "section_a32433dc",
+            "id": "section_8a21ac07",
             "fields": [
               {
-                "id": "diskSize",
-                "display": "decimalField",
+                "id": "diskControllerName",
+                "display": "dropDown",
                 "state": {
                   "visible": true,
                   "read-only": false
@@ -64,28 +64,6 @@
         "required": true
       }
     },
-    "deviceUnitNumber": {
-      "type": {
-        "dataType": "decimal"
-      },
-      "label": "Available Device Unit Number",
-      "valueList": {
-        "type": "scriptAction",
-        "id": "com.clouddepth.disk_management.actions/getUnusedDeviceUnitNumbers",
-        "parameters": [
-          {
-            "vm": "vm",
-            "$type": {
-              "dataType": "reference",
-              "referenceType": "VC:VirtualMachine"
-            }
-          }
-        ]
-      },
-      "constraints": {
-        "required": true
-      }
-    },
     "diskSize": {
       "type": {
         "dataType": "decimal"
@@ -97,6 +75,28 @@
         "min-value": 1
       },
       "signpost": "Disk size cannot be lower than 1GB and cannot be larger than 68169GB"
+    },
+    "diskControllerName": {
+      "type": {
+        "dataType": "string"
+      },
+      "label": "Disk Controller Name",
+      "constraints": {
+        "required": true
+      },
+      "valueList": {
+        "type": "scriptAction",
+        "id": "com.clouddepth.disk_management.actions/getDeviceControllerNames",
+        "parameters": [
+          {
+            "vm": "vm",
+            "$type": {
+              "dataType": "reference",
+              "referenceType": "VC:VirtualMachine"
+            }
+          }
+        ]
+      }
     }
   },
   "options": {
