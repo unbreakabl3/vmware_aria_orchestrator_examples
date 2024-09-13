@@ -1,34 +1,34 @@
-{
+  {
     "layout": {
       "pages": [
         {
           "id": "page_ftr9080h",
           "sections": [
             {
-              "id": "section_m29eidg4",
+              "id": "section_9052b61b",
               "fields": [
                 {
-                  "id": "foo",
-                  "display": "textField",
-                  "signpostPosition": "right-middle",
+                  "id": "vm",
+                  "display": "valuePicker",
                   "state": {
                     "visible": true,
                     "read-only": false
-                  }
+                  },
+                  "signpostPosition": "right-middle"
                 }
               ]
             },
             {
-              "id": "section_3wv6e91j",
+              "id": "section_75c05082",
               "fields": [
                 {
-                  "id": "bar",
-                  "display": "textField",
-                  "signpostPosition": "right-middle",
+                  "id": "deviceUnitNumber",
+                  "display": "decimalField",
                   "state": {
                     "visible": true,
                     "read-only": false
-                  }
+                  },
+                  "signpostPosition": "right-middle"
                 }
               ]
             }
@@ -39,25 +39,19 @@
       ]
     },
     "schema": {
-      "foo": {
-        "id": "foo",
+      "vm": {
         "type": {
-          "dataType": "string"
+          "dataType": "reference",
+          "referenceType": "VC:VirtualMachine"
         },
-        "label": "foo",
-        "constraints": {
-          "required": false
-        }
+        "label": "vm",
+        "valueList": []
       },
-      "bar": {
-        "id": "bar",
+      "deviceUnitNumber": {
         "type": {
-          "dataType": "string"
+          "dataType": "decimal"
         },
-        "label": "bar",
-        "constraints": {
-          "required": false
-        }
+        "label": "deviceUnitNumber"
       }
     },
     "options": {
