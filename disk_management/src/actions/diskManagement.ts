@@ -8,7 +8,7 @@
  * #L%
  */
 export class DiskManagement {
-  public createDisk(vm: VcVirtualMachine, deviceUnitNumber: number): VcVirtualMachineConfigSpec {
+  public createDisk(vm: VcVirtualMachine, deviceUnitNumber: number, diskSize: number): VcVirtualMachineConfigSpec {
     // Create Disk BackingInfo
     const diskBackingInfo = new VcVirtualDiskFlatVer2BackingInfo();
     diskBackingInfo.diskMode = "persistent";
@@ -21,7 +21,7 @@ export class DiskManagement {
     disk.backing = diskBackingInfo;
     disk.controllerKey = 1000;
     disk.unitNumber = deviceUnitNumber;
-    disk.capacityInKB = 108003328;
+    disk.capacityInKB = diskSize * 1024 * 1024;
 
     // Create Disk ConfigSpec
     const deviceConfigSpec = new VcVirtualDeviceConfigSpec();
