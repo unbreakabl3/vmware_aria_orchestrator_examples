@@ -8,7 +8,7 @@
  * #L%
  */
 /**
- * Get the device controllers associated
+ * Get storage controller device key
  *
  * @param {string} diskControllerLabel - The name of the device controller
  * @param {Array/VcVirtualDevice} deviceControllers - Array of deviceControllers objects

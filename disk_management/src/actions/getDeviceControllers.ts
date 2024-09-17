@@ -11,7 +11,7 @@
  * Get the device controllers associated
  *
  * @param {VC:VirtualMachine} vm - The name of the virtual machine to check.
- * @returns {Array/string} - Array of used device controllers associated
+ * @returns {Array/object} - Array of used device controllers associated
  */
 (function (vm: VcVirtualMachine): Array<object> {
   if (!vm) return [];
@@ -22,7 +22,8 @@
       device instanceof VcParaVirtualSCSIController ||
       device instanceof VcVirtualIDEController ||
       device instanceof VcVirtualAHCIController ||
-      device instanceof VcVirtualLsiLogicSASController
+      device instanceof VcVirtualLsiLogicSASController ||
+      device instanceof VcVirtualNVMEController
     ) {
       deviceControllers.push(device);
     }

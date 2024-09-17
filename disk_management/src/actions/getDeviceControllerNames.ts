@@ -8,10 +8,10 @@
  * #L%
  */
 /**
- * Get the device controllers associated
+ * Get the device controllers names
  *
  * @param {VC:VirtualMachine} vm - The name of the virtual machine to check.
- * @returns {Array/string} - Array of used device controllers associated
+ * @returns {Array/string} - Array of used device controllers names
  */
 (function (vm: VcVirtualMachine): Array<string> {
   if (!vm) return [];
