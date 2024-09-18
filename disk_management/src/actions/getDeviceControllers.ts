@@ -16,17 +16,12 @@
 (function (vm: VcVirtualMachine): Array<object> {
   if (!vm) return [];
   const devices: Array<VcVirtualDevice> = vm.config.hardware.device;
-  const deviceControllers: Array<object> = [];
-  devices.forEach((device) => {
-    if (
+  return devices.filter(
+    (device) =>
       device instanceof VcParaVirtualSCSIController ||
       device instanceof VcVirtualIDEController ||
       device instanceof VcVirtualAHCIController ||
       device instanceof VcVirtualLsiLogicSASController ||
       device instanceof VcVirtualNVMEController
-    ) {
-      deviceControllers.push(device);
-    }
-  });
-  return deviceControllers;
+  );
 });

@@ -16,9 +16,5 @@
 (function (vm: VcVirtualMachine): Array<string> {
   if (!vm) return [];
   const deviceControllers: Array<VcVirtualDevice> = System.getModule("com.clouddepth.disk_management.actions").getDeviceControllers(vm);
-  const deviceControllersNames: Array<string> = [];
-  deviceControllers.forEach((device) => {
-    deviceControllersNames.push(device.deviceInfo.label);
-  });
-  return deviceControllersNames;
+  return deviceControllers.map((device) => device.deviceInfo.label);
 });

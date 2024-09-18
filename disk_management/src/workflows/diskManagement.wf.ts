@@ -31,7 +31,7 @@ export class SampleWorkflow {
     const deviceControllers: Array<VcVirtualDevice> = System.getModule("com.clouddepth.disk_management.actions").getDeviceControllers(vm);
     if (!deviceControllers) throw new Error("No controllers found");
     const attachedDisks: Array<number> = System.getModule("com.clouddepth.disk_management.actions").getDeviceControllerAttachedDisks(deviceControllers, diskControllerName);
-    if (!attachedDisks) throw new Error("No free device units available");
+    if (!attachedDisks) System.log("No attached disks found");
     const usedDeviceUnits: Array<number> = System.getModule("com.clouddepth.disk_management.actions").getDeviceUsedUnitsNumber(vm, attachedDisks);
     const maxDeviceUnits: number = System.getModule("com.clouddepth.disk_management.actions").setDeviceUnusedUnitsNumber(deviceControllers, diskControllerName);
     if (!maxDeviceUnits) throw new Error("No free device units available");

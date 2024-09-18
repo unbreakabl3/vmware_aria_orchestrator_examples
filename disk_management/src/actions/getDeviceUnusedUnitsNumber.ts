@@ -17,16 +17,12 @@
  */
 (function (vm: VcVirtualMachine, maximumDeviceUnitsNumber: number, deviceUnitToRemove: Array<number>): number | Array<number> {
   if (!vm || !maximumDeviceUnitsNumber) throw new Error("Provide parameters are missing");
-  let predefinedArray: Array<number> = [];
-  let unusedDeviceUnits: Array<number> = [];
-  for (let i = 0; i < maximumDeviceUnitsNumber; i++) {
-    predefinedArray.push(i);
-  }
+  const predefinedArray: Array<number> = Array.from({ length: maximumDeviceUnitsNumber }, (_, i) => i);
+
   if (deviceUnitToRemove && deviceUnitToRemove.length > 0) {
-    unusedDeviceUnits = predefinedArray.filter(function (num) {
-      return deviceUnitToRemove.indexOf(num) === -1;
-    });
+    const unusedDeviceUnits = predefinedArray.filter((num) => deviceUnitToRemove.indexOf(num) === -1);
     return unusedDeviceUnits.length > 0 ? unusedDeviceUnits[0] : 0;
   }
-  return unusedDeviceUnits;
+
+  return predefinedArray;
 });

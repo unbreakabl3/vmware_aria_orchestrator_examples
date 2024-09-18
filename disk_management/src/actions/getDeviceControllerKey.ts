@@ -14,7 +14,7 @@
  * @param {Array/VcVirtualDevice} deviceControllers - Array of deviceControllers objects //TODO: change it to object
  * @returns {number} - The key number of the device controller
  */
-(function getDeviceControllerKey(diskControllerLabel: string, deviceControllers: Array<VcVirtualDevice>): number | Array<never> | undefined {
+(function (diskControllerLabel: string, deviceControllers: Array<VcVirtualDevice>): number | Array<never> | undefined {
   if (!diskControllerLabel || !deviceControllers) throw new Error("Both 'diskControllerLabel' and 'deviceControllers' parameters are required.");
   const device = deviceControllers.find((device) => device.deviceInfo.label === diskControllerLabel);
   return device?.key;
