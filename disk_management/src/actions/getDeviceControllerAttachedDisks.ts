@@ -11,14 +11,12 @@
  * Get number of disks attached to the specified controller
  *
  * @param {Array/object} deviceControllers - Virtual Machine device controllers
- * @param {string} diskControllerLabel - Storage controller label
- * @returns {Array/number} - maximum number of devices supported by the device controller
+ * @param {string} diskControllerLabel - The name of the device controller
+ * @returns {Array/number} - Maximum number of devices supported by the device controller
  */
 (function (deviceControllers: Array<VcVirtualDevice>, diskControllerLabel: string): Array<number> | undefined {
-  if (!diskControllerLabel || !deviceControllers) throw new Error("Provide parameters are missing");
-  const controller = deviceControllers.find((device) => {
-    return device.deviceInfo.label === diskControllerLabel;
-  });
+  if (!diskControllerLabel || !deviceControllers) throw new Error("Missing required parameters: deviceControllers or diskControllerLabel");
+  const controller = deviceControllers.find((device) => device.deviceInfo.label === diskControllerLabel);
 
   if (!controller) {
     throw new Error(`No controller found for label: ${diskControllerLabel}`);
@@ -33,4 +31,5 @@
   ) {
     return controller.device;
   }
+  return undefined;
 });

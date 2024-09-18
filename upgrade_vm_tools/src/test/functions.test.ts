@@ -64,56 +64,6 @@ describe("getResourcePool", () => {
   });
 });
 
-// describe("getResourcePool", () => {
-//   beforeEach(() => {
-//     func = new Functions();
-//   });
-//   it("should return the resource pool and log its name", () => {
-//     const mockVm = {
-//       resourcePool: { name: "MyResourcePool" }
-//     };
-//     const spy = spyOn(System, "log");
-//     //@ts-ignore
-//     const result = func.getResourcePool(mockVm);
-//     //@ts-ignore
-//     expect(result).toBe(mockVm.resourcePool);
-//   });
-
-//   it("should return null if VM has no resource pool", () => {
-//     const mockVm = { resourcePool: null };
-//     //@ts-ignore
-//     const result = func.getResourcePool(mockVm);
-//     expect(result).toBeNull();
-//   });
-
-//   it("should throw an error if VM object is null or undefined", () => {
-//     expect(() => func.getResourcePool(undefined)).toThrowError("VM object is null or undefined.");
-//   });
-// });
-
-// describe("getComputeResource", () => {
-//   beforeEach(() => {
-//     func = new Functions();
-//   });
-//   it("should return the compute resource and log its name", () => {
-//     const mockHostSystem = {
-//       parent: { name: "MyCluster" }
-//     };
-//     const spy = spyOn(System, "log");
-//     //@ts-ignore
-//     const result = func.getComputeResource(mockHostSystem);
-//     //@ts-ignore
-//     expect(result).toBe(mockHostSystem.parent);
-//     expect(spy).toHaveBeenCalledWith(`Cluster: ${mockHostSystem.parent.name}`);
-//   });
-
-//   it("should return null if host system has no parent", () => {
-//     const mockHostSystem = { parent: null };
-//     //@ts-ignore
-//     expect(() => func.getComputeResource(mockHostSystem)).toThrowError("Hostsystem does not have a compute resource");
-//   });
-// });
-
 describe("getVmParentHost", () => {
   beforeEach(() => {
     func = new Functions();
@@ -242,27 +192,4 @@ describe("setVmToolsUpgradePolicy", () => {
     func.setVmToolsUpgradePolicy(vm, desiredVmToolsUpgradePolicy);
     expect(vm.reconfigVM_Task).not.toHaveBeenCalled();
   });
-
-  //TODO: fix it
-  // it("should update the policy if it does not match the desired policy", () => {
-  //   const desiredVmToolsUpgradePolicy = "manual";
-  //   vm.config.tools.toolsUpgradePolicy = "automatic";
-  //   const task = {};
-  //   vm.reconfigVM_Task.and.returnValue(task);
-
-  //   func.setVmToolsUpgradePolicy(vm, desiredVmToolsUpgradePolicy);
-  //   expect(vm.reconfigVM_Task).toHaveBeenCalled();
-  //   expect(System.getModule("com.vmware.library.vc.basic").vim3WaitTaskEnd).toHaveBeenCalledWith(task, true, 2);
-  // });
-
-  // it("should throw an error if reconfigVM_Task fails", () => {
-  //   const desiredVmToolsUpgradePolicy = "manual";
-  //   vm.config.tools.toolsUpgradePolicy = "automatic";
-
-  //   // Make reconfigVM_Task throw an error
-  //   vm.reconfigVM_Task.and.throwError("Task failed");
-
-  //   // Call the function and expect an error to be thrown
-  //   expect(() => func.setVmToolsUpgradePolicy(vm, desiredVmToolsUpgradePolicy)).toThrowError(`Failed to set VMTools upgrade policy to 'manual'. Error: Task failed`);
-  // });
 });

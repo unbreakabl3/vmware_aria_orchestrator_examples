@@ -100,7 +100,30 @@
     }
   },
   "options": {
-    "externalValidations": []
+    "externalValidations": [
+      {
+        "target": ["diskControllerName"],
+        "source": {
+          "type": "scriptAction",
+          "id": "com.clouddepth.disk_management.actions.external_validation/validateFreeDeviceUnits",
+          "parameters": [
+            {
+              "diskControllerName": "diskControllerName",
+              "$type": {
+                "dataType": "string"
+              }
+            },
+            {
+              "vm": "vm",
+              "$type": {
+                "dataType": "reference",
+                "referenceType": "VC:VirtualMachine"
+              }
+            }
+          ]
+        }
+      }
+    ]
   },
   "itemId": ""
 }

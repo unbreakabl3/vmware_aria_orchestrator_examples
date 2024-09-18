@@ -38,41 +38,6 @@ export class DiskManagement {
     return configSpec;
   }
 
-  /**
-   * Remove attached VMDK  from Virtual Machine
-   */
-  // public removeVmdk(vm: VcVirtualMachine, unitNumber: number): boolean {
-  //     var result = false;
-  //     foreach (var device in devices) {
-  //       if (device instanceof VcVirtualDisk)
-  //         {
-  //             System.debug("Checking disk: " + (device.backing.fileName));
-  //             System.debug("device.unitNumber is : " + (device.unitNumber));
-  //             if (device.unitNumber == unitNumber)
-  //             {
-  //                 var deviceChange = new VcVirtualDeviceConfigSpec();
-  //                 deviceChange.operation = VcVirtualDeviceConfigSpecOperation.remove;
-  //                 deviceChange.device = device;
-  //                 var deviceChangeArray = new Array();
-  //                 deviceChangeArray.push(deviceChange);
-  //                 var spec = new VcVirtualMachineConfigSpec();
-  //                 spec.deviceChange = deviceChangeArray;
-  //                 var task = vcVm.reconfigVM_Task(spec);
-  //                 System.log("Initiating reconfigure. Detaching disk " + device.backing.fileName);
-  //                 System.getModule("com.vmware.library.vc.basic").vim3WaitTaskEnd(task,true,3);
-  //                 System.log("Reconfigure of VM '" + vcVm.name + "' successful.");
-  //                 result = true;
-  //             }
-  //             else
-  //             {
-  //                 System.warn("Unable to find unitNumber " + unitNumber + " attached to that VM.");
-  //                 result = false;
-  //             }
-  //         }
-  //     }
-  //     return result;
-  // }
-
   public reconfigureVM(vm: VcVirtualMachine, configSpec: VcVirtualMachineConfigSpec) {
     try {
       const task = vm.reconfigVM_Task(configSpec);

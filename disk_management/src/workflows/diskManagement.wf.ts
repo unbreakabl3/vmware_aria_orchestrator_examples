@@ -14,7 +14,7 @@ import { DiskManagement } from "../actions/diskManagement";
   name: "Disk Management",
   path: "MyOrg/MyProject",
   id: "",
-  description: "This workflow is used to create and attached a new disk or delete the existing disk from the VM",
+  description: "This workflow is used to create and attached a new disk to the VM",
   input: {
     vm: { type: "VC:VirtualMachine" },
     diskSize: { type: "number" },
@@ -30,18 +30,15 @@ export class SampleWorkflow {
     const diskManagement = new DiskManagement();
     const deviceControllers: Array<VcVirtualDevice> = System.getModule("com.clouddepth.disk_management.actions").getDeviceControllers(vm);
     if (!deviceControllers) throw new Error("No controllers found");
-    const deviceControllerAttachedDisks: Array<number> = System.getModule("com.clouddepth.disk_management.actions").getDeviceControllerAttachedDisks(
-      deviceControllers,
-      diskControllerName
-    );
-    if (!deviceControllerAttachedDisks) throw new Error("No controller's key found");
-    const deviceUnitToRemove: Array<number> = System.getModule("com.clouddepth.disk_management.actions").getDeviceUsedUnitsNumber(vm, deviceControllerAttachedDisks);
-    const maximumDeviceUnitsNumber: number = System.getModule("com.clouddepth.disk_management.actions").setDeviceUnusedUnitsNumber(deviceControllers, diskControllerName);
-    if (!maximumDeviceUnitsNumber) throw new Error("No free device units available");
-    const deviceUnitNumber: number = System.getModule("com.clouddepth.disk_management.actions").getDeviceUnusedUnitsNumber(vm, maximumDeviceUnitsNumber, deviceUnitToRemove);
-    if (!deviceUnitNumber && deviceUnitNumber !== 0) throw new Error("No device unit number available");
-    const deviceKey: number = System.getModule("com.clouddepth.disk_management.actions").getDeviceControllerKey(diskControllerName, deviceControllers);
-    const configSpec = diskManagement.createDisk(vm, deviceUnitNumber, diskSize, deviceKey);
+    const attachedDisks: Array<number> = System.getModule("com.clouddepth.disk_management.actions").getDeviceControllerAttachedDisks(deviceControllers, diskControllerName);
+    if (!attachedDisks) throw new Error("No free device units available");
+    const usedDeviceUnits: Array<number> = System.getModule("com.clouddepth.disk_management.actions").getDeviceUsedUnitsNumber(vm, attachedDisks);
+    const maxDeviceUnits: number = System.getModule("com.clouddepth.disk_management.actions").setDeviceUnusedUnitsNumber(deviceControllers, diskControllerName);
+    if (!maxDeviceUnits) throw new Error("No free device units available");
+    const freeDeviceUnit: number = System.getModule("com.clouddepth.disk_management.actions").getDeviceUnusedUnitsNumber(vm, maxDeviceUnits, usedDeviceUnits);
+    if (freeDeviceUnit === 0) throw new Error("No device unit number available");
+    const deviceControllerKey: number = System.getModule("com.clouddepth.disk_management.actions").getDeviceControllerKey(diskControllerName, deviceControllers);
+    const configSpec = diskManagement.createDisk(vm, freeDeviceUnit, diskSize, deviceControllerKey);
     try {
       diskManagement.reconfigureVM(vm, configSpec);
     } catch (error) {

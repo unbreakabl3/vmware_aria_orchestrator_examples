@@ -12,10 +12,10 @@
  *
  * @param {VC:VirtualMachine} vm - Virtual Machine to get the unit number
  * @param {number} maximumDeviceUnitsNumber - Number of maximum device units
- * @param {Array/number} deviceUnitToRemove
+ * @param {Array/number} deviceUnitToRemove - Array of device units to remove from the list of all available devices
  * @returns {number} - Array of unused device unit numbers
  */
-(function (vm: VcVirtualMachine, maximumDeviceUnitsNumber: number, deviceUnitToRemove: Array<number>): number | undefined {
+(function (vm: VcVirtualMachine, maximumDeviceUnitsNumber: number, deviceUnitToRemove: Array<number>): number | Array<number> {
   if (!vm || !maximumDeviceUnitsNumber) throw new Error("Provide parameters are missing");
   let predefinedArray: Array<number> = [];
   let unusedDeviceUnits: Array<number> = [];
@@ -26,9 +26,7 @@
     unusedDeviceUnits = predefinedArray.filter(function (num) {
       return deviceUnitToRemove.indexOf(num) === -1;
     });
+    return unusedDeviceUnits.length > 0 ? unusedDeviceUnits[0] : 0;
   }
-  // const unusedDeviceUnits = predefinedArray.filter(function (num) {
-  //   return deviceUnitToRemove.indexOf(num) === -1;
-  // });
-  return unusedDeviceUnits.length > 0 ? unusedDeviceUnits[0] : undefined;
+  return unusedDeviceUnits;
 });
