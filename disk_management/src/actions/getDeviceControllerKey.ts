@@ -11,7 +11,7 @@
  * Get storage controller device key
  *
  * @param {string} diskControllerLabel - The name of the device controller
- * @param {Array/VcVirtualDevice} deviceControllers - Array of deviceControllers objects //TODO: change it to object
+ * @param {Array/VcVirtualDevice} deviceControllers - Array of deviceControllers objects
  * @returns {number} - The key number of the device controller
  */
 (function (diskControllerLabel: string, deviceControllers: Array<VcVirtualDevice>): number | Array<never> | undefined {

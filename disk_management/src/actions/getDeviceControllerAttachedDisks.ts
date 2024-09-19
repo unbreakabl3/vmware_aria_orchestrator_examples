@@ -12,7 +12,7 @@
  *
  * @param {Array/object} deviceControllers - Virtual Machine device controllers
  * @param {string} diskControllerLabel - The name of the device controller
- * @returns {Array/number} - Maximum number of devices supported by the device controller
+ * @returns {Array/number} - Number of disks attached to the specified controller
  */
 (function (deviceControllers: Array<VcVirtualDevice>, diskControllerLabel: string): Array<number> | undefined {
   if (!diskControllerLabel || !deviceControllers) throw new Error("Missing required parameters: deviceControllers or diskControllerLabel");

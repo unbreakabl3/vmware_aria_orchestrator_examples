@@ -11,7 +11,7 @@
 
   <groupId>com.clouddepth</groupId>
   <artifactId>disk_management</artifactId>
-  <version>1.0.84</version>
+  <version>1.0.98</version>
   <packaging>package</packaging>
 
   <scm>

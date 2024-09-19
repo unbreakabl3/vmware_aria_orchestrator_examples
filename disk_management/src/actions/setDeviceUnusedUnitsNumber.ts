@@ -12,7 +12,7 @@
  *
  * @param {Array/object} deviceControllers - Virtual Machine device controller type
  * @param {string} diskControllerLabel - Storage controller label
- * @returns {number} - maximum number of devices supported by the device controller
+ * @returns {number} - Maximum number of devices supported by the device controller
  */
 (function (deviceControllers: Array<VcVirtualDevice>, diskControllerLabel: string) {
   if (!diskControllerLabel || !deviceControllers) throw new Error("Provide parameters are missing");

@@ -7,7 +7,7 @@
  * TODO: Define header text
  * #L%
  */
-import { Workflow, Out } from "vrotsc-annotations";
+import { Workflow, In, Item, Out } from "vrotsc-annotations";
 import { DiskManagement } from "../actions/diskManagement";
 
 @Workflow({
@@ -20,24 +20,54 @@ import { DiskManagement } from "../actions/diskManagement";
     diskSize: { type: "number" },
     diskControllerName: { type: "string" }
   },
-  output: {
-    result: { type: "Any" }
-  },
-  presentation: ""
+  attributes: {
+    result: { type: "any" },
+    deviceControllers: { type: "Array/Object" },
+    attachedDisks: { type: "Array/number" },
+    usedDeviceUnits: { type: "Array/number" },
+    maxDeviceUnits: { type: "number" },
+    deviceControllerKey: { type: "number" },
+    freeDeviceUnit: { type: "number" }
+  }
 })
-export class SampleWorkflow {
-  public install(vm: VcVirtualMachine, diskSize: number, diskControllerName: string, @Out result: any): void {
-    const diskManagement = new DiskManagement();
-    const deviceControllers: Array<VcVirtualDevice> = System.getModule("com.clouddepth.disk_management.actions").getDeviceControllers(vm);
+export class CreateAndAttachNewDiskToVM {
+  @Item({ target: "getAttachedDisks" })
+  public getDeviceControllers(vm: VcVirtualMachine, @Out deviceControllers: Array<VcVirtualDevice>) {
+    deviceControllers = System.getModule("com.clouddepth.disk_management.actions").getDeviceControllers(vm);
     if (!deviceControllers) throw new Error("No controllers found");
-    const attachedDisks: Array<number> = System.getModule("com.clouddepth.disk_management.actions").getDeviceControllerAttachedDisks(deviceControllers, diskControllerName);
+  }
+
+  @Item({ target: "getUsedDeviceUnits" })
+  public getAttachedDisks(@In deviceControllers: Array<VcVirtualDevice>, @In diskControllerName: string, @Out attachedDisks: Array<number>) {
+    attachedDisks = System.getModule("com.clouddepth.disk_management.actions").getDeviceControllerAttachedDisks(deviceControllers, diskControllerName);
     if (!attachedDisks) System.log("No attached disks found");
-    const usedDeviceUnits: Array<number> = System.getModule("com.clouddepth.disk_management.actions").getDeviceUsedUnitsNumber(vm, attachedDisks);
-    const maxDeviceUnits: number = System.getModule("com.clouddepth.disk_management.actions").setDeviceUnusedUnitsNumber(deviceControllers, diskControllerName);
+  }
+
+  @Item({ target: "getMaxDeviceUnits" })
+  public getUsedDeviceUnits(@In vm: VcVirtualMachine, @In attachedDisks: Array<number>, @Out usedDeviceUnits: Array<number>) {
+    usedDeviceUnits = System.getModule("com.clouddepth.disk_management.actions").getDeviceUsedUnitsNumber(vm, attachedDisks);
+  }
+
+  @Item({ target: "getFreeDeviceUnit" })
+  public getMaxDeviceUnits(@In deviceControllers: Array<VcVirtualDevice>, @In diskControllerName: string, @Out maxDeviceUnits: number) {
+    maxDeviceUnits = System.getModule("com.clouddepth.disk_management.actions").setDeviceUnusedUnitsNumber(deviceControllers, diskControllerName);
     if (!maxDeviceUnits) throw new Error("No free device units available");
-    const freeDeviceUnit: number = System.getModule("com.clouddepth.disk_management.actions").getDeviceUnusedUnitsNumber(vm, maxDeviceUnits, usedDeviceUnits);
+  }
+
+  @Item({ target: "getDeviceControllerKey" })
+  public getFreeDeviceUnit(@In vm: VcVirtualMachine, @In maxDeviceUnits: number, @In usedDeviceUnits: Array<number>, @Out freeDeviceUnit: number) {
+    freeDeviceUnit = System.getModule("com.clouddepth.disk_management.actions").getDeviceUnusedUnitsNumber(vm, maxDeviceUnits, usedDeviceUnits);
     if (freeDeviceUnit === 0) throw new Error("No device unit number available");
-    const deviceControllerKey: number = System.getModule("com.clouddepth.disk_management.actions").getDeviceControllerKey(diskControllerName, deviceControllers);
+  }
+
+  @Item({ target: "createNewDisk" })
+  public getDeviceControllerKey(@In diskControllerName: string, @In deviceControllers: Array<VcVirtualDevice>, @Out deviceControllerKey: number) {
+    deviceControllerKey = System.getModule("com.clouddepth.disk_management.actions").getDeviceControllerKey(diskControllerName, deviceControllers);
+  }
+
+  @Item({ target: "end" })
+  public createNewDisk(@In vm: VcVirtualMachine, @In freeDeviceUnit: number, @In diskSize: number, @In deviceControllerKey: number, @Out result: any) {
+    const diskManagement = new DiskManagement();
     const configSpec = diskManagement.createDisk(vm, freeDeviceUnit, diskSize, deviceControllerKey);
     try {
       diskManagement.reconfigureVM(vm, configSpec);

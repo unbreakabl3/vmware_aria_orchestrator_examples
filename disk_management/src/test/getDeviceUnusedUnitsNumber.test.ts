@@ -9,11 +9,10 @@
  */
 const getDeviceUnusedUnitsNumber = System.getModule("com.clouddepth.disk_management.actions").getDeviceUnusedUnitsNumber;
 describe("VcVirtualMachine Device Unit Function", () => {
-  let vm: any; // Mock object for the virtual machine
+  let vm: any;
   const maximumDeviceUnitsNumber = 5;
 
   beforeEach(() => {
-    // You can mock the virtual machine object here
     vm = {};
   });
 

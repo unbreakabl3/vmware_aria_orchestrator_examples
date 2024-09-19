@@ -8,7 +8,7 @@
  * #L%
  */
 /**
- *  Validate if there are any free storage controller slots available
+ * Validate if there are any free storage controller slots available
  * @param {string} diskControllerName - Disk controller name
  * @param {VC:VirtualMachine} vm - Virtual machine
  * @returns {string}

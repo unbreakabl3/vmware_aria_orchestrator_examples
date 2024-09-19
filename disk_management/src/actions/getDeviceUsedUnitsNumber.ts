@@ -20,15 +20,6 @@
   if (!deviceControllerAttachedDisks || deviceControllerAttachedDisks.length === 0) {
     return usedUnitNumbers;
   }
-  devices.forEach((device) => {
-    if (
-      device instanceof VcVirtualDisk &&
-      deviceControllerAttachedDisks.find((item) => {
-        return item === device.key;
-      })
-    ) {
-      usedUnitNumbers.push(device.unitNumber);
-    }
-  });
-  return usedUnitNumbers;
+  const attachedDiskSet = new Set(deviceControllerAttachedDisks);
+  return devices.filter((device) => device instanceof VcVirtualDisk && attachedDiskSet.has(device.key)).map((device) => device.unitNumber);
 });

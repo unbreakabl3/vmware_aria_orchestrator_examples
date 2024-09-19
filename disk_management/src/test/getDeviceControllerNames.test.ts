@@ -10,10 +10,8 @@
 const getDeviceControllerNames = System.getModule("com.clouddepth.disk_management.actions").getDeviceControllerNames;
 describe("getDeviceControllerNames", () => {
   let mockModule: any;
-  let mockGetDeviceControllers: jasmine.Spy;
 
   beforeEach(() => {
-    // Mock System.getModule
     mockModule = {
       getDeviceControllers: jasmine.createSpy("getDeviceControllers")
     };
