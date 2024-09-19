@@ -1,4 +1,3 @@
-# disk_management
-TODO: write a brief description of the package and its intended purpose.
-# Usage
-TODO: provide hints and examples on how to use the actions.
+# VM Disk Management in vRO
+
+This workflow examples show how to configure a new disk and attach it to the VM. More information can be found in [that](https://www.clouddepth.com/posts/vro-disk-management/) blog article.
