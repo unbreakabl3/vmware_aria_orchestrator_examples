@@ -14,23 +14,20 @@ import { Workflow, Out } from "vrotsc-annotations";
   path: "MyOrg/MyProject",
   id: "",
   description: "Get items from the content library",
-  attributes: {
-    field1: {
-      type: string,
-      bind: true,
-      value: "MyOrg/MyProject/field1"
-    }
-  },
   input: {
-    foo: {
+    contentLibraryName: {
       type: "string",
-      availableValues: ["a", "b"],
-      defaultValue: "а",
-      description: "foo Value",
       required: true,
-      title: "Foo"
+      description: "Name of the content library"
     },
-    bar: { type: "string" }
+    contentLibraryItems: {
+      type: "string",
+      required: true,
+      description: "VAPI Endpoint"
+    },
+    vapiEndpoint: {
+      type: "string"
+    }
   },
   output: {
     result: { type: "Any" }
@@ -38,8 +35,7 @@ import { Workflow, Out } from "vrotsc-annotations";
   presentation: ""
 })
 export class SampleWorkflow {
-  public install(foo: string, bar: string, field1: string, @Out result: any): void {
-    System.log(`foo=${foo}, bar=${bar}, field1=${field1}`);
-    result = "result value";
+  public install(contentLibraryItems: string, @Out result: any): void {
+    System.log(contentLibraryItems);
   }
 }

@@ -1,6 +1,6 @@
 {
 	"java.configuration.updateBuildConfiguration": "automatic",
-	"cSpell.words": ["Changelease", "creds"],
+	"cSpell.words": ["Changelease", "creds", "VAPI"],
 	"vrdev.maven.profile": "ops-vro01t",
 	"editor.formatOnPaste": true,
 	"editor.formatOnType": true,
