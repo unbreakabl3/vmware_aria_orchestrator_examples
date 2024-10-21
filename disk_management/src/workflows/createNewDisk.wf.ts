@@ -11,7 +11,7 @@ import { Workflow, In, Item, Out } from "vrotsc-annotations";
 import { DiskManagement } from "../actions/diskManagement";
 
 @Workflow({
-  name: "Disk Management",
+  name: "Create New Disk",
   path: "MyOrg/MyProject",
   id: "",
   description: "This workflow is used to create and attached a new disk to the VM",
