@@ -39,7 +39,7 @@ export class DiskManagement {
   }
 
   public increaseDiskSize(vm: VcVirtualMachine, diskToIncrease: VcVirtualDisk, diskSizeGB: number): VcVirtualMachineConfigSpec {
-    const newSizeKB = diskToIncrease.capacityInKB + diskSizeGB * 1024 * 1024;
+    const newSizeKB = diskToIncrease.capacityInKB + diskSizeGB * 1024 * 1024; // Convert to Kilobytes
     const spec = new VcVirtualMachineConfigSpec();
     spec.changeVersion = vm.config.changeVersion;
     spec.deviceChange = [new VcVirtualDeviceConfigSpec()];
