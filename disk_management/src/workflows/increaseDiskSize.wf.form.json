@@ -42,7 +42,7 @@
                   "visible": true,
                   "read-only": false
                 },
-                "signpostPosition": "right-middle"
+                "signpostPosition": "bottom-middle"
               }
             ]
           }
@@ -89,14 +89,38 @@
       "type": {
         "dataType": "decimal"
       },
-      "label": "Capacity To Add",
+      "label": "Disk Size (GB)",
       "constraints": {
         "required": true
-      }
+      },
+      "signpost": "This capacity will be added to the current disk size"
     }
   },
   "options": {
-    "externalValidations": []
+    "externalValidations": [
+      {
+        "target": [],
+        "source": {
+          "type": "scriptAction",
+          "id": "com.clouddepth.disk_management.actions.external_validation/validateMaximumDiskSize",
+          "parameters": [
+            {
+              "sizeToAdd": "diskSize",
+              "$type": {
+                "dataType": "decimal"
+              }
+            },
+            {
+              "currentDiskSize": "disks",
+              "$type": {
+                "dataType": "string"
+              }
+            }
+          ]
+        },
+        "label": "Validate maximum disk size"
+      }
+    ]
   },
   "itemId": ""
 }

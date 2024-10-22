@@ -71,7 +71,7 @@ export class DiskManagement {
       const task = vm.reconfigVM_Task(configSpec);
       System.getModule("com.vmware.library.vc.basic").vim3WaitTaskEnd(task, true, 3);
     } catch (e) {
-      throw `Failed to create and attach disk to VM  ${vm.name}. ${e}`;
+      throw `Failed to increase disk size ${e}`;
     }
   }
 }

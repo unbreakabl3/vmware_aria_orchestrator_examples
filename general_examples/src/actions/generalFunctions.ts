@@ -16,4 +16,22 @@ export class GeneralFunctions {
     const ipv4Regex = /^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}$/;
     return ipv4Regex.test(ip);
   }
+
+  public convertBytes(bytes: number) {
+    if (bytes === null || bytes === undefined) {
+      throw new Error("Mandatory input 'bytes' is null or undefined");
+    }
+
+    if (typeof bytes !== 'number' || bytes < 0) {
+      throw new Error("'bytes' must be a non-negative number");
+    }
+
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+    if (bytes === 0) return '0 Bytes';
+
+    const i = Math.floor(Math.log(bytes) / Math.log(1024));
+    const result = (bytes / Math.pow(1024, i)).toFixed(2);
+
+    return `${result} ${sizes[i]}`;
+  }
 }
