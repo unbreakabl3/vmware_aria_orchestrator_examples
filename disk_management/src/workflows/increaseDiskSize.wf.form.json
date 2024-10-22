@@ -19,15 +19,14 @@
             ]
           },
           {
-            "id": "section_5b1be64c",
+            "id": "section_4476edd9",
             "fields": [
               {
                 "id": "disks",
-                "display": "datagrid",
+                "display": "dropDown",
                 "state": {
                   "visible": true,
-                  "read-only": true,
-                  "hidden-fields": []
+                  "read-only": false
                 },
                 "signpostPosition": "right-middle"
               }
@@ -66,31 +65,13 @@
       }
     },
     "disks": {
-      "type": {
-        "dataType": "complex",
-        "fields": [
-          {
-            "type": {
-              "dataType": "string"
-            },
-            "id": "label",
-            "label": "Disk Label",
-            "constraints": {}
-          },
-          {
-            "type": {
-              "dataType": "string"
-            },
-            "label": "Disk Current Size",
-            "id": "summary",
-            "constraints": {
-              "required": true
-            }
-          }
-        ]
-      },
       "label": "Disks Properties",
-      "default": {
+      "placeholder": "",
+      "type": {
+        "dataType": "string"
+      },
+      "constraints": {},
+      "valueList": {
         "type": "scriptAction",
         "id": "com.clouddepth.disk_management.actions/getListOfDisksProperties",
         "parameters": [
