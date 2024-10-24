@@ -8,6 +8,8 @@
  * #L%
  */
 /**
+ * getDeviceControllerAttachedDisks.ts
+ *
  * Get number of disks attached to the specified controller
  *
  * @param {Array/object} deviceControllers - Virtual Machine device controllers

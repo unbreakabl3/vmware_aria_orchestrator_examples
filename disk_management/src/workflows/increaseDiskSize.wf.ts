@@ -21,7 +21,7 @@ import { DiskManagement } from "../actions/diskManagement";
     diskSize: { type: "number" }
   },
   attributes: {
-    disk: { type: "Object" },
+    disk: { type: "any" },
     result: { type: "any" }
   }
 })

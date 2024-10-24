@@ -8,6 +8,8 @@
  * #L%
  */
 /**
+ * getDeviceControllerKey.ts
+ *
  * Get storage controller device key
  *
  * @param {string} diskControllerLabel - The name of the device controller

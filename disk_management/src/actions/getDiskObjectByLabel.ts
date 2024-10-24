@@ -8,10 +8,12 @@
  * #L%
  */
 /**
+ * getDiskObjectByLabel.ts
+ *
  * Get list of available disks
  *
  * @param {VC:VirtualMachine} vm - Virtual Machine
- * @returns {VcVirtualDevice} - Disk object
+ * @returns {VC:ManagedObject} - Disk object
  */
 
 (function (vm: VcVirtualMachine, labelToMatch: string): VcVirtualDevice | null {

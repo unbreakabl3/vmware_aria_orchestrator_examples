@@ -8,6 +8,8 @@
  * #L%
  */
 /**
+ * getDeviceControllerNames.ts
+ *
  * Get the device controllers names
  *
  * @param {VC:VirtualMachine} vm - The name of the virtual machine to check.

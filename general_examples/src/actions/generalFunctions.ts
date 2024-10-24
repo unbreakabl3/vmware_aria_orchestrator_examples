@@ -22,12 +22,12 @@ export class GeneralFunctions {
       throw new Error("Mandatory input 'bytes' is null or undefined");
     }
 
-    if (typeof bytes !== 'number' || bytes < 0) {
+    if (typeof bytes !== "number" || bytes < 0) {
       throw new Error("'bytes' must be a non-negative number");
     }
 
-    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-    if (bytes === 0) return '0 Bytes';
+    const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
+    if (bytes === 0) return "0 Bytes";
 
     const i = Math.floor(Math.log(bytes) / Math.log(1024));
     const result = (bytes / Math.pow(1024, i)).toFixed(2);

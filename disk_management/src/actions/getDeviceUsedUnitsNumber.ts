@@ -8,6 +8,8 @@
  * #L%
  */
 /**
+ * getDeviceUsedUnitsNumber.ts
+ *
  * Get the device unit number not in use
  *
  * @param {VC:VirtualMachine} vm - The name of the virtual machine to check.
