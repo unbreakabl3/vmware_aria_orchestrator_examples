@@ -45,6 +45,8 @@ export class DiskManagement {
     spec.deviceChange = [new VcVirtualDeviceConfigSpec()];
     spec.deviceChange[0].operation = VcVirtualDeviceConfigSpecOperation.edit;
     spec.deviceChange[0].device = new VcVirtualDisk();
+    spec.deviceChange[0].device.controllerKey = diskToIncrease.controllerKey;
+    spec.deviceChange[0].device.unitNumber = diskToIncrease.unitNumber;
     spec.deviceChange[0].device.key = diskToIncrease.key;
     //@ts-ignore
     spec.deviceChange[0].device.backing = new VcVirtualDiskFlatVer2BackingInfo();
@@ -52,8 +54,6 @@ export class DiskManagement {
     spec.deviceChange[0].device.backing.fileName = diskToIncrease.backing.fileName;
     //@ts-ignore
     spec.deviceChange[0].device.backing.diskMode = diskToIncrease.backing.diskMode;
-    spec.deviceChange[0].device.controllerKey = diskToIncrease.controllerKey;
-    spec.deviceChange[0].device.unitNumber = diskToIncrease.unitNumber;
     //@ts-ignore
     spec.deviceChange[0].device.capacityInKB = newSizeKB;
     return spec;
