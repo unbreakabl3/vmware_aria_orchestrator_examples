@@ -62,7 +62,7 @@ describe("sshCommands", () => {
       await testInstance.executeSshCommand({ sshHostname, sshCommand: invalidCommand });
       fail("Expected rejection but promise resolved.");
     } catch (error) {
-      expect(error).toContain("Failed to execute SSH command. undefined");
+      expect(error).toContain("Invalid command");
     }
   });
 });

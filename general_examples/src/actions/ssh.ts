@@ -2,7 +2,7 @@
  * #%L
  * vmware_aria_orchestrator_examples
  * %%
- * Copyright (C) 2024 TODO: Enter Organization name
+ * Copyright (C) 2025 TODO: Enter Organization name
  * %%
  * TODO: Define header text
  * #L%
@@ -27,7 +27,7 @@ export class SSH {
         session.executeCommand(sshCommand, true);
         resolve(session.output);
       } catch (error) {
-        reject(`Failed to execute SSH command. ${session.error}`);
+        reject(`Failed to execute SSH command. ${error}`);
       } finally {
         if (session) {
           session.disconnect();
