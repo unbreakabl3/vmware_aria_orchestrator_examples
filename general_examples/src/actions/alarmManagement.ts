@@ -52,9 +52,10 @@ export class AlarmManagement {
     const triggeredAlarms = [];
     objectsToCheck.forEach((managedObject) => {
       try {
-        const alarmStates = alarmManager.getAlarmState(managedObject);
+        const alarmStates: Array<VcAlarmState> = alarmManager.getAlarmState(managedObject);
+        const unAcknowledgedAlarms: Array<VcAlarmState> = alarmStates.filter((state) => state.acknowledged === false);
         if (alarmStates) {
-          triggeredAlarms.push(...extractTriggeredAlarms(managedObject, alarmStates));
+          triggeredAlarms.push(...extractTriggeredAlarms(managedObject, unAcknowledgedAlarms));
         }
       } catch (error) {
         System.warn(`Failed to get alarm states for ${managedObject.name}: ${error}`);
@@ -83,6 +84,25 @@ export class AlarmManagement {
       alarmManager.acknowledgeAlarm(alarm, vcHost);
     } catch (error) {
       this.handleError(`Failed to acknowledge alarm ${alarm.info.name} on ${vcHost.name}: ${error}`);
+    }
+  }
+
+  private clearTriggeredAlarm(
+    alarmManager: VcAlarmManager,
+    entityType: VcAlarmFilterSpecAlarmTypeByEntity,
+    triggerType: VcAlarmFilterSpecAlarmTypeByTrigger,
+    status: VcManagedEntityStatus
+  ): void {
+    var vcAlarmFilterSpec = new VcAlarmFilterSpec();
+    vcAlarmFilterSpec.typeEntity = entityType.entityTypeHost;
+    vcAlarmFilterSpec.typeTrigger = triggerType.triggerTypeMetric;
+    //@ts-ignore
+    vcAlarmFilterSpec.status = [status.red];
+
+    try {
+      alarmManager.clearTriggeredAlarms(vcAlarmFilterSpec);
+    } catch (error) {
+      this.handleError(`Failed to clear triggered alarms: ${error}`);
     }
   }
 }
