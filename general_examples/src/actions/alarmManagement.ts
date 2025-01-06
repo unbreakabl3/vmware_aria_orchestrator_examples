@@ -19,7 +19,7 @@ export class AlarmManagement {
     throw new AlarmManagementError(`Error: ${errorDescription}.`);
   }
 
-  public getTriggeredAlarms(vCenter: VcSdkConnection) {
+  public getTriggeredAlarms(vCenter: VcSdkConnection): Array<object> {
     if (!vCenter) {
       throw this.handleError("No vCenter connections available.");
     }
@@ -49,7 +49,7 @@ export class AlarmManagement {
     };
 
     // Collect triggered alarms
-    const triggeredAlarms = [];
+    const triggeredAlarms: Array<object> = [];
     objectsToCheck.forEach((managedObject) => {
       try {
         const alarmStates: Array<VcAlarmState> = alarmManager.getAlarmState(managedObject);
