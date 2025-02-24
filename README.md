@@ -14,7 +14,6 @@ This repository includes various examples for VMware Aria Orchestrator, written 
 - `policy_management/`: Examples related to policy management.
 - `set_vm_hw_version/`: Scripts for setting VM hardware version.
 - `upgrade_vm_tools/`: Scripts for upgrading VM tools.
-- `user_interaction/`: Examples involving user interaction.
 
 ## Building and Compiling
 
@@ -30,4 +29,4 @@ Please refer to the `CODE_OF_CONDUCT.md` for guidelines on contributing to this 
 
 ## More Information
 
-More information can be found at [CloudDepth](https://www.clouddepth.com).
+More information can be found at [CloudDepth](https://clouddepth.com).
