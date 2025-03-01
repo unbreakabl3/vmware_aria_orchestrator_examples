@@ -8,6 +8,7 @@
  * #L%
  */
 export class VirtualMachineManagement {
+  // Reconfigure VM CD-ROM
   public answerVmQuestion(vm: VcVirtualMachine) {
     if (!vm) {
       throw new Error("VM is not defined.");
@@ -112,5 +113,107 @@ export class VirtualMachineManagement {
     deviceConfigSpec.operation = VcVirtualDeviceConfigSpecOperation.edit;
 
     return deviceConfigSpec;
+  }
+
+  // vCenter snapshot deletion scheduled task
+  private getServiceInstance(vm: VcVirtualMachine): VcServiceInstance {
+    let sdkConnection: VcSdkConnection = vm.sdkConnection;
+    let serviceInstanceReference: VcManagedObjectReference = new VcManagedObjectReference();
+    serviceInstanceReference.type = "ServiceInstance";
+    serviceInstanceReference.value = "ServiceInstance";
+    return VcPlugin.convertToVimManagedObject(sdkConnection, serviceInstanceReference);
+  }
+
+  private createOnceTaskScheduler(taskRunAt: Date): VcOnceTaskScheduler {
+    let onceTaskScheduler: VcOnceTaskScheduler = new VcOnceTaskScheduler();
+    onceTaskScheduler.runAt = taskRunAt;
+    return onceTaskScheduler;
+  }
+
+  private removeSnapshotsActionTask(): VcMethodAction {
+    let actionTask: VcMethodAction = new VcMethodAction();
+    actionTask.name = "RemoveAllSnapshots_Task";
+    let argument: VcMethodActionArgument = new VcMethodActionArgument();
+    actionTask.argument = [argument];
+    return actionTask;
+  }
+
+  private createSnapshotsActionTask({
+    snapName,
+    snapDescription,
+    snapMemory,
+    snapQuiesce
+  }: {
+    snapName: string;
+    snapDescription: string;
+    snapMemory: boolean;
+    snapQuiesce: boolean;
+  }): VcMethodAction {
+    const actionTask = new VcMethodAction();
+    actionTask.name = "CreateSnapshot_Task";
+
+    const createArgument = (value: any): VcMethodActionArgument => {
+      const arg = new VcMethodActionArgument();
+      arg.value_AnyValue = value;
+      return arg;
+    };
+    const snapshotName: VcMethodActionArgument = createArgument(`${snapName}_scheduledSnapshot_${new Date().toISOString()}`);
+    const description: VcMethodActionArgument = createArgument(snapDescription);
+    const memory: VcMethodActionArgument = createArgument(snapMemory);
+    const quiesce: VcMethodActionArgument = createArgument(snapQuiesce);
+    actionTask.argument = [snapshotName, description, memory, quiesce];
+
+    return actionTask;
+  }
+
+  public createScheduledSnapshotTaskSpec({
+    vm,
+    scheduledTaskSpecName,
+    scheduledTaskSpecDescription,
+    scheduledTaskRunAt,
+    useRemoveSnapshotsAction,
+    scheduledTaskEmailNotification,
+    snapshotName,
+    snapshotDescription,
+    snapshotMemory,
+    snapshotQuiesce
+  }: {
+    vm: VcVirtualMachine;
+    scheduledTaskSpecName: string;
+    scheduledTaskSpecDescription: string;
+    scheduledTaskRunAt: Date;
+    useRemoveSnapshotsAction: boolean;
+    scheduledTaskEmailNotification: string;
+    snapshotName: string;
+    snapshotDescription: string;
+    snapshotMemory: boolean;
+    snapshotQuiesce: boolean;
+  }): VcScheduledTaskSpec {
+    let scheduledTaskSpec: VcScheduledTaskSpec = new VcScheduledTaskSpec();
+    scheduledTaskSpec.name = vm.name + " " + scheduledTaskSpecName;
+    scheduledTaskSpec.description = scheduledTaskSpecDescription;
+    scheduledTaskSpec.enabled = true;
+    scheduledTaskSpec.scheduler = this.createOnceTaskScheduler(scheduledTaskRunAt);
+    scheduledTaskSpec.notification = scheduledTaskEmailNotification;
+    scheduledTaskSpec.action = useRemoveSnapshotsAction
+      ? this.removeSnapshotsActionTask()
+      : this.createSnapshotsActionTask({ snapName: snapshotName, snapDescription: snapshotDescription, snapMemory: snapshotMemory, snapQuiesce: snapshotQuiesce });
+
+    return scheduledTaskSpec;
+  }
+
+  public createScheduledSnapshotTask(vm: VcVirtualMachine, scheduledTaskSpec: VcScheduledTaskSpec): VcScheduledTask {
+    let serviceInstance: VcServiceInstance = this.getServiceInstance(vm);
+    let serviceContent: VcServiceContent = serviceInstance.content;
+    let vcScheduledTaskManager = serviceContent.scheduledTaskManager;
+
+    try {
+      let scheduledTask: VcScheduledTask = vcScheduledTaskManager.createScheduledTask(vm, scheduledTaskSpec);
+      System.log("Scheduled Task Created: " + scheduledTask.info.name);
+      return scheduledTask;
+    } catch (e) {
+      System.error("Failed to create scheduled task: " + e);
+      throw e;
+    }
   }
 }
