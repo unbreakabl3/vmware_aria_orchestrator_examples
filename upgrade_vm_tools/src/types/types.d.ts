@@ -2,7 +2,7 @@
  * #%L
  * upgrade_vm_tools
  * %%
- * Copyright (C) 2024 TODO: Enter Organization name
+ * Copyright (C) 2025 TODO: Enter Organization name
  * %%
  * TODO: Define header text
  * #L%

@@ -10,7 +10,7 @@
 
   <groupId>com.clouddepth</groupId>
   <artifactId>host_profiles</artifactId>
-  <version>1.0.28</version>
+  <version>1.0.27</version>
   <packaging>package</packaging>
 
   <scm>

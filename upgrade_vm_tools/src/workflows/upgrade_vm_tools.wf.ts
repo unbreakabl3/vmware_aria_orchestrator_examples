@@ -2,7 +2,7 @@
  * #%L
  * upgrade_vm_tools
  * %%
- * Copyright (C) 2024 TODO: Enter Organization name
+ * Copyright (C) 2025 TODO: Enter Organization name
  * %%
  * TODO: Define header text
  * #L%
@@ -115,9 +115,9 @@ export class UpgradeVMTools {
       func.convertTemplateToVm(vars);
     }
     if (createSnapshot) func.createVmSnapshot(vars);
-    const vmDisks = func.getVmDisks(vm);
+    const vmDisks: VcVirtualDisk[] | undefined = func.getVmDisks(vm);
     if (!vmDisks) throw new Error(`No disks found for virtual machine '${vm.name}'`);
-    const isDiskNonPersistent = func.getVmNonPersistentDisks(vmDisks, diskPersistencyType.persistent).length !== 0;
+    const isDiskNonPersistent: boolean = func.getVmNonPersistentDisks(vmDisks, diskPersistencyType.persistent).length !== 0;
     if (isDiskNonPersistent) {
       System.log(`Preparing disks for conversion to ${diskPersistencyType.persistent}`);
       func.shutdownVmBasedOnCurrentState(vm, shutdownTimeout);
