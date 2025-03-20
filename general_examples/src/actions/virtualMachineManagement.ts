@@ -217,3 +217,60 @@ export class VirtualMachineManagement {
     }
   }
 }
+
+export class FaultTolerance {
+  private getHost(vm: VcVirtualMachine): VcHostSystem {
+    return Server.findForType("VC:HostSystem", vm.vimHost.id);
+  }
+
+  private getDatastore(vm: VcVirtualMachine): VcDatastore {
+    if (!vm.datastore || vm.datastore.length === 0) {
+      throw new Error("No datastore found for the virtual machine.");
+    }
+    if (vm.datastore.length > 1) {
+      throw new Error("Multiple datastores found. Expected only one.");
+    }
+
+    return Server.findForType("VC:Datastore", vm.vimHost.id + "/" + vm.datastore[0].id);
+  }
+
+  private createDiskSpec(datastore: VcDatastore, vm: VcVirtualMachine): VcFaultToleranceDiskSpec {
+    let diskSpec: VcFaultToleranceDiskSpec = new VcFaultToleranceDiskSpec();
+    let disk: VcVirtualDisk = new VcVirtualDisk();
+    let backing: VcVirtualDiskFlatVer2BackingInfo = new VcVirtualDiskFlatVer2BackingInfo();
+    backing.fileName = vm.summary.config.vmPathName;
+    backing.datastore = datastore;
+    backing.diskMode = "persistent";
+    disk.backing = backing;
+    diskSpec.disk = disk;
+
+    return diskSpec;
+  }
+
+  private createFaultToleranceSpec(vm: VcVirtualMachine, datastore: VcDatastore): VcFaultToleranceConfigSpec {
+    let spec: VcFaultToleranceConfigSpec = new VcFaultToleranceConfigSpec();
+    spec.secondaryVmSpec = new VcFaultToleranceVMConfigSpec();
+    spec.secondaryVmSpec.disks = [this.createDiskSpec(datastore, vm)];
+    spec.secondaryVmSpec.vmConfig = datastore;
+    spec.metaDataPath = new VcFaultToleranceMetaSpec();
+    spec.metaDataPath.metaDataDatastore = datastore;
+
+    return spec;
+  }
+
+  public enableVMFaultTolerance(vm: VcVirtualMachine): VcTask {
+    let host: VcHostSystem = this.getHost(vm);
+    let datastore: VcDatastore = this.getDatastore(vm);
+    let spec: VcFaultToleranceConfigSpec = this.createFaultToleranceSpec(vm, datastore);
+
+    try {
+      let task: VcTask = vm.createSecondaryVMEx_Task(host, spec);
+      System.getModule("com.vmware.library.vc.basic").vim3WaitTaskEnd(task, true, 3);
+      System.log("Secondary VM creation task initiated successfully");
+      return task;
+    } catch (e) {
+      System.error("Failed to initiate secondary VM creation task: " + e);
+      throw e;
+    }
+  }
+}
