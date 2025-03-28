@@ -59,27 +59,19 @@ export class MountIsoWorkflow {
 			let cdromConfig: VcVirtualDeviceConfigSpec =
 				new VcVirtualDeviceConfigSpec();
 			let cdrom: VcVirtualCdrom = new VcVirtualCdrom();
-
-			// Set up connectable properties
 			cdrom.connectable = new VcVirtualDeviceConnectInfo();
 			cdrom.connectable.connected = false;
 			cdrom.connectable.allowGuestControl = true;
 			cdrom.connectable.startConnected = true;
-
-			// Set up ISO backing
 			cdrom.backing = new VcVirtualCdromIsoBackingInfo();
 			//@ts-ignore
 			cdrom.backing.fileName = isoPath;
-
-			// Set device properties
 			cdrom.controllerKey = 15000;
 			cdrom.unitNumber = 0;
 			cdrom.deviceInfo = new VcDescription();
 			cdrom.deviceInfo.summary = "Remote ATAPI";
 			cdrom.deviceInfo.label = "CD/DVD drive 1";
 			cdrom.key = 16000;
-
-			// Assign device to config spec
 			cdromConfig.device = cdrom;
 			cdromConfig.operation = VcVirtualDeviceConfigSpecOperation.edit;
 
@@ -89,8 +81,6 @@ export class MountIsoWorkflow {
 		function createReconfigSpec(isoPath: string): VcVirtualMachineConfigSpec {
 			let spec: VcVirtualMachineConfigSpec = new VcVirtualMachineConfigSpec();
 			spec.deviceChange = [createCdromDeviceConfig(isoPath)];
-			//@ts-ignore
-			spec.virtualNuma = new VcVirtualMachineVirtualNuma();
 			return spec;
 		}
 
@@ -107,14 +97,6 @@ export class MountIsoWorkflow {
 			} catch (error) {
 				throw new Error("Failed to reconfigure VM: " + error);
 			}
-		}
-
-		function isValidIsoFile(fileName: string): boolean {
-			return fileName.toLowerCase().endsWith(".iso");
-		}
-
-		if (!isValidIsoFile(iso)) {
-			throw new Error("Invalid ISO file name.");
 		}
 
 		const isoFilePath: string = `[${datastore.name}] ${folder}/${iso}`;
