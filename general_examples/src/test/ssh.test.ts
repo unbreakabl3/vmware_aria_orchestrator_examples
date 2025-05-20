@@ -17,11 +17,12 @@ describe("sshCommands", () => {
     const path = "/var/lib/vco/app-server/conf/vco_key"; // A static path. Should be always the same
     const sshKeyPassword = "";
 
-    const sessionMock = {
+    let sessionMock = {
       connectWithIdentity: jasmine.createSpy().and.callThrough(),
       executeCommand: jasmine.createSpy().and.callFake((command: string, _: boolean) => {
         if (command === sshCommand) {
           // Simulate successful execution
+          //@ts-ignore
           sessionMock.output = "Directory listing";
         } else {
           // Simulate an invalid command
