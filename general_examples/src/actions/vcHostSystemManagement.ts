@@ -8,7 +8,7 @@
  * #L%
  */
 export class AdvancedSettingsManagement {
-  public validateParameters(key: string, value: string): void {
+  public validateParameters(key: string, value: any): void {
     if (!key) {
       throw "Mandatory parameter 'advancedSettingKey' is not defined";
     }
