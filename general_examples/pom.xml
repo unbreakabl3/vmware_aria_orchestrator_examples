@@ -6,12 +6,12 @@
   <parent>
     <groupId>com.vmware.pscoe.o11n</groupId>
     <artifactId>typescript-project-all</artifactId>
-    <version>4.5.0</version>
+    <version>4.6.0</version>
   </parent>
 
   <groupId>com.examples</groupId>
   <artifactId>vmware_aria_orchestrator_examples</artifactId>
-  <version>1.0.63</version>
+  <version>1.0.64</version>
   <packaging>package</packaging>
 
   <scm>

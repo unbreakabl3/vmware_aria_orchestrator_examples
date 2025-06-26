@@ -1,67 +1,248 @@
+
 {
-    "layout": {
-      "pages": [
-        {
-          "id": "page_ftr9080h",
-          "sections": [
-            {
-              "id": "section_m29eidg4",
-              "fields": [
-                {
-                  "id": "foo",
-                  "display": "textField",
-                  "signpostPosition": "right-middle",
-                  "state": {
-                    "visible": true,
-                    "read-only": false
-                  }
+  "layout": {
+    "pages": [
+      {
+        "id": "page_1",
+        "sections": [
+          {
+            "id": "section_b4b09508",
+            "fields": [
+              {
+                "id": "vCenter",
+                "display": "dropDown",
+                "signpostPosition": "right-middle",
+                "state": {
+                  "visible": true,
+                  "read-only": false
                 }
-              ]
-            },
-            {
-              "id": "section_3wv6e91j",
-              "fields": [
-                {
-                  "id": "bar",
-                  "display": "textField",
-                  "signpostPosition": "right-middle",
-                  "state": {
-                    "visible": true,
-                    "read-only": false
-                  }
+              }
+            ]
+          },
+          {
+            "id": "section_0",
+            "fields": [
+              {
+                "id": "datastoreClusterName",
+                "display": "dropDown",
+                "signpostPosition": "right-middle",
+                "state": {
+                  "visible": true,
+                  "read-only": false
                 }
-              ]
-            }
-          ],
-          "title": "General",
-          "state": {}
-        }
-      ]
-    },
-    "schema": {
-      "foo": {
-        "id": "foo",
-        "type": {
-          "dataType": "string"
-        },
-        "label": "foo",
-        "constraints": {
-          "required": false
-        }
+              }
+            ]
+          },
+          {
+            "id": "section_2",
+            "fields": [
+              {
+                "id": "defaultVmBehavior",
+                "display": "textField",
+                "signpostPosition": "right-middle",
+                "state": {
+                  "visible": true,
+                  "read-only": false
+                }
+              }
+            ]
+          },
+          {
+            "id": "section_3",
+            "fields": [
+              {
+                "id": "ioLoadImbalanceThreshold",
+                "display": "decimalField",
+                "signpostPosition": "right-middle",
+                "state": {
+                  "visible": true,
+                  "read-only": false
+                }
+              }
+            ]
+          },
+          {
+            "id": "section_4",
+            "fields": [
+              {
+                "id": "ioLatencyThreshold",
+                "display": "decimalField",
+                "signpostPosition": "right-middle",
+                "state": {
+                  "visible": true,
+                  "read-only": false
+                }
+              }
+            ]
+          },
+          {
+            "id": "section_5",
+            "fields": [
+              {
+                "id": "minSpaceUtilizationDifference",
+                "display": "decimalField",
+                "signpostPosition": "right-middle",
+                "state": {
+                  "visible": true,
+                  "read-only": false
+                }
+              }
+            ]
+          },
+          {
+            "id": "section_6",
+            "fields": [
+              {
+                "id": "spaceThresholdMode",
+                "display": "textField",
+                "signpostPosition": "right-middle",
+                "state": {
+                  "visible": true,
+                  "read-only": false
+                }
+              }
+            ]
+          },
+          {
+            "id": "section_7",
+            "fields": [
+              {
+                "id": "freeSpaceThresholdGB",
+                "display": "decimalField",
+                "signpostPosition": "right-middle",
+                "state": {
+                  "visible": true,
+                  "read-only": false
+                }
+              }
+            ]
+          },
+          {
+            "id": "section_8",
+            "fields": [
+              {
+                "id": "spaceUtilizationThreshold",
+                "display": "decimalField",
+                "signpostPosition": "right-middle",
+                "state": {
+                  "visible": true,
+                  "read-only": false
+                }
+              }
+            ]
+          }
+        ],
+        "title": "General"
+      }
+    ]
+  },
+  "schema": {
+    "vCenter": {
+      "type": {
+        "dataType": "string",
+        "isMultiple": false
       },
-      "bar": {
-        "id": "bar",
-        "type": {
-          "dataType": "string"
-        },
-        "label": "bar",
-        "constraints": {
-          "required": false
-        }
+      "label": "vCenter",
+      "id": "vCenter",
+      "constraints": {
+        "required": true
+      },
+      "valueList": {
+        "type": "scriptAction",
+        "id": "com.clouddepth.datastore_cluster_management.integration-service-1.actions/getvCenters",
+        "parameters": []
       }
     },
-    "options": {
-      "externalValidations": []
+    "datastoreClusterName": {
+      "type": {
+        "dataType": "string",
+        "isMultiple": false
+      },
+      "label": "Datastore Clusters",
+      "id": "datastoreClusterName",
+      "constraints": {
+        "required": true
+      },
+      "valueList": {
+        "type": "scriptAction",
+        "id": "com.clouddepth.datastore_cluster_management.integration-service-1.actions/getDatastoreClusters",
+        "parameters": [
+          {
+            "vCenter": "vCenter",
+            "$type": {
+              "dataType": "string"
+            }
+          }
+        ]
+      }
     },
-    "itemId": ""
-  }
+    "defaultVmBehavior": {
+      "type": {
+        "dataType": "string",
+        "isMultiple": false
+      },
+      "label": "Default VM Behavior",
+      "id": "defaultVmBehavior",
+      "constraints": {}
+    },
+    "ioLoadImbalanceThreshold": {
+      "type": {
+        "dataType": "decimal",
+        "isMultiple": false
+      },
+      "label": "I/O Load Imbalance Threshold",
+      "id": "ioLoadImbalanceThreshold",
+      "constraints": {}
+    },
+    "ioLatencyThreshold": {
+      "type": {
+        "dataType": "decimal",
+        "isMultiple": false
+      },
+      "label": "I/O Latency Threshold",
+      "id": "ioLatencyThreshold",
+      "constraints": {}
+    },
+    "minSpaceUtilizationDifference": {
+      "type": {
+        "dataType": "decimal",
+        "isMultiple": false
+      },
+      "label": "Min Space Utilization Difference",
+      "id": "minSpaceUtilizationDifference",
+      "constraints": {}
+    },
+    "spaceThresholdMode": {
+      "type": {
+        "dataType": "string",
+        "isMultiple": false
+      },
+      "label": "Space Threshold Mode",
+      "id": "spaceThresholdMode",
+      "constraints": {}
+    },
+    "freeSpaceThresholdGB": {
+      "type": {
+        "dataType": "decimal",
+        "isMultiple": false
+      },
+      "label": "Free Space Threshold (GB)",
+      "id": "freeSpaceThresholdGB",
+      "constraints": {}
+    },
+    "spaceUtilizationThreshold": {
+      "type": {
+        "dataType": "decimal",
+        "isMultiple": false
+      },
+      "label": "Space Utilization Threshold",
+      "id": "spaceUtilizationThreshold",
+      "constraints": {}
+    }
+  },
+  "options": {
+    "externalValidations": []
+  },
+  "itemId": ""
+}
+

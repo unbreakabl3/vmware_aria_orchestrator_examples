@@ -8,38 +8,73 @@
  * #L%
  */
 import { Out, Workflow } from "vrotsc-annotations";
+import { DatastoreClusterManagement } from "../classes/datastoreClusterManagement";
 
 @Workflow({
-	name: "Create Integration",
-	path: "PSCoE/my-project/integration-service-1/workflows",
-	id: "",
-	description: "Sample workflow description",
-	attributes: {
-		field1: {
-			type: string,
-			bind: true,
-			value: "PSCoE/my-project/field1"
-		}
-	},
-	input: {
-		foo: {
-			type: "string",
-			availableValues: ["a", "b"],
-			defaultValue: "а",
-			description: "foo Value",
-			required: true,
-			title: "Foo"
-		},
-		bar: { type: "string" }
-	},
-	output: {
-		result: { type: "Any" }
-	},
-	presentation: ""
+  name: "Datastore Cluster Management Workflow",
+  path: "MyOrg/MyProject",
+  id: "",
+  description: "Sample workflow description",
+  attributes: {
+    // field1: {
+    //   type: string,
+    //   bind: true,
+    //   value: "PSCoE/my-project/field1"
+    // }
+  },
+  input: {
+    datastoreClusterName: {
+      type: "string",
+      title: "Foo"
+    },
+    vCenter: {
+      type: "string",
+      title: "vCenter"
+    },
+    defaultVmBehavior: { type: "string" },
+    ioLoadImbalanceThreshold: { type: "number" },
+    ioLatencyThreshold: { type: "number" },
+    minSpaceUtilizationDifference: { type: "number" },
+    spaceThresholdMode: { type: "string" },
+    freeSpaceThresholdGB: { type: "number" },
+    spaceUtilizationThreshold: { type: "number" }
+  },
+  output: {
+    result: { type: "Any" }
+  },
+  presentation: ""
 })
-export class SampleWorkflow {
-	public install(foo: string, bar: string, field1: string, @Out result: any): void {
-		System.log(`foo=${foo}, bar=${bar}, field1=${field1}`);
-		result = "result value";
-	}
+export class DatastoreClusterManagementWorkflow {
+  public install(
+    datastoreClusterName: string,
+    vCenter: string,
+    defaultVmBehavior: string,
+    ioLoadImbalanceThreshold: number,
+    ioLatencyThreshold: number,
+    minSpaceUtilizationDifference: number,
+    spaceThresholdMode: string,
+    freeSpaceThresholdGB: number,
+    spaceUtilizationThreshold: number,
+    @Out result: any
+  ): void {
+    const sdkConnection: VcSdkConnection = System.getModule('com.examples.vmware_aria_orchestrator_examples.actions')
+      .vcSdkManagement()
+      .VcSdkManagement.prototype.getVcSdkConnectionByName(vCenter);
+    const datastoreCluster = new DatastoreClusterManagement();
+    datastoreCluster.configureStorageDrsForPod(
+      sdkConnection,
+      datastoreClusterName,
+      defaultVmBehavior,
+      ioLoadImbalanceThreshold,
+      ioLatencyThreshold,
+      minSpaceUtilizationDifference,
+      spaceThresholdMode,
+      freeSpaceThresholdGB,
+      spaceUtilizationThreshold,
+      false, // ioLoadBalanceEnabled
+      true, // defaultIntraVmAffinity
+      420, // loadBalanceInterval in minutes
+      true // enabled
+    );
+  }
 }
