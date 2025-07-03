@@ -1,248 +1,352 @@
 
-{
-  "layout": {
-    "pages": [
-      {
-        "id": "page_1",
-        "sections": [
-          {
-            "id": "section_b4b09508",
-            "fields": [
-              {
-                "id": "vCenter",
-                "display": "dropDown",
-                "signpostPosition": "right-middle",
-                "state": {
-                  "visible": true,
-                  "read-only": false
+  {
+    "layout": {
+      "pages": [
+        {
+          "id": "page_1",
+          "sections": [
+            {
+              "id": "section_b4b09508",
+              "fields": [
+                {
+                  "id": "vCenter",
+                  "display": "dropDown",
+                  "signpostPosition": "right-middle",
+                  "state": {
+                    "visible": true,
+                    "read-only": false
+                  }
                 }
+              ]
+            },
+            {
+              "id": "section_0",
+              "fields": [
+                {
+                  "id": "datastoreClusterName",
+                  "display": "dropDown",
+                  "signpostPosition": "right-middle",
+                  "state": {
+                    "visible": true,
+                    "read-only": false
+                  }
+                }
+              ]
+            },
+            {
+              "id": "section_2",
+              "fields": [
+                {
+                  "id": "defaultVmBehavior",
+                  "display": "dropDown",
+                  "signpostPosition": "right-middle",
+                  "state": {
+                    "visible": true,
+                    "read-only": false
+                  }
+                }
+              ]
+            },
+            {
+              "id": "section_3",
+              "fields": [
+                {
+                  "id": "ioLoadImbalanceThreshold",
+                  "display": "decimalField",
+                  "signpostPosition": "right-middle",
+                  "state": {
+                    "visible": true,
+                    "read-only": false
+                  }
+                }
+              ]
+            },
+            {
+              "id": "section_4",
+              "fields": [
+                {
+                  "id": "ioLatencyThreshold",
+                  "display": "decimalField",
+                  "signpostPosition": "right-middle",
+                  "state": {
+                    "visible": true,
+                    "read-only": false
+                  }
+                }
+              ]
+            },
+            {
+              "id": "section_5",
+              "fields": [
+                {
+                  "id": "minSpaceUtilizationDifference",
+                  "display": "decimalField",
+                  "signpostPosition": "right-middle",
+                  "state": {
+                    "visible": true,
+                    "read-only": false
+                  }
+                }
+              ]
+            },
+            {
+              "id": "section_6",
+              "fields": [
+                {
+                  "id": "spaceThresholdMode",
+                  "display": "textField",
+                  "signpostPosition": "right-middle",
+                  "state": {
+                    "visible": true,
+                    "read-only": false
+                  }
+                }
+              ]
+            },
+            {
+              "id": "section_7",
+              "fields": [
+                {
+                  "id": "freeSpaceThresholdGB",
+                  "display": "decimalField",
+                  "signpostPosition": "right-middle",
+                  "state": {
+                    "visible": true,
+                    "read-only": false
+                  }
+                }
+              ]
+            },
+            {
+              "id": "section_8",
+              "fields": [
+                {
+                  "id": "spaceUtilizationThreshold",
+                  "display": "decimalField",
+                  "signpostPosition": "right-middle",
+                  "state": {
+                    "visible": true,
+                    "read-only": false
+                  }
+                }
+              ]
+            },
+            {
+              "id": "section_6efa98a2",
+              "fields": [
+                {
+                  "id": "ioLoadBalanceEnabled",
+                  "display": "checkbox",
+                  "state": {
+                    "visible": true,
+                    "read-only": false
+                  },
+                  "signpostPosition": "right-middle"
+                }
+              ]
+            },
+            {
+              "id": "section_a86bcfb9",
+              "fields": [
+                {
+                  "id": "defaultIntraVmAffinity",
+                  "display": "checkbox",
+                  "state": {
+                    "visible": true,
+                    "read-only": false
+                  },
+                  "signpostPosition": "right-middle"
+                }
+              ]
+            },
+            {
+              "id": "section_98933414",
+              "fields": [
+                {
+                  "id": "enabled",
+                  "display": "checkbox",
+                  "state": {
+                    "visible": true,
+                    "read-only": false
+                  },
+                  "signpostPosition": "right-middle"
+                }
+              ]
+            },
+            {
+              "id": "section_16b65484",
+              "fields": [
+                {
+                  "id": "loadBalanceInterval",
+                  "display": "decimalField",
+                  "state": {
+                    "visible": true,
+                    "read-only": false
+                  },
+                  "signpostPosition": "right-middle"
+                }
+              ]
+            }
+          ],
+          "title": "General"
+        }
+      ]
+    },
+    "schema": {
+      "vCenter": {
+        "type": {
+          "dataType": "string",
+          "isMultiple": false
+        },
+        "label": "vCenter",
+        "id": "vCenter",
+        "constraints": {
+          "required": true
+        },
+        "valueList": {
+          "type": "scriptAction",
+          "id": "com.clouddepth.datastore_cluster_management.integration-service-1.actions/getvCenters",
+          "parameters": []
+        }
+      },
+      "datastoreClusterName": {
+        "type": {
+          "dataType": "string",
+          "isMultiple": false
+        },
+        "label": "Datastore Clusters",
+        "id": "datastoreClusterName",
+        "constraints": {
+          "required": true
+        },
+        "valueList": {
+          "type": "scriptAction",
+          "id": "com.clouddepth.datastore_cluster_management.integration-service-1.actions/getDatastoreClusters",
+          "parameters": [
+            {
+              "vCenter": "vCenter",
+              "$type": {
+                "dataType": "string"
               }
-            ]
+            }
+          ]
+        }
+      },
+      "defaultVmBehavior": {
+        "type": {
+          "dataType": "string",
+          "isMultiple": false
+        },
+        "label": "Default VM Behavior",
+        "id": "defaultVmBehavior",
+        "constraints": {},
+        "valueList": [
+          {
+            "value": "partiallyAutomated",
+            "label": "Partially Automated"
           },
           {
-            "id": "section_0",
-            "fields": [
-              {
-                "id": "datastoreClusterName",
-                "display": "dropDown",
-                "signpostPosition": "right-middle",
-                "state": {
-                  "visible": true,
-                  "read-only": false
-                }
-              }
-            ]
+            "value": "manual",
+            "label": "Manuall"
           },
           {
-            "id": "section_2",
-            "fields": [
-              {
-                "id": "defaultVmBehavior",
-                "display": "textField",
-                "signpostPosition": "right-middle",
-                "state": {
-                  "visible": true,
-                  "read-only": false
-                }
-              }
-            ]
-          },
-          {
-            "id": "section_3",
-            "fields": [
-              {
-                "id": "ioLoadImbalanceThreshold",
-                "display": "decimalField",
-                "signpostPosition": "right-middle",
-                "state": {
-                  "visible": true,
-                  "read-only": false
-                }
-              }
-            ]
-          },
-          {
-            "id": "section_4",
-            "fields": [
-              {
-                "id": "ioLatencyThreshold",
-                "display": "decimalField",
-                "signpostPosition": "right-middle",
-                "state": {
-                  "visible": true,
-                  "read-only": false
-                }
-              }
-            ]
-          },
-          {
-            "id": "section_5",
-            "fields": [
-              {
-                "id": "minSpaceUtilizationDifference",
-                "display": "decimalField",
-                "signpostPosition": "right-middle",
-                "state": {
-                  "visible": true,
-                  "read-only": false
-                }
-              }
-            ]
-          },
-          {
-            "id": "section_6",
-            "fields": [
-              {
-                "id": "spaceThresholdMode",
-                "display": "textField",
-                "signpostPosition": "right-middle",
-                "state": {
-                  "visible": true,
-                  "read-only": false
-                }
-              }
-            ]
-          },
-          {
-            "id": "section_7",
-            "fields": [
-              {
-                "id": "freeSpaceThresholdGB",
-                "display": "decimalField",
-                "signpostPosition": "right-middle",
-                "state": {
-                  "visible": true,
-                  "read-only": false
-                }
-              }
-            ]
-          },
-          {
-            "id": "section_8",
-            "fields": [
-              {
-                "id": "spaceUtilizationThreshold",
-                "display": "decimalField",
-                "signpostPosition": "right-middle",
-                "state": {
-                  "visible": true,
-                  "read-only": false
-                }
-              }
-            ]
+            "value": "fullyAutomated",
+            "label": "Fully Automated"
           }
         ],
-        "title": "General"
+        "default": "fullyAutomated"
+      },
+      "ioLoadImbalanceThreshold": {
+        "type": {
+          "dataType": "decimal",
+          "isMultiple": false
+        },
+        "label": "I/O Load Imbalance Threshold",
+        "id": "ioLoadImbalanceThreshold",
+        "constraints": {}
+      },
+      "ioLatencyThreshold": {
+        "type": {
+          "dataType": "decimal",
+          "isMultiple": false
+        },
+        "label": "I/O Latency Threshold",
+        "id": "ioLatencyThreshold",
+        "constraints": {}
+      },
+      "minSpaceUtilizationDifference": {
+        "type": {
+          "dataType": "decimal",
+          "isMultiple": false
+        },
+        "label": "Min Space Utilization Difference",
+        "id": "minSpaceUtilizationDifference",
+        "constraints": {}
+      },
+      "spaceThresholdMode": {
+        "type": {
+          "dataType": "string",
+          "isMultiple": false
+        },
+        "label": "Space Threshold Mode",
+        "id": "spaceThresholdMode",
+        "constraints": {}
+      },
+      "freeSpaceThresholdGB": {
+        "type": {
+          "dataType": "decimal",
+          "isMultiple": false
+        },
+        "label": "Free Space Threshold (GB)",
+        "id": "freeSpaceThresholdGB",
+        "constraints": {}
+      },
+      "spaceUtilizationThreshold": {
+        "type": {
+          "dataType": "decimal",
+          "isMultiple": false
+        },
+        "label": "Space Utilization Threshold",
+        "id": "spaceUtilizationThreshold",
+        "constraints": {}
+      },
+      "ioLoadBalanceEnabled": {
+        "type": {
+          "dataType": "boolean"
+        },
+        "label": "I/O Load Balance Enabled",
+        "default": true
+      },
+      "defaultIntraVmAffinity": {
+        "type": {
+          "dataType": "boolean"
+        },
+        "label": "Default Intra VM Affinity",
+        "default": true
+      },
+      "enabled": {
+        "type": {
+          "dataType": "boolean"
+        },
+        "label": "Enabled",
+        "default": true
+      },
+      "loadBalanceInterval": {
+        "type": {
+          "dataType": "decimal"
+        },
+        "label": "Load Balance Interval",
+        "default": 420,
+        "step": 1,
+        "signpost": "In minutes",
+        "constraints": {
+          "max-value": 60,
+          "min-value": 41760
+        }
       }
-    ]
-  },
-  "schema": {
-    "vCenter": {
-      "type": {
-        "dataType": "string",
-        "isMultiple": false
-      },
-      "label": "vCenter",
-      "id": "vCenter",
-      "constraints": {
-        "required": true
-      },
-      "valueList": {
-        "type": "scriptAction",
-        "id": "com.clouddepth.datastore_cluster_management.integration-service-1.actions/getvCenters",
-        "parameters": []
-      }
     },
-    "datastoreClusterName": {
-      "type": {
-        "dataType": "string",
-        "isMultiple": false
-      },
-      "label": "Datastore Clusters",
-      "id": "datastoreClusterName",
-      "constraints": {
-        "required": true
-      },
-      "valueList": {
-        "type": "scriptAction",
-        "id": "com.clouddepth.datastore_cluster_management.integration-service-1.actions/getDatastoreClusters",
-        "parameters": [
-          {
-            "vCenter": "vCenter",
-            "$type": {
-              "dataType": "string"
-            }
-          }
-        ]
-      }
+    "options": {
+      "externalValidations": []
     },
-    "defaultVmBehavior": {
-      "type": {
-        "dataType": "string",
-        "isMultiple": false
-      },
-      "label": "Default VM Behavior",
-      "id": "defaultVmBehavior",
-      "constraints": {}
-    },
-    "ioLoadImbalanceThreshold": {
-      "type": {
-        "dataType": "decimal",
-        "isMultiple": false
-      },
-      "label": "I/O Load Imbalance Threshold",
-      "id": "ioLoadImbalanceThreshold",
-      "constraints": {}
-    },
-    "ioLatencyThreshold": {
-      "type": {
-        "dataType": "decimal",
-        "isMultiple": false
-      },
-      "label": "I/O Latency Threshold",
-      "id": "ioLatencyThreshold",
-      "constraints": {}
-    },
-    "minSpaceUtilizationDifference": {
-      "type": {
-        "dataType": "decimal",
-        "isMultiple": false
-      },
-      "label": "Min Space Utilization Difference",
-      "id": "minSpaceUtilizationDifference",
-      "constraints": {}
-    },
-    "spaceThresholdMode": {
-      "type": {
-        "dataType": "string",
-        "isMultiple": false
-      },
-      "label": "Space Threshold Mode",
-      "id": "spaceThresholdMode",
-      "constraints": {}
-    },
-    "freeSpaceThresholdGB": {
-      "type": {
-        "dataType": "decimal",
-        "isMultiple": false
-      },
-      "label": "Free Space Threshold (GB)",
-      "id": "freeSpaceThresholdGB",
-      "constraints": {}
-    },
-    "spaceUtilizationThreshold": {
-      "type": {
-        "dataType": "decimal",
-        "isMultiple": false
-      },
-      "label": "Space Utilization Threshold",
-      "id": "spaceUtilizationThreshold",
-      "constraints": {}
-    }
-  },
-  "options": {
-    "externalValidations": []
-  },
-  "itemId": ""
-}
-
+    "itemId": ""
+  }

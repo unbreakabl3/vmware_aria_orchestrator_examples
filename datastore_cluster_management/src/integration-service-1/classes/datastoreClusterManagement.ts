@@ -83,14 +83,14 @@ export class DatastoreClusterManagement {
     const podConfig = new VcStorageDrsPodConfigSpec();
     const spaceLoadBalanceConfig = { minSpaceUtilizationDifference, spaceThresholdMode, freeSpaceThresholdGB, spaceUtilizationThreshold };
 
-    podConfig.defaultVmBehavior = "manual";
+    podConfig.defaultVmBehavior = defaultVmBehavior;
     podConfig.ioLoadBalanceConfig = this.buildIoLoadBalanceConfig(ioLoadImbalanceThreshold, ioLatencyThreshold);
     podConfig.spaceLoadBalanceConfig = this.buildSpaceLoadBalanceConfig(spaceLoadBalanceConfig);
-    podConfig.ioLoadBalanceEnabled = false;
-    podConfig.defaultIntraVmAffinity = true;
+    podConfig.ioLoadBalanceEnabled = ioLoadBalanceEnabled;
+    podConfig.defaultIntraVmAffinity = defaultIntraVmAffinity;
     podConfig.automationOverrides = new VcStorageDrsAutomationConfig();
-    podConfig.loadBalanceInterval = 420;
-    podConfig.enabled = true;
+    podConfig.loadBalanceInterval = loadBalanceInterval;
+    podConfig.enabled = enabled;
 
     spec.podConfigSpec = podConfig;
 

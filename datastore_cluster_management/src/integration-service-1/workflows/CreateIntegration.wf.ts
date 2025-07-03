@@ -37,7 +37,11 @@ import { DatastoreClusterManagement } from "../classes/datastoreClusterManagemen
     minSpaceUtilizationDifference: { type: "number" },
     spaceThresholdMode: { type: "string" },
     freeSpaceThresholdGB: { type: "number" },
-    spaceUtilizationThreshold: { type: "number" }
+    spaceUtilizationThreshold: { type: "number" },
+    ioLoadBalanceEnabled: { type: "boolean" },
+    defaultIntraVmAffinity: { type: "boolean" },
+    loadBalanceInterval: { type: "number" },
+    enabled: { type: "boolean" }
   },
   output: {
     result: { type: "Any" }
@@ -55,6 +59,10 @@ export class DatastoreClusterManagementWorkflow {
     spaceThresholdMode: string,
     freeSpaceThresholdGB: number,
     spaceUtilizationThreshold: number,
+    ioLoadBalanceEnabled: boolean,
+    defaultIntraVmAffinity: boolean,
+    loadBalanceInterval: number,
+    enabled: boolean,
     @Out result: any
   ): void {
     const sdkConnection: VcSdkConnection = System.getModule('com.examples.vmware_aria_orchestrator_examples.actions')
@@ -71,10 +79,10 @@ export class DatastoreClusterManagementWorkflow {
       spaceThresholdMode,
       freeSpaceThresholdGB,
       spaceUtilizationThreshold,
-      false, // ioLoadBalanceEnabled
-      true, // defaultIntraVmAffinity
-      420, // loadBalanceInterval in minutes
-      true // enabled
+      ioLoadBalanceEnabled,
+      defaultIntraVmAffinity,
+      loadBalanceInterval,
+      enabled
     );
   }
 }

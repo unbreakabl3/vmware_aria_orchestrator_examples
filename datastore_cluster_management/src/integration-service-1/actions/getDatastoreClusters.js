@@ -21,8 +21,6 @@
       .vcSdkManagement()
       .VcSdkManagement.prototype.getVcSdkConnectionByName(vCenter);
     datastoreClusters = sdkConnection.getAllVimManagedObjects("StoragePod", null, null);
-  } else {
-    datastoreClusters = VcPlugin.getAllVimManagedObjects("StoragePod", null, null);
   }
 
   if (datastoreClusters.length !== 0) {

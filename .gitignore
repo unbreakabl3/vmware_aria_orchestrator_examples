@@ -3,3 +3,4 @@
 .vscode/
 jasmine.json
 src/*
+datastore_cluster_management/THIRD-PARTY.properties
