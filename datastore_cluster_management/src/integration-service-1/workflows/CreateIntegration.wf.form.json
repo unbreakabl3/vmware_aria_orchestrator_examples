@@ -1,10 +1,23 @@
-
-  {
+{
     "layout": {
       "pages": [
         {
           "id": "page_1",
           "sections": [
+            {
+              "id": "section_74d8ddc1",
+              "fields": [
+                {
+                  "id": "enabled",
+                  "display": "checkbox",
+                  "state": {
+                    "visible": true,
+                    "read-only": false
+                  },
+                  "signpostPosition": "right-middle"
+                }
+              ]
+            },
             {
               "id": "section_b4b09508",
               "fields": [
@@ -94,7 +107,7 @@
               "fields": [
                 {
                   "id": "spaceThresholdMode",
-                  "display": "textField",
+                  "display": "dropDown",
                   "signpostPosition": "right-middle",
                   "state": {
                     "visible": true,
@@ -111,8 +124,15 @@
                   "display": "decimalField",
                   "signpostPosition": "right-middle",
                   "state": {
-                    "visible": true,
-                    "read-only": false
+                    "read-only": false,
+                    "visible": [
+                      {
+                        "equals": {
+                          "spaceThresholdMode": "freeSpace"
+                        },
+                        "value": true
+                      }
+                    ]
                   }
                 }
               ]
@@ -125,8 +145,15 @@
                   "display": "decimalField",
                   "signpostPosition": "right-middle",
                   "state": {
-                    "visible": true,
-                    "read-only": false
+                    "read-only": false,
+                    "visible": [
+                      {
+                        "equals": {
+                          "spaceThresholdMode": "utilization"
+                        },
+                        "value": true
+                      }
+                    ]
                   }
                 }
               ]
@@ -160,20 +187,6 @@
               ]
             },
             {
-              "id": "section_98933414",
-              "fields": [
-                {
-                  "id": "enabled",
-                  "display": "checkbox",
-                  "state": {
-                    "visible": true,
-                    "read-only": false
-                  },
-                  "signpostPosition": "right-middle"
-                }
-              ]
-            },
-            {
               "id": "section_16b65484",
               "fields": [
                 {
@@ -193,6 +206,13 @@
       ]
     },
     "schema": {
+      "enabled": {
+        "type": {
+          "dataType": "boolean"
+        },
+        "label": "Enable Storage DRS?",
+        "default": true
+      },
       "vCenter": {
         "type": {
           "dataType": "string",
@@ -261,27 +281,45 @@
           "dataType": "decimal",
           "isMultiple": false
         },
-        "label": "I/O Load Imbalance Threshold",
+        "label": "I/O Load Imbalance Threshold (%)",
         "id": "ioLoadImbalanceThreshold",
-        "constraints": {}
+        "constraints": {
+          "min-value": 1,
+          "max-value": 100
+        },
+        "default": 50,
+        "step": 1,
+        "signpost": "1% - Aggressive\n100% - Conservative"
       },
       "ioLatencyThreshold": {
         "type": {
           "dataType": "decimal",
           "isMultiple": false
         },
-        "label": "I/O Latency Threshold",
+        "label": "I/O Latency Threshold (ms)",
         "id": "ioLatencyThreshold",
-        "constraints": {}
+        "constraints": {
+          "min-value": 5,
+          "max-value": 100
+        },
+        "step": 1,
+        "default": 15,
+        "signpost": "Allowed value is between 5-100 ms"
       },
       "minSpaceUtilizationDifference": {
         "type": {
           "dataType": "decimal",
           "isMultiple": false
         },
-        "label": "Min Space Utilization Difference",
+        "label": "Min Space Utilization Difference (%)",
         "id": "minSpaceUtilizationDifference",
-        "constraints": {}
+        "constraints": {
+          "min-value": 1,
+          "max-value": 50
+        },
+        "default": 5,
+        "step": 1,
+        "signpost": "Allowed value can be in a range between 1-50%"
       },
       "spaceThresholdMode": {
         "type": {
@@ -290,7 +328,18 @@
         },
         "label": "Space Threshold Mode",
         "id": "spaceThresholdMode",
-        "constraints": {}
+        "constraints": {},
+        "valueList": [
+          {
+            "value": "freeSpace",
+            "label": "Free Space"
+          },
+          {
+            "value": "utilization",
+            "label": "Utilization"
+          }
+        ],
+        "default": "utilization"
       },
       "freeSpaceThresholdGB": {
         "type": {
@@ -299,16 +348,26 @@
         },
         "label": "Free Space Threshold (GB)",
         "id": "freeSpaceThresholdGB",
-        "constraints": {}
+        "constraints": {
+          "min-value": 1
+        },
+        "step": 1,
+        "default": 1
       },
       "spaceUtilizationThreshold": {
         "type": {
           "dataType": "decimal",
           "isMultiple": false
         },
-        "label": "Space Utilization Threshold",
+        "label": "Space Utilization Threshold (%)",
         "id": "spaceUtilizationThreshold",
-        "constraints": {}
+        "constraints": {
+          "min-value": 50,
+          "max-value": 100
+        },
+        "step": 1,
+        "default": 80,
+        "signpost": "Allowed value can be in a range between 50-100%"
       },
       "ioLoadBalanceEnabled": {
         "type": {
@@ -324,18 +383,11 @@
         "label": "Default Intra VM Affinity",
         "default": true
       },
-      "enabled": {
-        "type": {
-          "dataType": "boolean"
-        },
-        "label": "Enable Storage DRS?",
-        "default": true
-      },
       "loadBalanceInterval": {
         "type": {
           "dataType": "decimal"
         },
-        "label": "Load Balance Interval in Minutes",
+        "label": "Load Balance Interval (mins)",
         "default": 420,
         "step": 1,
         "signpost": "In minutes",

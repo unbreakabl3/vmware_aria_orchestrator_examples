@@ -99,8 +99,8 @@ export class DatastoreClusterManagement {
 
   public buildIoLoadBalanceConfig(ioLoadImbalanceThreshold: number, ioLatencyThreshold: number): VcStorageDrsIoLoadBalanceConfig {
     const config = new VcStorageDrsIoLoadBalanceConfig();
-    config.ioLoadImbalanceThreshold = 47;
-    config.ioLatencyThreshold = 15;
+    config.ioLoadImbalanceThreshold = ioLoadImbalanceThreshold;
+    config.ioLatencyThreshold = ioLatencyThreshold;
     return config;
   }
 
@@ -116,10 +116,10 @@ export class DatastoreClusterManagement {
     spaceUtilizationThreshold: number;
   }): VcStorageDrsSpaceLoadBalanceConfig {
     const config = new VcStorageDrsSpaceLoadBalanceConfig();
-    config.minSpaceUtilizationDifference = 5;
-    config.spaceThresholdMode = "utilization";
-    config.freeSpaceThresholdGB = 1;
-    config.spaceUtilizationThreshold = 80;
+    config.minSpaceUtilizationDifference = minSpaceUtilizationDifference;
+    config.spaceThresholdMode = spaceThresholdMode;
+    config.freeSpaceThresholdGB = freeSpaceThresholdGB;
+    config.spaceUtilizationThreshold = spaceUtilizationThreshold;
     return config;
   }
 }
