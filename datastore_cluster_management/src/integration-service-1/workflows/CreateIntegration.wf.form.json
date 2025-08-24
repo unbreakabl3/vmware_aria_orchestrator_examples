@@ -247,14 +247,14 @@
           },
           {
             "value": "manual",
-            "label": "Manuall"
+            "label": "Manual"
           },
           {
-            "value": "fullyAutomated",
+            "value": "automated",
             "label": "Fully Automated"
           }
         ],
-        "default": "fullyAutomated"
+        "default": "automated"
       },
       "ioLoadImbalanceThreshold": {
         "type": {
@@ -328,20 +328,20 @@
         "type": {
           "dataType": "boolean"
         },
-        "label": "Enabled",
+        "label": "Enable Storage DRS?",
         "default": true
       },
       "loadBalanceInterval": {
         "type": {
           "dataType": "decimal"
         },
-        "label": "Load Balance Interval",
+        "label": "Load Balance Interval in Minutes",
         "default": 420,
         "step": 1,
         "signpost": "In minutes",
         "constraints": {
-          "max-value": 60,
-          "min-value": 41760
+          "max-value": 41760,
+          "min-value": 60
         }
       }
     },

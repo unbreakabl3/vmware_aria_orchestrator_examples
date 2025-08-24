@@ -41,7 +41,7 @@ import { DatastoreClusterManagement } from "../classes/datastoreClusterManagemen
     ioLoadBalanceEnabled: { type: "boolean" },
     defaultIntraVmAffinity: { type: "boolean" },
     loadBalanceInterval: { type: "number" },
-    enabled: { type: "boolean" }
+    isEnabled: { type: "boolean" }
   },
   output: {
     result: { type: "Any" }
@@ -62,7 +62,7 @@ export class DatastoreClusterManagementWorkflow {
     ioLoadBalanceEnabled: boolean,
     defaultIntraVmAffinity: boolean,
     loadBalanceInterval: number,
-    enabled: boolean,
+    isEnabled: boolean,
     @Out result: any
   ): void {
     const sdkConnection: VcSdkConnection = System.getModule('com.examples.vmware_aria_orchestrator_examples.actions')
@@ -82,7 +82,7 @@ export class DatastoreClusterManagementWorkflow {
       ioLoadBalanceEnabled,
       defaultIntraVmAffinity,
       loadBalanceInterval,
-      enabled
+      isEnabled
     );
   }
 }

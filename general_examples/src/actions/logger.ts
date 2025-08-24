@@ -1,3 +1,12 @@
+/*-
+ * #%L
+ * vmware_aria_orchestrator_examples
+ * %%
+ * Copyright (C) 2025 TODO: Enter Organization name
+ * %%
+ * TODO: Define header text
+ * #L%
+ */
 /**
  * This action creates a Logger object that can be used to standardize the log output in workflows.
  * This provides greater visibility into what code is executing and where, which makes troubleshooting easier.

@@ -1,3 +1,12 @@
+/*-
+ * #%L
+ * vmware_aria_orchestrator_examples
+ * %%
+ * Copyright (C) 2025 TODO: Enter Organization name
+ * %%
+ * TODO: Define header text
+ * #L%
+ */
 import { Logger } from "./logger";
 
 export class SSHFunctions {

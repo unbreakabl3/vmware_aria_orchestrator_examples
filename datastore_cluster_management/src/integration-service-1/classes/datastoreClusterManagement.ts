@@ -21,7 +21,7 @@ export class DatastoreClusterManagement {
     ioLoadBalanceEnabled: boolean,
     defaultIntraVmAffinity: boolean,
     loadBalanceInterval: number,
-    enabled: boolean
+    isEnabled: boolean
   ): void {
     const managedObject: VcStorageResourceManager = vc.storageResourceManager;
     const pod: VcStoragePod = this.findStoragePod(vc, datastoreClusterName);
@@ -36,7 +36,7 @@ export class DatastoreClusterManagement {
       ioLoadBalanceEnabled,
       defaultIntraVmAffinity,
       loadBalanceInterval,
-      enabled
+      isEnabled
     };
     const spec: VcStorageDrsConfigSpec = this.buildStorageDrsConfigSpec(storageDrsConfigSpec);
     const modify = true;
@@ -65,7 +65,7 @@ export class DatastoreClusterManagement {
     ioLoadBalanceEnabled,
     defaultIntraVmAffinity,
     loadBalanceInterval,
-    enabled
+    isEnabled
   }: {
     defaultVmBehavior: string;
     ioLoadImbalanceThreshold: number;
@@ -77,7 +77,7 @@ export class DatastoreClusterManagement {
     ioLoadBalanceEnabled: boolean;
     defaultIntraVmAffinity: boolean;
     loadBalanceInterval: number;
-    enabled: boolean;
+    isEnabled: boolean;
   }): VcStorageDrsConfigSpec {
     const spec = new VcStorageDrsConfigSpec();
     const podConfig = new VcStorageDrsPodConfigSpec();
@@ -90,7 +90,7 @@ export class DatastoreClusterManagement {
     podConfig.defaultIntraVmAffinity = defaultIntraVmAffinity;
     podConfig.automationOverrides = new VcStorageDrsAutomationConfig();
     podConfig.loadBalanceInterval = loadBalanceInterval;
-    podConfig.enabled = enabled;
+    podConfig.enabled = isEnabled;
 
     spec.podConfigSpec = podConfig;
 

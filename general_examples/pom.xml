@@ -6,7 +6,7 @@
   <parent>
     <groupId>com.vmware.pscoe.o11n</groupId>
     <artifactId>typescript-project-all</artifactId>
-    <version>4.6.0</version>
+    <version>4.10.0</version>
   </parent>
 
   <groupId>com.examples</groupId>
