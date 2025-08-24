@@ -22,7 +22,7 @@ export class DatastoreClusterManagement {
     defaultIntraVmAffinity: boolean,
     loadBalanceInterval: number,
     isEnabled: boolean
-  ): void {
+  ): VcTask {
     const managedObject: VcStorageResourceManager = vc.storageResourceManager;
     const pod: VcStoragePod = this.findStoragePod(vc, datastoreClusterName);
     const storageDrsConfigSpec = {
@@ -40,7 +40,7 @@ export class DatastoreClusterManagement {
     };
     const spec: VcStorageDrsConfigSpec = this.buildStorageDrsConfigSpec(storageDrsConfigSpec);
     const modify = true;
-    managedObject.configureStorageDrsForPod_Task(pod, spec, modify);
+    return managedObject.configureStorageDrsForPod_Task(pod, spec, modify);
   }
 
   public findStoragePod(vCenter: VcSdkConnection, storagePodName: string): VcStoragePod {

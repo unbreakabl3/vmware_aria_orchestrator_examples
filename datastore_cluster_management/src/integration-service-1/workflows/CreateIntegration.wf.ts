@@ -16,11 +16,6 @@ import { DatastoreClusterManagement } from "../classes/datastoreClusterManagemen
   id: "",
   description: "Sample workflow description",
   attributes: {
-    // field1: {
-    //   type: string,
-    //   bind: true,
-    //   value: "PSCoE/my-project/field1"
-    // }
   },
   input: {
     datastoreClusterName: {
@@ -69,7 +64,7 @@ export class DatastoreClusterManagementWorkflow {
       .vcSdkManagement()
       .VcSdkManagement.prototype.getVcSdkConnectionByName(vCenter);
     const datastoreCluster = new DatastoreClusterManagement();
-    datastoreCluster.configureStorageDrsForPod(
+    const task = datastoreCluster.configureStorageDrsForPod(
       sdkConnection,
       datastoreClusterName,
       defaultVmBehavior,
@@ -84,5 +79,6 @@ export class DatastoreClusterManagementWorkflow {
       loadBalanceInterval,
       isEnabled
     );
+    System.getModule("com.vmware.library.vc.basic").vim3WaitTaskEnd(task, true, 2);
   }
 }
