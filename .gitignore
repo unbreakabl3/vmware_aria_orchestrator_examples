@@ -5,3 +5,4 @@ jasmine.json
 src/*
 datastore_cluster_management/THIRD-PARTY.properties
 datastore_cluster_management/THIRD-PARTY.properties
+.DS_Store

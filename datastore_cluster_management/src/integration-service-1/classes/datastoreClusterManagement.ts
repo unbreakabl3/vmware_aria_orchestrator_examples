@@ -9,20 +9,7 @@
  */
 export class DatastoreClusterManagement {
   public configureStorageDrsForPod(
-    vc: VcSdkConnection,
-    datastoreClusterName: string,
-    defaultVmBehavior: string,
-    ioLoadImbalanceThreshold: number,
-    ioLatencyThreshold: number,
-    minSpaceUtilizationDifference: number,
-    spaceThresholdMode: string,
-    freeSpaceThresholdGB: number,
-    spaceUtilizationThreshold: number,
-    ioLoadBalanceEnabled: boolean,
-    defaultIntraVmAffinity: boolean,
-    loadBalanceInterval: number,
-    isEnabled: boolean
-  ): VcTask {
+    { vc, datastoreClusterName, defaultVmBehavior, ioLoadImbalanceThreshold, ioLatencyThreshold, minSpaceUtilizationDifference, spaceThresholdMode, freeSpaceThresholdGB, spaceUtilizationThreshold, ioLoadBalanceEnabled, defaultIntraVmAffinity, loadBalanceInterval, isEnabled }: { vc: VcSdkConnection; datastoreClusterName: string; defaultVmBehavior: string; ioLoadImbalanceThreshold: number; ioLatencyThreshold: number; minSpaceUtilizationDifference: number; spaceThresholdMode: string; freeSpaceThresholdGB: number; spaceUtilizationThreshold: number; ioLoadBalanceEnabled: boolean; defaultIntraVmAffinity: boolean; loadBalanceInterval: number; isEnabled: boolean; }): VcTask {
     const managedObject: VcStorageResourceManager = vc.storageResourceManager;
     const pod: VcStoragePod = this.findStoragePod(vc, datastoreClusterName);
     const storageDrsConfigSpec = {
@@ -43,7 +30,7 @@ export class DatastoreClusterManagement {
     return managedObject.configureStorageDrsForPod_Task(pod, spec, modify);
   }
 
-  public findStoragePod(vCenter: VcSdkConnection, storagePodName: string): VcStoragePod {
+  private findStoragePod(vCenter: VcSdkConnection, storagePodName: string): VcStoragePod {
     const storagePods = vCenter.getAllVimManagedObjects('StoragePod', [], "xpath:name[matches(.,'" + storagePodName + "')]");
     if (storagePods.length === 0) {
       throw new Error(`Storage Pod with name ${storagePodName} not found.`);
@@ -54,7 +41,7 @@ export class DatastoreClusterManagement {
     return storagePods[0] as VcStoragePod;
   }
 
-  public buildStorageDrsConfigSpec({
+  private buildStorageDrsConfigSpec({
     defaultVmBehavior,
     ioLoadImbalanceThreshold,
     ioLatencyThreshold,
@@ -97,14 +84,14 @@ export class DatastoreClusterManagement {
     return spec;
   }
 
-  public buildIoLoadBalanceConfig(ioLoadImbalanceThreshold: number, ioLatencyThreshold: number): VcStorageDrsIoLoadBalanceConfig {
+  private buildIoLoadBalanceConfig(ioLoadImbalanceThreshold: number, ioLatencyThreshold: number): VcStorageDrsIoLoadBalanceConfig {
     const config = new VcStorageDrsIoLoadBalanceConfig();
     config.ioLoadImbalanceThreshold = ioLoadImbalanceThreshold;
     config.ioLatencyThreshold = ioLatencyThreshold;
     return config;
   }
 
-  public buildSpaceLoadBalanceConfig({
+  private buildSpaceLoadBalanceConfig({
     minSpaceUtilizationDifference,
     spaceThresholdMode,
     freeSpaceThresholdGB,

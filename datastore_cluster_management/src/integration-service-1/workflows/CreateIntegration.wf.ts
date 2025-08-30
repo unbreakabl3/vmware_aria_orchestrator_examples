@@ -19,12 +19,10 @@ import { DatastoreClusterManagement } from "../classes/datastoreClusterManagemen
   },
   input: {
     datastoreClusterName: {
-      type: "string",
-      title: "Foo"
+      type: "string"
     },
     vCenter: {
-      type: "string",
-      title: "vCenter"
+      type: "string"
     },
     defaultVmBehavior: { type: "string" },
     ioLoadImbalanceThreshold: { type: "number" },
@@ -63,22 +61,11 @@ export class DatastoreClusterManagementWorkflow {
     const sdkConnection: VcSdkConnection = System.getModule('com.examples.vmware_aria_orchestrator_examples.actions')
       .vcSdkManagement()
       .VcSdkManagement.prototype.getVcSdkConnectionByName(vCenter);
+
     const datastoreCluster = new DatastoreClusterManagement();
+
     const task = datastoreCluster.configureStorageDrsForPod(
-      sdkConnection,
-      datastoreClusterName,
-      defaultVmBehavior,
-      ioLoadImbalanceThreshold,
-      ioLatencyThreshold,
-      minSpaceUtilizationDifference,
-      spaceThresholdMode,
-      freeSpaceThresholdGB,
-      spaceUtilizationThreshold,
-      ioLoadBalanceEnabled,
-      defaultIntraVmAffinity,
-      loadBalanceInterval,
-      isEnabled
-    );
+      { vc: sdkConnection, datastoreClusterName, defaultVmBehavior, ioLoadImbalanceThreshold, ioLatencyThreshold, minSpaceUtilizationDifference, spaceThresholdMode, freeSpaceThresholdGB, spaceUtilizationThreshold, ioLoadBalanceEnabled, defaultIntraVmAffinity, loadBalanceInterval, isEnabled });
     System.getModule("com.vmware.library.vc.basic").vim3WaitTaskEnd(task, true, 2);
   }
 }
