@@ -1,0 +1,301 @@
+{
+  "itemId": "",
+  "layout": {
+    "pages": [
+      {
+        "id": "page_ftr9080h",
+        "sections": [
+          {
+            "fields": [
+              {
+                "display": "valuePicker",
+                "id": "vmHost",
+                "signpostPosition": "right-middle",
+                "state": {
+                  "read-only": false,
+                  "visible": true
+                }
+              }
+            ],
+            "id": "section_cf233d9d"
+          },
+          {
+            "fields": [
+              {
+                "display": "textField",
+                "id": "textField_b92a6ced",
+                "signpostPosition": "right-middle",
+                "state": {
+                  "read-only": true,
+                  "visible": true
+                }
+              }
+            ],
+            "id": "section_36799d43"
+          },
+          {
+            "fields": [
+              {
+                "display": "dropDown",
+                "id": "availableHostProfiles",
+                "signpostPosition": "right-middle",
+                "state": {
+                  "read-only": false,
+                  "visible": true
+                }
+              }
+            ],
+            "id": "section_9d25e162"
+          },
+          {
+            "fields": [
+              {
+                "display": "datagrid",
+                "id": "datagrid_8dc4dba2",
+                "signpostPosition": "right-middle",
+                "state": {
+                  "hidden-fields": [],
+                  "read-only": true,
+                  "visible": true
+                }
+              }
+            ],
+            "id": "section_25b88391"
+          },
+          {
+            "fields": [
+              {
+                "display": "textField",
+                "id": "hostFQDN",
+                "signpostPosition": "right-middle",
+                "state": {
+                  "read-only": false,
+                  "visible": [
+                    {
+                      "equals": {
+                        "availableHostProfiles": "Host Profile 1"
+                      },
+                      "value": true
+                    }
+                  ]
+                }
+              }
+            ],
+            "id": "section_0de228dc"
+          },
+          {
+            "fields": [
+              {
+                "display": "textField",
+                "id": "hostSubnet",
+                "signpostPosition": "right-middle",
+                "state": {
+                  "read-only": false,
+                  "visible": [
+                    {
+                      "equals": {
+                        "availableHostProfiles": "Host Profile 1"
+                      },
+                      "value": true
+                    }
+                  ]
+                }
+              }
+            ],
+            "id": "section_474d9059"
+          },
+          {
+            "fields": [
+              {
+                "display": "textField",
+                "id": "hostIP",
+                "signpostPosition": "right-middle",
+                "state": {
+                  "read-only": false,
+                  "visible": [
+                    {
+                      "equals": {
+                        "availableHostProfiles": "Host Profile 1"
+                      },
+                      "value": true
+                    }
+                  ]
+                }
+              }
+            ],
+            "id": "section_6000e071"
+          }
+        ],
+        "state": {},
+        "title": "General"
+      }
+    ]
+  },
+  "options": {
+    "externalValidations": []
+  },
+  "schema": {
+    "availableHostProfiles": {
+      "constraints": {
+        "required": true
+      },
+      "label": "Available Host Profiles",
+      "type": {
+        "dataType": "string"
+      },
+      "valueList": {
+        "id": "com.clouddepth.host_profiles.actions/getAllAvailableHostProfiles",
+        "parameters": [
+          {
+            "$type": {
+              "dataType": "reference",
+              "referenceType": "VC:HostSystem"
+            },
+            "vmHost": "vmHost"
+          }
+        ],
+        "type": "scriptAction"
+      }
+    },
+    "datagrid_8dc4dba2": {
+      "constraints": {},
+      "default": {
+        "id": "com.clouddepth.host_profiles.actions/getHostProfileDetails",
+        "parameters": [
+          {
+            "$type": {
+              "dataType": "reference",
+              "referenceType": "VC:HostSystem"
+            },
+            "vmHost": "vmHost"
+          },
+          {
+            "$type": {
+              "dataType": "string"
+            },
+            "hostProfileName": "availableHostProfiles"
+          }
+        ],
+        "type": "scriptAction"
+      },
+      "label": "Host Profile Details",
+      "placeholder": "",
+      "type": {
+        "dataType": "complex",
+        "fields": [
+          {
+            "id": "profileName",
+            "label": "Profile Name",
+            "type": {
+              "dataType": "string"
+            }
+          },
+          {
+            "id": "profileValidationState",
+            "label": "Profile Validation State",
+            "type": {
+              "dataType": "string"
+            }
+          },
+          {
+            "id": "profileDescription",
+            "label": "Profile Description",
+            "type": {
+              "dataType": "string"
+            }
+          }
+        ],
+        "isMultiple": true
+      }
+    },
+    "hostFQDN": {
+      "constraints": {
+        "pattern": {
+          "message": "FQDN format is required.",
+          "value": "^(?!-)[A-Za-z0-9-]{1,63}(?<!-)(\\.(?!-)[A-Za-z0-9-]{1,63}(?<!-))*\\.[A-Za-z]{2,}$"
+        },
+        "required": [
+          {
+            "equals": {
+              "availableHostProfiles": "Host Profile 1"
+            },
+            "value": true
+          }
+        ]
+      },
+      "label": "Host FQDN",
+      "placeholder": "ex. esxi01.domain.local",
+      "type": {
+        "dataType": "string"
+      }
+    },
+    "hostIP": {
+      "constraints": {
+        "pattern": {
+          "message": "",
+          "value": "^((25[0-5]|(2[0-4]|1\\d|[1-9]|)\\d)\\.?\\b){4}$"
+        },
+        "required": [
+          {
+            "equals": {
+              "availableHostProfiles": "Host Profile 1"
+            },
+            "value": true
+          }
+        ]
+      },
+      "label": "IP Address",
+      "placeholder": "ex. 192.168.0.1",
+      "type": {
+        "dataType": "string"
+      }
+    },
+    "hostSubnet": {
+      "constraints": {
+        "required": [
+          {
+            "equals": {
+              "availableHostProfiles": "Host Profile 1"
+            },
+            "value": true
+          }
+        ]
+      },
+      "label": "IP Subnetmask",
+      "placeholder": "ex. 255.255.255.0",
+      "type": {
+        "dataType": "string"
+      }
+    },
+    "textField_b92a6ced": {
+      "constraints": {},
+      "default": {
+        "id": "com.clouddepth.host_profiles.actions/getAttachedProfile",
+        "parameters": [
+          {
+            "$type": {
+              "dataType": "reference",
+              "referenceType": "VC:HostSystem"
+            },
+            "vmHost": "vmHost"
+          }
+        ],
+        "type": "scriptAction"
+      },
+      "label": "Attached Host Profile",
+      "placeholder": "",
+      "type": {
+        "dataType": "string"
+      }
+    },
+    "vmHost": {
+      "id": "vmHost",
+      "label": "ESXi Host",
+      "type": {
+        "dataType": "reference",
+        "referenceType": "VC:HostSystem"
+      },
+      "valueList": []
+    }
+  }
+}

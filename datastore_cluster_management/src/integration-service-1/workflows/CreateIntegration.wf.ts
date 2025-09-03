@@ -1,0 +1,71 @@
+/*-
+ * #%L
+ * datastore_cluster_management
+ * %%
+ * Copyright (C) 2025 TODO: Enter Organization name
+ * %%
+ * TODO: Define header text
+ * #L%
+ */
+import { Out, Workflow } from "vrotsc-annotations";
+import { DatastoreClusterManagement } from "../classes/datastoreClusterManagement";
+
+@Workflow({
+  name: "Datastore Cluster Management Workflow",
+  path: "MyOrg/MyProject",
+  id: "",
+  description: "Sample workflow description",
+  attributes: {
+  },
+  input: {
+    datastoreClusterName: {
+      type: "string"
+    },
+    vCenter: {
+      type: "string"
+    },
+    defaultVmBehavior: { type: "string" },
+    ioLoadImbalanceThreshold: { type: "number" },
+    ioLatencyThreshold: { type: "number" },
+    minSpaceUtilizationDifference: { type: "number" },
+    spaceThresholdMode: { type: "string" },
+    freeSpaceThresholdGB: { type: "number" },
+    spaceUtilizationThreshold: { type: "number" },
+    ioLoadBalanceEnabled: { type: "boolean" },
+    defaultIntraVmAffinity: { type: "boolean" },
+    loadBalanceInterval: { type: "number" },
+    isEnabled: { type: "boolean" }
+  },
+  output: {
+    result: { type: "Any" }
+  },
+  presentation: ""
+})
+export class DatastoreClusterManagementWorkflow {
+  public install(
+    datastoreClusterName: string,
+    vCenter: string,
+    defaultVmBehavior: string,
+    ioLoadImbalanceThreshold: number,
+    ioLatencyThreshold: number,
+    minSpaceUtilizationDifference: number,
+    spaceThresholdMode: string,
+    freeSpaceThresholdGB: number,
+    spaceUtilizationThreshold: number,
+    ioLoadBalanceEnabled: boolean,
+    defaultIntraVmAffinity: boolean,
+    loadBalanceInterval: number,
+    isEnabled: boolean,
+    @Out result: any
+  ): void {
+    const sdkConnection: VcSdkConnection = System.getModule('com.examples.vmware_aria_orchestrator_examples.actions')
+      .vcSdkManagement()
+      .VcSdkManagement.prototype.getVcSdkConnectionByName(vCenter);
+
+    const datastoreCluster = new DatastoreClusterManagement();
+
+    const task = datastoreCluster.configureStorageDrsForPod(
+      { vc: sdkConnection, datastoreClusterName, defaultVmBehavior, ioLoadImbalanceThreshold, ioLatencyThreshold, minSpaceUtilizationDifference, spaceThresholdMode, freeSpaceThresholdGB, spaceUtilizationThreshold, ioLoadBalanceEnabled, defaultIntraVmAffinity, loadBalanceInterval, isEnabled });
+    System.getModule("com.vmware.library.vc.basic").vim3WaitTaskEnd(task, true, 2);
+  }
+}

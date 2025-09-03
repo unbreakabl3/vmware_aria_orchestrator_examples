@@ -1,0 +1,320 @@
+{
+  "itemId": "",
+  "layout": {
+    "pages": [
+      {
+        "id": "page_1",
+        "sections": [
+          {
+            "fields": [
+              {
+                "display": "valuePicker",
+                "id": "vm",
+                "signpostPosition": "right-middle"
+              }
+            ],
+            "id": "section_0"
+          },
+          {
+            "fields": [],
+            "id": "section_1"
+          },
+          {
+            "fields": [
+              {
+                "display": "checkbox",
+                "id": "allowReboot",
+                "signpostPosition": "right-middle",
+                "state": {
+                  "read-only": false,
+                  "visible": true
+                }
+              }
+            ],
+            "id": "section_2"
+          },
+          {
+            "fields": [
+              {
+                "display": "checkbox",
+                "id": "setVmToolsUpgradePolicy",
+                "signpostPosition": "right-middle",
+                "state": {
+                  "read-only": false,
+                  "visible": true
+                }
+              }
+            ],
+            "id": "section_3"
+          },
+          {
+            "fields": [
+              {
+                "display": "dropDown",
+                "id": "desiredVmToolsUpgradePolicy",
+                "signpostPosition": "right-middle",
+                "state": {
+                  "read-only": false,
+                  "visible": [
+                    {
+                      "equals": {
+                        "setVmToolsUpgradePolicy": true
+                      },
+                      "value": true
+                    }
+                  ]
+                }
+              }
+            ],
+            "id": "section_4"
+          },
+          {
+            "fields": [
+              {
+                "display": "checkbox",
+                "id": "allowUpgradeTemplates",
+                "signpostPosition": "right-middle",
+                "state": {
+                  "read-only": false,
+                  "visible": true
+                }
+              }
+            ],
+            "id": "section_5"
+          },
+          {
+            "fields": [
+              {
+                "display": "checkbox",
+                "id": "allowUpgradePoweredOffVms",
+                "signpostPosition": "right-middle",
+                "state": {
+                  "read-only": [
+                    {
+                      "equals": {
+                        "allowUpgradeTemplates": true
+                      },
+                      "value": true
+                    }
+                  ],
+                  "visible": true
+                }
+              }
+            ],
+            "id": "section_6"
+          },
+          {
+            "fields": [
+              {
+                "display": "checkbox",
+                "id": "createSnapshot",
+                "signpostPosition": "right-middle",
+                "state": {
+                  "read-only": false,
+                  "visible": true
+                }
+              },
+              {
+                "display": "textField",
+                "id": "snapshotName",
+                "signpostPosition": "right-middle",
+                "state": {
+                  "read-only": false,
+                  "visible": [
+                    {
+                      "equals": {
+                        "createSnapshot": true
+                      },
+                      "value": true
+                    }
+                  ]
+                }
+              }
+            ],
+            "id": "section_586819e2"
+          },
+          {
+            "fields": [
+              {
+                "display": "checkbox",
+                "id": "removeChildren",
+                "signpostPosition": "right-middle",
+                "state": {
+                  "read-only": false,
+                  "visible": [
+                    {
+                      "equals": {
+                        "createSnapshot": true
+                      },
+                      "value": true
+                    }
+                  ]
+                }
+              }
+            ],
+            "id": "section_d2b2e75a"
+          },
+          {
+            "fields": [
+              {
+                "display": "checkbox",
+                "id": "consolidate",
+                "signpostPosition": "right-middle",
+                "state": {
+                  "read-only": false,
+                  "visible": [
+                    {
+                      "equals": {
+                        "createSnapshot": true
+                      },
+                      "value": true
+                    }
+                  ]
+                }
+              }
+            ],
+            "id": "section_8c76f1ff"
+          }
+        ],
+        "title": "General"
+      }
+    ]
+  },
+  "options": {
+    "externalValidations": []
+  },
+  "schema": {
+    "allowReboot": {
+      "constraints": {},
+      "default": false,
+      "id": "allowReboot",
+      "label": "Allow reboot?",
+      "signpost": "If true, VM will be rebooted if required by the installation. If false, reboot will be suppressed",
+      "type": {
+        "dataType": "boolean",
+        "isMultiple": false
+      }
+    },
+    "allowUpgradePoweredOffVms": {
+      "constraints": {},
+      "default": [
+        {
+          "equals": {
+            "allowUpgradeTemplates": true
+          },
+          "value": true
+        }
+      ],
+      "id": "allowUpgradePoweredOffVms",
+      "label": "Upgrade Powered Off VMs?",
+      "type": {
+        "dataType": "boolean",
+        "isMultiple": false
+      }
+    },
+    "allowUpgradeTemplates": {
+      "constraints": {},
+      "default": false,
+      "id": "allowUpgradeTemplates",
+      "label": "Upgrade VM Templates?",
+      "signpost": "Template will be converted to VM and converted back to template",
+      "type": {
+        "dataType": "boolean",
+        "isMultiple": false
+      }
+    },
+    "consolidate": {
+      "default": true,
+      "description": "Consolidate snapshot",
+      "label": "Consolidate snapshot when deleting?",
+      "type": {
+        "dataType": "boolean"
+      }
+    },
+    "createSnapshot": {
+      "default": true,
+      "description": "Create a snapshot before any changes",
+      "label": "Create snapshot?",
+      "signpost": "Snapshot will be created and deleted if upgrade will be successful. ",
+      "type": {
+        "dataType": "boolean"
+      }
+    },
+    "desiredVmToolsUpgradePolicy": {
+      "constraints": {
+        "required": {
+          "id": "com.vmware.o11n.forms/evalOGNL",
+          "parameters": [
+            {
+              "ognl": "`#setVmToolsUpgradePolicy`"
+            },
+            {
+              "setVmToolsUpgradePolicy": "setVmToolsUpgradePolicy"
+            },
+            {
+              "setVmToolsUpgradePolicy__type_": "`boolean`"
+            },
+            {
+              "return": "`boolean`"
+            }
+          ],
+          "type": "scriptAction"
+        }
+      },
+      "default": "manual",
+      "id": "desiredVmToolsUpgradePolicy",
+      "label": "Desired VMTools upgrade policy",
+      "type": {
+        "dataType": "string",
+        "isMultiple": false
+      },
+      "valueList": [
+        {
+          "label": "Manual",
+          "value": "manual"
+        },
+        {
+          "label": "Upgrade at power cycle",
+          "value": "upgradeAtPowerCycle"
+        }
+      ]
+    },
+    "removeChildren": {
+      "description": "Remove children snapshots",
+      "label": "Remove children snapshot?",
+      "type": {
+        "dataType": "boolean"
+      }
+    },
+    "setVmToolsUpgradePolicy": {
+      "constraints": {},
+      "default": false,
+      "id": "setVmToolsUpgradePolicy",
+      "label": "Set VMTools upgrade policy?",
+      "type": {
+        "dataType": "boolean",
+        "isMultiple": false
+      }
+    },
+    "snapshotName": {
+      "default": "upgrade_vm_tools",
+      "description": "Snapshot name",
+      "label": "Snapshot Name",
+      "type": {
+        "dataType": "string"
+      }
+    },
+    "vm": {
+      "constraints": {
+        "required": true
+      },
+      "id": "vm",
+      "label": "Virtual machine",
+      "type": {
+        "dataType": "reference",
+        "isMultiple": false,
+        "referenceType": "VC:VirtualMachine"
+      }
+    }
+  }
+}
